@@ -1911,3 +1911,5 @@
 [2025-05-06 19:11:41] [DEBUG] Cleared expired thermal flags
 [2025-05-06 19:11:49] [SERIAL] Frame too long (513 bytes), resyncing
 [2025-05-06 19:11:49] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 6.950015e-10}}
+[2025-05-06 19:11:59] [SERIAL] Frame too long (513 bytes), resyncing
+[2025-05-06 19:11:59] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 6.172853e-25}}
