@@ -204,6 +204,7 @@ def handle_frame(frame):
             for i in range(8):
                 if incoming_trig[i]:
                     camera_trigger_times[i] = time.time()
+                    
                 merged_trig.append(incoming_trig[i] or current_trig[i])
 
             update_status_fields(
