@@ -32,7 +32,7 @@
   "thermal": [
     false,
     true,
-    true,
+    false,
     false,
     false,
     false,
