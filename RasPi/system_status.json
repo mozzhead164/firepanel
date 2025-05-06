@@ -21,10 +21,10 @@
     false,
     false
   ],
-  "avgTemp": 29.2125,
+  "avgTemp": 0,
   "thermal": [
-    true,
     false,
+    true,
     false,
     false,
     false,
@@ -34,8 +34,9 @@
   ],
   "lastAlert": {
     "type": "alert",
-    "alertType": "psu_undervoltage",
-    "psu": 2,
-    "voltage": 0
+    "alertType": "temp_alert",
+    "data": {
+      "avgTemp": 1.085943e-11
+    }
   }
 }
