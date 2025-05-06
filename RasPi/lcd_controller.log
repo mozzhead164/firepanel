@@ -3454,3 +3454,7 @@
 [DEBUG] Connected screen content: ['Mode: ARMED    29.4C', 'CHAN 1 2 3 4 5 6 7 8', 'CONN \x00 \x00 \x00 \x00 \x01 \x01 \x01 \x01', 'TRIG \x01 \x01 \x01 \x01 \x01 \x01 \x01 \x01']
 [DEBUG] system_data = {'stage': 'connected', 'mode': 'ARMED', 'conn': [True, True, True, True, False, False, False, False], 'trig': [False, False, False, False, False, False, False, False], 'thermal': [False, False, False, False, False, False, False, False], 'avgTemp': 29.4125}
 [DEBUG] Connected screen content: ['Mode: ARMED    29.4C', 'CHAN 1 2 3 4 5 6 7 8', 'CONN \x00 \x00 \x00 \x00 \x01 \x01 \x01 \x01', 'TRIG \x01 \x01 \x01 \x01 \x01 \x01 \x01 \x01']
+[DEBUG] system_data = {'stage': 'connected', 'mode': 'ARMED', 'conn': [True, True, True, True, False, False, False, False], 'trig': [False, False, False, False, False, False, False, False], 'thermal': [False, False, False, False, False, False, False, False], 'avgTemp': 29.4125}
+[DEBUG] Connected screen content: ['Mode: ARMED    29.4C', 'CHAN 1 2 3 4 5 6 7 8', 'CONN \x00 \x00 \x00 \x00 \x01 \x01 \x01 \x01', 'TRIG \x01 \x01 \x01 \x01 \x01 \x01 \x01 \x01']
+[DEBUG] system_data = {'stage': 'connected', 'mode': 'ARMED', 'conn': [True, True, True, True, False, False, False, False], 'trig': [False, False, False, False, False, False, False, False], 'thermal': [False, False, False, False, False, False, False, False], 'avgTemp': 29.4125}
+[DEBUG] Connected screen content: ['Mode: ARMED    29.4C', 'CHAN 1 2 3 4 5 6 7 8', 'CONN \x00 \x00 \x00 \x00 \x01 \x01 \x01 \x01', 'TRIG \x01 \x01 \x01 \x01 \x01 \x01 \x01 \x01']
