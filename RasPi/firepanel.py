@@ -37,10 +37,10 @@ watchdog_active = False
 
 trig = {}
 camera_trigger_times = [0] * 8  # Track last set time for each channel trig
-TRIG_HOLD_TIME = 30  # 3 minutes
+TRIG_HOLD_TIME = 20  # 3 minutes
 
 thermal_trigger_times = [0] * 8
-THERMAL_HOLD_TIME = 30  # seconds
+THERMAL_HOLD_TIME = 20  # seconds
 
 stop_event = threading.Event()
 
@@ -176,6 +176,9 @@ def handle_frame(frame):
                 update_status_fields(thermal=thermal)
                 write_log(f"[INFO] Thermal trigger received on channel {ch}")
 
+        elif msg_type == "ack" and data.get("command") == "trigger_thermal":
+            write_log("Received ACK for thermal trigger – ignoring for display")
+            # no update_status_fields() here, so LCD won’t do a full redraw
 
         elif msg_type == "ack" and data.get("command") == "handshake":
             update_status_fields(stage="connected", mode="ARMED")
@@ -288,7 +291,7 @@ def handle_frame(frame):
         
 
         else:
-            update_status_fields(lastUnhandled=data)
+            write_log(f"[FRAME] Unhandled message, ignoring for status: {frame}")
             write_log(f"Unhandled message: {frame}")
 
 

@@ -332,11 +332,11 @@ def build_trig_line(trig_states, thermal_states):
     line = "TRIG "
     for i in range(8):
         if trig_states[i]:
-            icon = '\x03' if flash_tick_on else ' '
+            icon = '\x03'      # flame
         elif thermal_states[i]:
-            icon = '\x02' if flash_tick_on else ' '
+            icon = '\x02'      # thermometer
         else:
-            icon = '\x01'
+            icon = '\x01'      # cross
         line += icon + " "
     return line.strip().center(20)
 
