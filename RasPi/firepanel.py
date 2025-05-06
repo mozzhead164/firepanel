@@ -11,6 +11,8 @@ import threading
 DEBUG_FILE = False
 DEBUG_TRIG = False
 DEBUG_STATUS = False
+DEBUG_HEARTBEAT = False
+SHOW_ALERTS = False
 
 SERIAL_PORT = "/dev/ttyS0"
 BAUD_RATE = 115200
@@ -48,7 +50,9 @@ def send_json(ser, obj):
         frame = "<" + json.dumps(obj) + ">"
         ser.write(frame.encode('utf-8'))
         ser.flush()
-        write_log(f"SENT: {frame}")
+        if DEBUG_STATUS:
+            if SHOW_ALERTS:
+                write_log(f"SENT: {frame}")
     except Exception as e:
         write_log(f"[ERROR] Failed to send: {e}")
 
@@ -214,7 +218,8 @@ def handle_frame(frame):
 
         elif msg_type == "heartbeat":
             last_heartbeat = time.time()
-            write_log("Received heartbeat")
+            if DEBUG_HEARTBEAT:
+                write_log("Received heartbeat")
 
             # Ensure screen is set to connected mode
             update_status_fields(stage="connected")
