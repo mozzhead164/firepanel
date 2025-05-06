@@ -1,12 +1,12 @@
 {
-  "stage": "connected",
-  "mode": "NO_OUTPUT",
+  "stage": "booting",
+  "mode": "BOOTING",
   "avgTemp": 29.8375,
   "conn": [
-    true,
-    true,
-    true,
-    true,
+    false,
+    false,
+    false,
+    false,
     false,
     false,
     false,
