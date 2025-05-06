@@ -2045,3 +2045,5 @@
 [2025-05-06 19:28:28] [ALERT] BREAK_GLASS received: {"type": "alert", "alertType": "break_glass"}
 [2025-05-06 19:28:28] [ALERT] Break glass trigger on channel None
 [2025-05-06 19:28:29] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 1.471723e-31}}
+[2025-05-06 19:28:32] [ALERT] BREAK_GLASS received: {"type": "alert", "alertType": "break_glass"}
+[2025-05-06 19:28:32] [ALERT] Break glass trigger on channel None

@@ -34,10 +34,7 @@
   ],
   "lastAlert": {
     "type": "alert",
-    "alertType": "temp_alert",
-    "data": {
-      "avgTemp": 1.471723e-31
-    }
+    "alertType": "break_glass"
   },
   "lastUnhandled": {
     "ye": "heartbeat",
