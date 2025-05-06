@@ -1599,3 +1599,5 @@
 [2025-05-06 18:37:51] [ERROR] Failed to parse frame: yeeartet,ayload"e"}
 [2025-05-06 18:38:11] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
 [2025-05-06 18:38:11] [ERROR] Failed to parse frame: y"hatet,pyod:aie}{pe":"heartbeat","payload":"alive"}
+[2025-05-06 18:38:21] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
+[2025-05-06 18:38:21] [ERROR] Failed to parse frame: "type":"heartbeat","payload":"alive"}
