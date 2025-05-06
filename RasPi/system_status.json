@@ -12,10 +12,10 @@
     false
   ],
   "trig": [
-    false,
-    false,
     true,
-    false,
+    true,
+    true,
+    true,
     false,
     false,
     false,
