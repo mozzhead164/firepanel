@@ -430,7 +430,7 @@ def socket_command_listener():
                         #    Arduino expects "trigger_thermal" and 1–8 channels:
                         msg = {
                           "type":    "trigger_thermal",
-                          "channel": ch0 + 1
+                          "channel": ch0
                         }
                         frame = json.dumps(msg)
                         # frame it exactly as you do elsewhere:
