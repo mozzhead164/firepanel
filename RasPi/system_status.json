@@ -21,5 +21,15 @@
     false,
     false,
     false
+  ],
+  "thermal": [
+    true,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
   ]
 }
