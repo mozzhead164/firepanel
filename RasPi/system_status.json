@@ -1,7 +1,6 @@
 {
   "stage": "connected",
   "mode": "ARMED",
-  "avgTemp": 29.25,
   "conn": [
     true,
     true,
@@ -22,25 +21,12 @@
     false,
     false
   ],
-  "thermal": [
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
-  ],
+  "avgTemp": 29.25,
   "lastAlert": {
     "type": "alert",
     "alertType": "temp_alert",
     "data": {
-      "avgTemp": 2.299567e-33
+      "avgTemp": 4.44801e-08
     }
-  },
-  "lastUnhandled": {
-    "ye": "heartbeat",
-    "payload": "alive"
   }
 }
