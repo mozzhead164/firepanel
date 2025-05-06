@@ -380,16 +380,16 @@ if __name__ == "__main__":
     write_log("Firepanel controller started")
     update_status_fields(stage="booting", mode="BOOTING", conn=[False]*8, trig=[False]*8)
 
-    serial_thread = Thread(target=read_from_serial, args=(ser,))
+    serial_thread = threading.Thread(target=read_from_serial, args=(ser,))
     serial_thread.start()
 
-    trig_thread = Thread(target=trig_cleanup_loop)
+    trig_thread = threading.Thread(target=trig_cleanup_loop)
     trig_thread.start()
 
-    thermal_thread = Thread(target=thermal_cleanup_loop)
+    thermal_thread = threading.Thread(target=thermal_cleanup_loop)
     thermal_thread.start()
 
-    watchdog_thread = Thread(target=watchdog_loop)
+    watchdog_thread = threading.Thread(target=watchdog_loop)
     watchdog_thread.start()
 
     socket_thread = threading.Thread(
