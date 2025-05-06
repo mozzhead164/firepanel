@@ -1565,3 +1565,9 @@
 [2025-05-06 18:36:21] SENT: <{"type": "get_data"}>
 [2025-05-06 18:36:21] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 5.789362e-39}}
 [2025-05-06 18:36:23] [DEBUG] Cleared expired thermal flags
+[2025-05-06 18:36:25] [SOCKET] Received command: thermal_trigger:3
+[2025-05-06 18:36:25] [SOCKET] Thermal trigger on channel 3
+[2025-05-06 18:36:26] [SOCKET] Received command: thermal_trigger:3
+[2025-05-06 18:36:26] [SOCKET] Thermal trigger on channel 3
+[2025-05-06 18:36:27] [SOCKET] Received command: thermal_trigger:3
+[2025-05-06 18:36:27] [SOCKET] Thermal trigger on channel 3
