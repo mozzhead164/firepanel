@@ -21,7 +21,7 @@
     false,
     false
   ],
-  "avgTemp": 29.2375,
+  "avgTemp": 29.25,
   "lastAlert": {
     "type": "alert",
     "alertType": "temp_alert",
