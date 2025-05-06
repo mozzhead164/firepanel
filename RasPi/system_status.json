@@ -1,5 +1,5 @@
 {
-  "stage": "connected",
+  "stage": "booting",
   "mode": "BOOTING",
   "avgTemp": 29.5625,
   "conn": [

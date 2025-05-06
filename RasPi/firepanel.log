@@ -1917,3 +1917,6 @@
 [2025-05-06 19:12:09] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 5.789362e-39}}
 [2025-05-06 19:12:19] [SERIAL] Frame too long (513 bytes), resyncing
 [2025-05-06 19:12:19] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 1.060488e-14}}
+[2025-05-06 19:12:20] Firepanel controller started
+[2025-05-06 19:12:20] [MAIN] socket_thread started
+[2025-05-06 19:12:20] [SOCKET] Listening on /home/Dale/firepanel/RasPi/firepanel.sock
