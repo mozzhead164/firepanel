@@ -1586,3 +1586,5 @@
 [2025-05-06 18:37:00] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
 [2025-05-06 18:37:00] [ERROR] Failed to parse frame: tye"::moe_hge,"moe":ARD}{"p{{ype":"alert","alertType":"mode_change","mode":"TEST"}
 [2025-05-06 18:37:01] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
+[2025-05-06 18:37:01] [ALERT] MODE_CHANGE received: {"type": "alert", "alertType": "mode_change", "mode": "NO_OUTPUT"}
+[2025-05-06 18:37:01] [INFO] Mode changed to: NO_OUTPUT
