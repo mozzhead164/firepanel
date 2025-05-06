@@ -1699,3 +1699,7 @@
 [2025-05-06 18:47:18] [ERROR] Failed to parse frame: "type":"heartbeat","payload":"alive"}
 [2025-05-06 18:47:28] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
 [2025-05-06 18:47:28] [ERROR] Failed to parse frame: "type":"heartbeat","payload":"alive"}
+[2025-05-06 18:47:38] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
+[2025-05-06 18:47:38] Received heartbeat
+[2025-05-06 18:47:38] SENT: <{"type": "get_data"}>
+[2025-05-06 18:47:38] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 1.112002e-08}}
