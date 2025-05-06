@@ -3266,3 +3266,6 @@
 [2025-05-06 22:11:01] [DATA IN ] cam=[False, False, False, False, False, False, False, False] th=[False, False, False, False, False, False, False, False]
 [2025-05-06 22:11:01] [DATA OUT] trig=[False, False, False, False, False, False, False, False] thermal=[False, False, False, False, False, False, False, False]
 [2025-05-06 22:11:01] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 2.780006e-09}}
+[2025-05-06 22:14:49] Firepanel controller started
+[2025-05-06 22:14:49] [MAIN] socket_thread started
+[2025-05-06 22:14:49] [SOCKET] Listening on /home/Dale/firepanel/RasPi/firepanel.sock
