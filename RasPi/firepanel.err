@@ -85,3 +85,15 @@ NameError: name 'handle_frame_obj' is not defined. Did you mean: 'handle_frame'?
     else:
     ^^^^
 SyntaxError: invalid syntax
+  File "/home/Dale/firepanel/RasPi/firepanel.py", line 472
+    else:
+    ^^^^
+SyntaxError: invalid syntax
+  File "/home/Dale/firepanel/RasPi/firepanel.py", line 472
+    else:
+    ^^^^
+SyntaxError: invalid syntax
+  File "/home/Dale/firepanel/RasPi/firepanel.py", line 472
+    else:
+    ^^^^
+SyntaxError: invalid syntax
