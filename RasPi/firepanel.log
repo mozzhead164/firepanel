@@ -584,3 +584,4 @@
 [2025-05-06 17:42:13] [DEBUG] Cleared expired thermal flags
 [2025-05-06 17:42:20] Received heartbeat
 [2025-05-06 17:42:20] SENT: <{"type": "get_data"}>
+[2025-05-06 17:42:20] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 1.580251e-22}}
