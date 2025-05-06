@@ -4289,3 +4289,7 @@
 [2025-05-06 22:51:48] Received ACK for handshake
 [2025-05-06 22:51:48] [ALERT] PSU_UNDERVOLTAGE received: {"type": "alert", "alertType": "psu_undervoltage", "psu": 2, "voltage": 0}
 [2025-05-06 22:51:48] [ALERT] PSU2 Undervoltage: 0.00V
+[2025-05-06 22:51:55] [SOCKET] Received command: thermal_trigger:1
+[2025-05-06 22:51:55] [SOCKET] Thermal trigger on channel 1
+[2025-05-06 22:51:55] [SOCKET] Forwarded to Arduino: {"type": "trigger_thermal", "channel": 1}
+[2025-05-06 22:51:55] Received ACK for thermal trigger – ignoring for display
