@@ -1248,3 +1248,6 @@
 [2025-05-06 18:15:07] [SOCKET] Error: [Errno 32] Broken pipe
 [2025-05-06 18:15:07] [SOCKET] Received command: 
 [2025-05-06 18:15:07] [SOCKET] Error: [Errno 32] Broken pipe
+[2025-05-06 18:15:11] Received heartbeat
+[2025-05-06 18:15:11] SENT: <{"type": "get_data"}>
+[2025-05-06 18:15:11] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 0.01166}}
