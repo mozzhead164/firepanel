@@ -62,32 +62,38 @@ def read_from_serial(ser):
     in_frame = False
 
     while not stop_event.is_set():
-        raw = ser.read(1)
-        if raw == b'':
-            # timeout: if we were mid-frame, abandon it and wait for the next '<'
-            if in_frame:
-                buffer = ""
-                in_frame = False
+        try:
+            raw = ser.read(1)  # or readline(), etc.
+            if raw == b"":
+                # timeout (no data) — drop partial and loop
+                if in_frame:
+                    buffer = ""
+                    in_frame = False
+                continue
+
+            ch = raw.decode("utf-8", errors="ignore")
+            # … your existing <…> parsing goes here …
+
+        except serial.SerialException as e:
+            write_log(f"[SERIAL] Port error: {e}. Reopening in 1s.")
+            # tear down and rebuild the connection
+            try:
+                ser.close()
+            except Exception as close_err:
+                write_log(f"[SERIAL] Close failed: {close_err}")
+
+            time.sleep(1)
+
+            try:
+                ser.open()
+                write_log(f"[SERIAL] Port reopened successfully")
+            except Exception as open_err:
+                write_log(f"[SERIAL] Reopen failed: {open_err}")
+                # if you want to be extra robust, you could loop here
+                # until success or until stop_event is set
+            # then continue back to the top of the while-loop
             continue
 
-        ch = raw.decode('utf-8', errors='ignore')
-        if ch == '<':
-            buffer = ""
-            in_frame = True
-            continue
-        if ch == '>' and in_frame:
-            in_frame = False
-            frame = buffer
-            buffer = ""
-            try:
-                data = json.loads(frame)
-                handle_frame_obj(data)
-            except json.JSONDecodeError:
-                write_log(f"[ERROR] Bad JSON frame: {frame!r}")
-            continue
-        if in_frame:
-            buffer += ch
-        # everything else outside <…> is ignored
 
 
 
