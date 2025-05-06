@@ -1,0 +1,25 @@
+{
+  "stage": "booting",
+  "mode": "BOOTING",
+  "avgTemp": null,
+  "conn": [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ],
+  "trig": [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ]
+}
