@@ -957,3 +957,6 @@
 [2025-05-06 18:00:14] [DEBUG] Cleared expired thermal flags
 [2025-05-06 18:00:16] [SOCKET] Received command: thermal_trigger:0
 [2025-05-06 18:00:16] [SOCKET] Thermal trigger on channel 0
+[2025-05-06 18:00:21] Received heartbeat
+[2025-05-06 18:00:21] SENT: <{"type": "get_data"}>
+[2025-05-06 18:00:21] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 6.172853e-25}}
