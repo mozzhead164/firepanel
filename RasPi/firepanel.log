@@ -3049,3 +3049,4 @@
 [2025-05-06 21:58:11] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 9.876565e-24}}
 [2025-05-06 21:58:12] [DEBUG] Cleared expired thermal flags
 [2025-05-06 21:58:21] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 9.876565e-24}}
+[2025-05-06 21:58:31] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 3.950626e-23}}
