@@ -7,7 +7,7 @@ import json
 import os
 import time
 import socket
-from threading import Thread, Event
+import threading
 
 DEBUG_FILE = False
 DEBUG_TRIG = False
@@ -35,7 +35,7 @@ TRIG_HOLD_TIME = 20  # 3 minutes
 thermal_trigger_times = [0] * 8
 THERMAL_HOLD_TIME = 20  # seconds
 
-stop_event = Event()
+stop_event = threading.Event()
 
 
 def write_log(entry):
@@ -392,7 +392,10 @@ if __name__ == "__main__":
     watchdog_thread = Thread(target=watchdog_loop)
     watchdog_thread.start()
 
-    socket_thread = threading.Thread(target=socket_command_listener)
+    socket_thread = threading.Thread(
+        target=socket_command_listener,
+        daemon=True
+    )
     socket_thread.start()
 
     try:
