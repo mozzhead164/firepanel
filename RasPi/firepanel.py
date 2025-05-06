@@ -37,10 +37,10 @@ watchdog_active = False
 
 trig = {}
 camera_trigger_times = [0] * 8  # Track last set time for each channel trig
-TRIG_HOLD_TIME = 20  # 3 minutes
+TRIG_HOLD_TIME = 30  # 3 minutes
 
 thermal_trigger_times = [0] * 8
-THERMAL_HOLD_TIME = 20  # seconds
+THERMAL_HOLD_TIME = 30  # seconds
 
 stop_event = threading.Event()
 
