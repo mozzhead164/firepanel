@@ -36,7 +36,7 @@
     "type": "alert",
     "alertType": "temp_alert",
     "data": {
-      "avgTemp": 0.000729
+      "avgTemp": 2.411271e-27
     }
   },
   "lastUnhandled": {
