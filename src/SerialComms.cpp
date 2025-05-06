@@ -69,11 +69,20 @@ void pollJsonSerial()
         receiving = false;
         buffer[bufpos] = '\0';
 
+        #ifdef DEBUG_PI_SERIAL
+          Serial.print(millis()); Serial.print(" ms: Received frame: <");
+          Serial.print(buffer);
+          Serial.println(">");
+        #endif
+
         // Attempt to parse JSON
         DeserializationError err = deserializeJson(jsonDoc, buffer);
         if (!err)
         {
           handleIncomingCommand(jsonDoc);  // 🔥 CALL PROPER COMMAND HANDLER
+          #ifdef DEBUG_PI_SERIAL
+            Serial.print(millis()); Serial.println(" ms: Calling handleIncomingCommand");
+          #endif
         }
         else
         {
@@ -254,8 +263,11 @@ void handleTriggerThermal()
   }
 
   uint8_t ch = jsonDoc["channel"];
-  Serial.print(F("[DEBUG] handleTriggerThermal() got channel: "));
-  Serial.println(ch);
+  #ifdef DEBUG_PI_SERIAL
+    Serial.print(millis()); 
+    Serial.print(" ms: handleTriggerThermal start for channel ");
+    Serial.println(ch);
+  #endif
 
   if (ch < 1 || ch > 8)
   {
@@ -272,8 +284,10 @@ void handleTriggerThermal()
 
   digitalWrite(pin, HIGH);
 
-  Serial.print(F("[THERMAL] Activated - Channel "));
-  Serial.println(ch);
+  #ifdef DEBUG_PI_SERIAL
+    Serial.print(millis());
+    Serial.println(" ms: handleTriggerThermal done");
+  #endif
 
   sendAck("trigger_thermal", ch);
 }
