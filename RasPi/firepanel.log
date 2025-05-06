@@ -1162,3 +1162,11 @@
 [2025-05-06 18:11:02] [INFO] Mode changed to: ARMED
 [2025-05-06 18:11:03] [ALERT] MODE_CHANGE received: {"type": "alert", "alertType": "mode_change", "mode": "NO_OUTPUT"}
 [2025-05-06 18:11:03] [INFO] Mode changed to: NO_OUTPUT
+[2025-05-06 18:11:04] [ALERT] MODE_CHANGE received: {"type": "alert", "alertType": "mode_change", "mode": "TEST"}
+[2025-05-06 18:11:04] [INFO] Mode changed to: TEST
+[2025-05-06 18:11:05] [ALERT] MODE_CHANGE received: {"type": "alert", "alertType": "mode_change", "mode": "NO_OUTPUT"}
+[2025-05-06 18:11:05] [INFO] Mode changed to: NO_OUTPUT
+[2025-05-06 18:11:05] [ALERT] MODE_CHANGE received: {"type": "alert", "alertType": "mode_change", "mode": "ARMED"}
+[2025-05-06 18:11:05] [INFO] Mode changed to: ARMED
+[2025-05-06 18:11:06] [ALERT] MODE_CHANGE received: {"type": "alert", "alertType": "mode_change", "mode": "NO_OUTPUT"}
+[2025-05-06 18:11:06] [INFO] Mode changed to: NO_OUTPUT
