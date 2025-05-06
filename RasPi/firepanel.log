@@ -2016,3 +2016,4 @@
 [2025-05-06 19:24:07] [SOCKET] Received command: thermal_trigger:2
 [2025-05-06 19:24:07] [SOCKET] Thermal trigger on channel 2
 [2025-05-06 19:24:09] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 6.787124e-13}}
+[2025-05-06 19:24:14] [DEBUG] Cleared expired thermal flags
