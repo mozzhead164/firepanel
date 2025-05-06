@@ -16,6 +16,12 @@ SHOW_ALERTS = False
 
 SERIAL_PORT = "/dev/ttyS0"
 BAUD_RATE = 115200
+# How long (in seconds) before we consider a partial frame “stale”
+FRAME_TIMEOUT    = 1.0
+# Maximum bytes we’ll accumulate between markers before we give up
+MAX_FRAME_LENGTH = 512
+
+
 STATUS_FILE = "/home/Dale/firepanel/RasPi/system_status.json"
 WATCHDOG_FILE = "/home/Dale/firepanel/RasPi/watchdog_status.json"
 LOG_FILE = "/home/Dale/firepanel/RasPi/firepanel.log"
@@ -58,43 +64,64 @@ def send_json(ser, obj):
 
 
 def read_from_serial(ser):
-    buffer = ""
+    buffer = []               # list of chars inside <…>
     in_frame = False
+    last_byte_time = time.monotonic()
 
     while not stop_event.is_set():
         try:
-            raw = ser.read(1)  # or readline(), etc.
-            if raw == b"":
-                # timeout (no data) — drop partial and loop
-                if in_frame:
-                    buffer = ""
+            # read up to whatever’s available, or at least 1 byte
+            to_read = ser.in_waiting or 1
+            data = ser.read(to_read)
+            if not data:
+                # timeout: if we were mid-frame and nothing’s changed for FRAME_TIMEOUT, resync
+                if in_frame and (time.monotonic() - last_byte_time) > FRAME_TIMEOUT:
+                    write_log("[SERIAL] Frame timeout, discarding partial frame")
+                    buffer.clear()
                     in_frame = False
                 continue
 
-            ch = raw.decode("utf-8", errors="ignore")
-            # … your existing <…> parsing goes here …
+            last_byte_time = time.monotonic()
+
+            for b in data:
+                ch = chr(b)
+
+                if ch == "<":
+                    # start marker: reset buffer
+                    in_frame = True
+                    buffer.clear()
+                elif ch == ">" and in_frame:
+                    # end marker: process complete frame
+                    frame = "".join(buffer).strip()
+                    in_frame = False
+                    buffer.clear()
+                    if frame:
+                        handle_frame(frame)
+                elif in_frame:
+                    # accumulate, but guard against runaway
+                    buffer.append(ch)
+                    if len(buffer) > MAX_FRAME_LENGTH:
+                        write_log(f"[SERIAL] Frame too long ({len(buffer)} bytes), resyncing")
+                        buffer.clear()
+                        in_frame = False
 
         except serial.SerialException as e:
-            write_log(f"[SERIAL] Port error: {e}. Reopening in 1s.")
-            # tear down and rebuild the connection
+            write_log(f"[ERROR] Serial exception: {e}. Reopening port in 1s.")
             try:
                 ser.close()
-            except Exception as close_err:
-                write_log(f"[SERIAL] Close failed: {close_err}")
-
+            except Exception:
+                pass
             time.sleep(1)
-
             try:
                 ser.open()
-                write_log(f"[SERIAL] Port reopened successfully")
-            except Exception as open_err:
-                write_log(f"[SERIAL] Reopen failed: {open_err}")
-                # if you want to be extra robust, you could loop here
-                # until success or until stop_event is set
-            # then continue back to the top of the while-loop
-            continue
-
-
+                ser.reset_input_buffer()
+                write_log("[SERIAL] Port reopened and buffer flushed")
+            except Exception as reopen_err:
+                write_log(f"[ERROR] Failed to reopen port: {reopen_err}")
+        except Exception as e:
+            write_log(f"[ERROR] Unexpected error in serial read loop: {e}")
+            # small sleep to prevent busy‐spin on unexpected errors
+            time.sleep(0.1)
 
 
 
