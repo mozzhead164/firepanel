@@ -3331,3 +3331,8 @@
 [2025-05-06 22:17:01] [DATA IN ] cam=[False, False, False, False, False, False, False, False] th=[False, False, False, False, False, False, False, False]
 [2025-05-06 22:17:01] [DATA OUT] trig=[False, False, False, False, False, False, False, False] thermal=[False, False, False, False, False, False, False, False]
 [2025-05-06 22:17:01] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 1.696781e-13}}
+[2025-05-06 22:17:08] [SOCKET] Received command: thermal_trigger:2
+[2025-05-06 22:17:08] [SOCKET] Thermal trigger on channel 2
+[2025-05-06 22:17:08] [SOCKET] Forwarded to Arduino: {"type": "trigger_thermal", "channel": 2}
+[2025-05-06 22:17:08] Unhandled message: {"type":"ack","command":"trigger_thermal","channel":2}
+[2025-05-06 22:17:09] [DEBUG] Cleared expired thermal flags
