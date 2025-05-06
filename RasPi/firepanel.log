@@ -33,3 +33,8 @@
 [2025-05-06 17:12:25] Received heartbeat
 [2025-05-06 17:12:25] SENT: <{"type": "get_data"}>
 [2025-05-06 17:12:25] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 3.679307e-32}}
+[2025-05-06 17:12:50] Received heartbeat
+[2025-05-06 17:12:50] SENT: <{"type": "get_data"}>
+[2025-05-06 17:12:50] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 2.589082e-18}}
+[2025-05-06 17:12:51] [SOCKET] Received command: thermal_trigger:0
+[2025-05-06 17:12:51] [SOCKET] Thermal trigger on channel 0
