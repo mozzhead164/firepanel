@@ -2924,3 +2924,7 @@
 [2025-05-06 21:45:23] [MAIN] socket_thread started
 [2025-05-06 21:45:23] [SOCKET] Listening on /home/Dale/firepanel/RasPi/firepanel.sock
 [2025-05-06 21:45:31] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 2.71485e-12}}
+[2025-05-06 21:45:33] [SOCKET] Received command: thermal_trigger:2
+[2025-05-06 21:45:33] [SOCKET] Thermal trigger on channel 2
+[2025-05-06 21:45:33] [SOCKET] Forwarded to Arduino: {"type": "trigger_thermal", "channel": 3}
+[2025-05-06 21:45:33] Unhandled message: {"type":"ack","command":"trigger_thermal","channel":3}

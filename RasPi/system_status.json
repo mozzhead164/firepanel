@@ -32,11 +32,16 @@
   "thermal": [
     false,
     false,
-    false,
+    true,
     false,
     false,
     false,
     false,
     false
-  ]
+  ],
+  "lastUnhandled": {
+    "type": "ack",
+    "command": "trigger_thermal",
+    "channel": 3
+  }
 }
