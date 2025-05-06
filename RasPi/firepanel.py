@@ -397,6 +397,8 @@ if __name__ == "__main__":
         daemon=True
     )
     socket_thread.start()
+    write_log("[MAIN] socket_thread started")
+    print("[MAIN] socket_thread started")
 
     try:
         while True:
