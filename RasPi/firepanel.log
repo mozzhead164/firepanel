@@ -258,3 +258,6 @@
 [2025-05-06 17:24:30] Received heartbeat
 [2025-05-06 17:24:30] SENT: <{"type": "get_data"}>
 [2025-05-06 17:24:30] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 2.589082e-18}}
+[2025-05-06 17:24:40] Received heartbeat
+[2025-05-06 17:24:40] SENT: <{"type": "get_data"}>
+[2025-05-06 17:24:40] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 0.000182}}
