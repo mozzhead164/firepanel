@@ -8,6 +8,39 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from RPLCD.i2c import CharLCD
 
+
+
+STATUS_FILE = "/home/Dale/firepanel/RasPi/system_status.json"
+
+lcd_cache = [[' ' for _ in range(20)] for _ in range(4)]
+current_data = {
+    'stage': 'booting',
+    'mode': 'BOOTING',
+    'conn': [False]*8,
+    'trig': [False]*8,
+    'thermal': [False]*8  
+}
+
+last_stage = None
+booting_idx = 0
+handshake_left = 0
+handshake_right = 19
+handshake_previous_left = None
+handshake_previous_right = None
+
+watchdogActive = False
+last_toggle_time = 0
+showing_trouble = False
+status_changed = Event()
+
+flash_tick_on = True
+last_flash_toggle = time.time()
+flash_interval = 0.25 
+previous_trig_states = [False] * 8
+
+
+
+
 # LCD Setup
 I2C_ADDRESS = 0x27
 lcd = None
@@ -91,36 +124,6 @@ def init_lcd():
         print(f"[ERROR] LCD init failed: {e}", file=sys.stderr)
         lcd = None
         return False
-
-STATUS_FILE = "/home/Dale/firepanel/RasPi/system_status.json"
-
-lcd_cache = [[' ' for _ in range(20)] for _ in range(4)]
-current_data = {
-    'stage': 'booting',
-    'mode': 'BOOTING',
-    'conn': [False]*8,
-    'trig': [False]*8,
-    'thermal': [False]*8  
-}
-
-last_stage = None
-booting_idx = 0
-handshake_left = 0
-handshake_right = 19
-handshake_previous_left = None
-handshake_previous_right = None
-
-watchdogActive = False
-last_toggle_time = 0
-showing_trouble = False
-status_changed = Event()
-
-flash_tick_on = True
-last_flash_toggle = time.time()
-flash_interval = 0.25 
-previous_trig_states = [False] * 8
-
-
 
 
 def lcd_write_safe(pos, text):
