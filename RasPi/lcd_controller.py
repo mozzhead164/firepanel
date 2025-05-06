@@ -35,7 +35,7 @@ status_changed = Event()
 
 flash_tick_on = True
 last_flash_toggle = time.time()
-flash_interval = 0.25 
+flash_interval = 0.5 
 previous_trig_states = [False] * 8
 
 
