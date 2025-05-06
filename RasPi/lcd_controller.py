@@ -387,17 +387,45 @@ def handle_status_file_update():
         except Exception:
             watchdogActive = False
 
-    stage = current_data.get('stage', 'unknown')
+    # Decide which page we should be on now
+    page = determine_page(current_data)
 
-    # Always handle screen clear if stage changed
-    if stage != last_stage:
-        check_and_handle_stage_change(stage)
+    # If the page changed, clear the screen
+    if page != last_stage:
+        clear_screen_full()
+        last_stage = page
 
-    # Always update screen if connected
-    if stage == "connected":
+    # For booting / initializing we have their own frame-renderers
+    if page == "connected":
         screen = build_screen_from_system(current_data)
-        print("[DEBUG] Connected screen content:", screen)
         update_screen(screen)
+    # else: we do nothing here. The main loop runs the animations
+
+
+def determine_page(status):
+    """
+    Three states:
+      - 'booting'      : for first BOOT_DURATION seconds after script start
+      - 'initializing' : after BOOT_DURATION but before first heartbeat
+      - 'connected'    : once we’ve seen a heartbeat from the Arduino
+    """
+    global heartbeat_received
+
+    now = time.time()
+    elapsed = now - start_time
+
+    # Always show “BOOTING” for the first BOOT_DURATION seconds
+    if elapsed < BOOT_DURATION:
+        return "booting"
+
+    # If the file’s stage is 'connected', or we’ve previously seen one, we’re connected
+    if status.get("stage") == "connected" or heartbeat_received:
+        heartbeat_received = True
+        return "connected"
+
+    # Otherwise we’re still waiting on that first heartbeat
+    return "initializing"
+
 
 
 
@@ -431,20 +459,22 @@ def main():
                     flash_tick_on = not flash_tick_on
                     update_flashing_triggers()
 
-            stage = current_data.get('stage', 'booting')
-            
-            if stage == 'booting':
+            # Decide page each iteration
+            page = determine_page(current_data)
+
+            if page == 'booting':
                 booting_animation_frame()
-            
-            elif stage == 'handshake':
-                handshake_animation_frame()
-            
-            elif stage == 'connected' and watchdogActive:
-                now = time.time()
-                if now - last_toggle_time > 2.5:
-                    last_toggle_time = now
-                    showing_trouble = not showing_trouble
-            
+            elif page == 'initializing':
+                handshake_animation_frame()   # reuse your old init animation
+            elif page == 'connected':
+                # only show trouble if watchdog is active
+                if watchdogActive:
+                    now = time.time()
+                    if now - last_toggle_time > 2.5:
+                        last_toggle_time = now
+                        showing_trouble = not showing_trouble
+            # else: no other pages
+
             sleep(0.01)
 
     except KeyboardInterrupt:
