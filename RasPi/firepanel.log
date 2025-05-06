@@ -1865,3 +1865,6 @@
 [2025-05-06 18:59:08] Received heartbeat
 [2025-05-06 18:59:08] SENT: <{"type": "get_data"}>
 [2025-05-06 18:59:08] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 5.886891e-31}}
+[2025-05-06 18:59:17] Firepanel controller started
+[2025-05-06 18:59:17] [MAIN] socket_thread started
+[2025-05-06 18:59:17] [SOCKET] Listening on /home/Dale/firepanel/RasPi/firepanel.sock
