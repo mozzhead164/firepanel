@@ -1,7 +1,7 @@
 {
   "stage": "connected",
   "mode": "NO_OUTPUT",
-  "avgTemp": 29.3125,
+  "avgTemp": 29.3,
   "conn": [
     true,
     true,
@@ -36,7 +36,7 @@
     "type": "alert",
     "alertType": "temp_alert",
     "data": {
-      "avgTemp": 2.245671e-36
+      "avgTemp": 6.787124e-13
     }
   },
   "lastUnhandled": {
