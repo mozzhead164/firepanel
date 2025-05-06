@@ -23,3 +23,15 @@ Traceback (most recent call last):
     handle_frame_obj(data)
     ^^^^^^^^^^^^^^^^
 NameError: name 'handle_frame_obj' is not defined. Did you mean: 'handle_frame'?
+Exception in thread Thread-1 (read_from_serial):
+Traceback (most recent call last):
+  File "/usr/lib/python3.11/threading.py", line 1038, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.11/threading.py", line 975, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/Dale/firepanel/RasPi/firepanel.py", line 65, in read_from_serial
+    byte = ser.read(1)
+           ^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/serial/serialposix.py", line 595, in read
+    raise SerialException(
+serial.serialutil.SerialException: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
