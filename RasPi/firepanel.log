@@ -3859,3 +3859,7 @@
 [2025-05-06 22:37:51] [DATA IN ] cam=[False, False, False, False, False, False, False, False] th=[False, True, False, False, False, False, False, False]
 [2025-05-06 22:37:51] [DATA OUT] trig=[False, False, False, False, False, False, False, False] thermal=[False, True, False, False, False, False, False, False]
 [2025-05-06 22:37:51] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 6.787124e-13}}
+[2025-05-06 22:37:53] [SOCKET] Received command: thermal_trigger:2
+[2025-05-06 22:37:53] [SOCKET] Thermal trigger on channel 2
+[2025-05-06 22:37:53] Received ACK for thermal trigger – ignoring for display
+[2025-05-06 22:37:53] [SOCKET] Forwarded to Arduino: {"type": "trigger_thermal", "channel": 2}
