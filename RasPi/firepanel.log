@@ -1558,3 +1558,5 @@
 [2025-05-06 18:36:01] [ERROR] Failed to parse frame: type":"heartbeat","payload":"alive"}
 [2025-05-06 18:36:11] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
 [2025-05-06 18:36:11] [ERROR] Failed to parse frame: {{""type":"heartbeat","payload":"alive"}
+[2025-05-06 18:36:20] [SOCKET] Received command: thermal_trigger:3
+[2025-05-06 18:36:20] [SOCKET] Thermal trigger on channel 3
