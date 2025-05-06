@@ -14,19 +14,19 @@
   "trig": [
     false,
     false,
-    false,
+    true,
     false,
     false,
     false,
     false,
     false
   ],
-  "avgTemp": 29.175,
+  "avgTemp": 29.1625,
   "lastAlert": {
     "type": "alert",
     "alertType": "temp_alert",
     "data": {
-      "avgTemp": 2.71485e-12
+      "avgTemp": 2.411271e-27
     }
   },
   "thermal": [

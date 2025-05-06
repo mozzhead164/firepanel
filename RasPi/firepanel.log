@@ -2928,3 +2928,4 @@
 [2025-05-06 21:45:33] [SOCKET] Thermal trigger on channel 2
 [2025-05-06 21:45:33] [SOCKET] Forwarded to Arduino: {"type": "trigger_thermal", "channel": 3}
 [2025-05-06 21:45:33] Unhandled message: {"type":"ack","command":"trigger_thermal","channel":3}
+[2025-05-06 21:45:41] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 2.411271e-27}}
