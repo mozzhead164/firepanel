@@ -4277,3 +4277,4 @@
 [2025-05-06 22:51:31] [DATA IN ] cam=[False, False, False, False, False, False, False, False] th=[False, False, False, False, False, False, False, False]
 [2025-05-06 22:51:31] [DATA OUT] trig=[False, False, False, False, False, False, False, False] thermal=[False, False, False, False, False, False, False, False]
 [2025-05-06 22:51:31] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 4.34376e-11}}
+[2025-05-06 22:51:44] Received handshake from Arduino
