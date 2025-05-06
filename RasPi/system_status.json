@@ -1,11 +1,11 @@
 {
-  "stage": "connected",
-  "mode": "ARMED",
+  "stage": "booting",
+  "mode": "BOOTING",
   "conn": [
-    true,
-    true,
-    true,
-    true,
+    false,
+    false,
+    false,
+    false,
     false,
     false,
     false,
@@ -13,7 +13,7 @@
   ],
   "trig": [
     false,
-    true,
+    false,
     false,
     false,
     false,
