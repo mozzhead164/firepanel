@@ -97,3 +97,7 @@ SyntaxError: invalid syntax
     else:
     ^^^^
 SyntaxError: invalid syntax
+  File "/home/Dale/firepanel/RasPi/firepanel.py", line 472
+    else:
+    ^^^^
+SyntaxError: invalid syntax
