@@ -4317,3 +4317,8 @@
 [2025-05-06 22:52:07] [DATA OUT] trig=[False, False, False, False, False, False, False, False] thermal=[True, True, True, True, True, False, False, False]
 [2025-05-06 22:52:07] Received ACK for thermal trigger – ignoring for display
 [2025-05-06 22:52:07] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 1.085943e-11}}
+[2025-05-06 22:52:08] [DEBUG] Cleared expired thermal flags
+[2025-05-06 22:52:09] [SOCKET] Received command: thermal_trigger:6
+[2025-05-06 22:52:09] [SOCKET] Thermal trigger on channel 6
+[2025-05-06 22:52:09] [SOCKET] Forwarded to Arduino: {"type": "trigger_thermal", "channel": 6}
+[2025-05-06 22:52:09] Received ACK for thermal trigger – ignoring for display
