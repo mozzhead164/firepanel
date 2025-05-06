@@ -436,18 +436,32 @@ def socket_command_listener():
                 write_log(f"[SOCKET] Received command: {data}")
 
                 if data.startswith("thermal_trigger:"):
-                    ch0 = int(data.split(":",1)[1])
-                    if 0 <= ch0 < 8:
-                        # 1) Update your status file immediately:
-                        update_status_fields(thermal=[i == ch0 for i in range(8)])
-                        write_log(f"[SOCKET] Thermal trigger on channel {ch0}")
 
-                        # 2) Forward to Arduino on Serial1:
-                        #    Arduino expects "trigger_thermal" and 1–8 channels:
-                        msg = {
-                          "type":    "trigger_thermal",
-                          "channel": ch0
-                        }
+
+                    # parse the 1–8 channel from Node-RED
+                    ch1 = int(data.split(":",1)[1])
+                    if 1 <= ch1 <= 8:
+                        idx = ch1 - 1          # now zero-based for our Python arrays
+
+                        # 1) immediately update the Pi’s status with the correct index
+                        update_status_fields(
+                        thermal=[i == idx for i in range(8)]
+                        )
+                        write_log(f"[SOCKET] Thermal trigger on channel {ch1}")
+
+                        # 2) forward the exact same 1–8 channel to Arduino
+                        msg = {"type":"trigger_thermal", "channel": ch1}
+                        frame = json.dumps(msg)
+                        ser.write(f'<{frame}>'.encode('utf-8'))
+                        ser.flush()
+                        write_log(f"[SOCKET] Forwarded to Arduino: {frame}")
+
+                        conn.sendall(b"OK\n")
+                    else:
+                        conn.sendall(b"ERR: Invalid channel\n")
+
+
+
                         frame = json.dumps(msg)
                         # frame it exactly as you do elsewhere:
                         ser.write(f'<{frame}>'.encode('utf-8'))
