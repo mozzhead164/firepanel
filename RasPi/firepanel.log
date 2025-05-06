@@ -2047,3 +2047,9 @@
 [2025-05-06 19:28:29] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 1.471723e-31}}
 [2025-05-06 19:28:32] [ALERT] BREAK_GLASS received: {"type": "alert", "alertType": "break_glass"}
 [2025-05-06 19:28:32] [ALERT] Break glass trigger on channel None
+[2025-05-06 19:28:35] [ALERT] MODE_CHANGE received: {"type": "alert", "alertType": "mode_change", "mode": "ARMED"}
+[2025-05-06 19:28:35] [INFO] Mode changed to: ARMED
+[2025-05-06 19:28:36] [INFO] Channel 4 triggered
+[2025-05-06 19:28:36] [INFO] Channel 3 triggered
+[2025-05-06 19:28:36] [INFO] Channel 2 triggered
+[2025-05-06 19:28:36] [INFO] Channel 1 triggered

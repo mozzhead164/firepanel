@@ -1,6 +1,6 @@
 {
   "stage": "connected",
-  "mode": "NO_OUTPUT",
+  "mode": "ARMED",
   "avgTemp": 29.25,
   "conn": [
     true,
@@ -14,9 +14,9 @@
   ],
   "trig": [
     true,
-    false,
-    false,
-    false,
+    true,
+    true,
+    true,
     false,
     false,
     false,
@@ -34,7 +34,8 @@
   ],
   "lastAlert": {
     "type": "alert",
-    "alertType": "break_glass"
+    "alertType": "mode_change",
+    "mode": "ARMED"
   },
   "lastUnhandled": {
     "ye": "heartbeat",
