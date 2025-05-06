@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# This is a TEST for Github #2
+
 import serial
 import json
 import os
