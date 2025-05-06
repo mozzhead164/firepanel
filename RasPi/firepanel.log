@@ -1926,3 +1926,5 @@
 [2025-05-06 19:12:39] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 0.002915}}
 [2025-05-06 19:12:49] [SERIAL] Frame too long (1025 bytes), resyncing
 [2025-05-06 19:12:49] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 1.01136e-20}}
+[2025-05-06 19:12:59] [SERIAL] Frame too long (1025 bytes), resyncing
+[2025-05-06 19:12:59] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 1.43723e-34}}
