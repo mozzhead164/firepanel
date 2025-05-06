@@ -1,11 +1,11 @@
 {
-  "stage": "booting",
-  "mode": "BOOTING",
+  "stage": "connected",
+  "mode": "ARMED",
   "conn": [
-    false,
-    false,
-    false,
-    false,
+    true,
+    true,
+    true,
+    true,
     false,
     false,
     false,
@@ -21,27 +21,12 @@
     false,
     false
   ],
-  "avgTemp": 29.1625,
+  "avgTemp": 29.175,
   "lastAlert": {
     "type": "alert",
     "alertType": "temp_alert",
     "data": {
-      "avgTemp": 1.060488e-14
+      "avgTemp": 2.589082e-18
     }
-  },
-  "thermal": [
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
-  ],
-  "lastUnhandled": {
-    "type": "ack",
-    "command": "trigger_thermal",
-    "channel": 7
   }
 }
