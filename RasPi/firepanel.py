@@ -461,17 +461,6 @@ def socket_command_listener():
                         conn.sendall(b"ERR: Invalid channel\n")
 
 
-
-                        frame = json.dumps(msg)
-                        # frame it exactly as you do elsewhere:
-                        ser.write(f'<{frame}>'.encode('utf-8'))
-                        ser.flush()
-                        write_log(f"[SOCKET] Forwarded to Arduino: {frame}")
-
-                        conn.sendall(b"OK\n")
-                    else:
-                        conn.sendall(b"ERR: Invalid channel\n")
-
                 else:
                     conn.sendall(b"ERR: Unknown command\n")
 
