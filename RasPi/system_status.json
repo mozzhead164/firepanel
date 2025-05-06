@@ -34,9 +34,8 @@
   ],
   "lastAlert": {
     "type": "alert",
-    "alertType": "temp_alert",
-    "data": {
-      "avgTemp": 4.34376e-11
-    }
+    "alertType": "psu_undervoltage",
+    "psu": 2,
+    "voltage": 0
   }
 }
