@@ -4567,3 +4567,11 @@
 [2025-05-06 23:01:57] [DATA IN ] cam=[False, False, False, False, False, False, False, False] th=[False, False, False, False, False, False, False, False]
 [2025-05-06 23:01:57] [DATA OUT] trig=[False, False, False, False, False, False, False, False] thermal=[False, False, False, False, False, False, False, False]
 [2025-05-06 23:01:57] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 3.950637e-23}}
+[2025-05-06 23:01:58] [INFO] Channel 2 triggered
+[2025-05-06 23:01:58] [INFO] Channel 2 triggered
+[2025-05-06 23:01:59] [INFO] Channel 2 triggered
+[2025-05-06 23:01:59] [INFO] Channel 2 triggered
+[2025-05-06 23:02:00] [INFO] Channel 2 triggered
+[2025-05-06 23:02:00] [INFO] Channel 2 triggered
+[2025-05-06 23:02:01] [INFO] Channel 2 triggered
+[2025-05-06 23:02:01] [INFO] Channel 2 triggered
