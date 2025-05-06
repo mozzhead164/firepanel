@@ -1883,3 +1883,4 @@
 [2025-05-06 19:11:01] Firepanel controller started
 [2025-05-06 19:11:01] [MAIN] socket_thread started
 [2025-05-06 19:11:01] [SOCKET] Listening on /home/Dale/firepanel/RasPi/firepanel.sock
+[2025-05-06 19:11:04] [INFO] Channel 2 triggered
