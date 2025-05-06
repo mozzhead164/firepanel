@@ -2121,3 +2121,4 @@
 [2025-05-06 19:33:41] [MAIN] socket_thread started
 [2025-05-06 19:33:41] [SOCKET] Listening on /home/Dale/firepanel/RasPi/firepanel.sock
 [2025-05-06 19:33:49] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 1.035633e-17}}
+[2025-05-06 19:33:59] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 9.419026e-30}}
