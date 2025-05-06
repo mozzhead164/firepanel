@@ -1,1 +1,42 @@
-{"stage":"connected","mode":"ARMED","conn":[true,true,true,true,true,true,true,true],"trig":[false,false,false,false,false,false,false,false]}
+{
+  "stage": "connected",
+  "mode": "ARMED",
+  "conn": [
+    true,
+    true,
+    true,
+    true,
+    false,
+    false,
+    false,
+    false
+  ],
+  "trig": [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ],
+  "avgTemp": 29.2,
+  "thermal": [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ],
+  "lastAlert": {
+    "type": "alert",
+    "alertType": "temp_alert",
+    "data": {
+      "avgTemp": 1.737504e-10
+    }
+  }
+}
