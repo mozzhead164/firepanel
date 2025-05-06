@@ -4322,3 +4322,11 @@
 [2025-05-06 22:52:09] [SOCKET] Thermal trigger on channel 6
 [2025-05-06 22:52:09] [SOCKET] Forwarded to Arduino: {"type": "trigger_thermal", "channel": 6}
 [2025-05-06 22:52:09] Received ACK for thermal trigger – ignoring for display
+[2025-05-06 22:52:12] [SOCKET] Received command: thermal_trigger:7
+[2025-05-06 22:52:12] [SOCKET] Thermal trigger on channel 7
+[2025-05-06 22:52:12] [SOCKET] Forwarded to Arduino: {"type": "trigger_thermal", "channel": 7}
+[2025-05-06 22:52:12] Received ACK for thermal trigger – ignoring for display
+[2025-05-06 22:52:15] [SOCKET] Received command: thermal_trigger:8
+[2025-05-06 22:52:15] [SOCKET] Thermal trigger on channel 8
+[2025-05-06 22:52:15] [SOCKET] Forwarded to Arduino: {"type": "trigger_thermal", "channel": 8}
+[2025-05-06 22:52:15] Received ACK for thermal trigger – ignoring for display

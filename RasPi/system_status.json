@@ -28,9 +28,9 @@
     false,
     false,
     false,
-    true,
     false,
-    false
+    false,
+    true
   ],
   "lastAlert": {
     "type": "alert",
