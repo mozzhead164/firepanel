@@ -8,15 +8,12 @@
 
 
 extern StaticJsonDocument<500> jsonDoc;
-extern bool piHandshakeComplete;
 
 // Public Functions
 void initPiSerial();
 void handleGetData();
 void sendHeartbeat();
 void pollJsonSerial();
-void testPiHandshake();
-void handleHandshake(const JsonDocument& doc);
 void handleResetThermal();
 void handleTriggerThermal();
 

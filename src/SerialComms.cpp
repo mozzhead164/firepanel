@@ -15,10 +15,7 @@
 
 extern SystemConnectionState systemConnectionState; // for tracking Pi status
 
-bool piHandshakeComplete = false; // Flag to indicate if the handshake is complete
-bool sentHandshake = false;      // Have we sent handshake TO Pi?
-bool receivedHandshake = false;  // Have we received handshake FROM Pi?
-bool handshakeComplete = false;  // Has full handshake been completed?
+
 
 
 // Serial Communication Defines
@@ -39,10 +36,6 @@ void initPiSerial()
     Serial1.read();
 
   jsonDoc.clear();
-  // optionally send initial handshake:
-  jsonDoc["type"] = "handshake";
-  jsonDoc["payload"] = "HELLO_ATMEGA";
-  sendJson(jsonDoc);
 }
 
 
@@ -111,10 +104,7 @@ void handleIncomingCommand(const JsonDocument& doc) {
     return;
   }
 
-  if (strcmp(type, "handshake") == 0) {
-    handleHandshake(doc);
-  }
-  else if (strcmp(type, "get_data") == 0) {
+  if (strcmp(type, "get_data") == 0) {
     handleGetData();
   }
   else if (strcmp(type, "trigger_thermal") == 0) {
@@ -183,23 +173,6 @@ void sendNack(const char *reason)
 }
 
 
-// Send a handshake request to the Pi
-void testPiHandshake() {
-  static unsigned long lastPing = 0;
-
-  if (!handshakeComplete) {
-    if (millis() - lastPing > 2000) {  // 2 second gap
-      jsonDoc.clear();
-      jsonDoc["type"] = "handshake";
-      jsonDoc["payload"] = "HELLO_ATMEGA";
-      sendJson(jsonDoc);
-
-      sentHandshake = true;
-      lastPing = millis();
-      Serial.println(F("[INFO] Handshake ping sent."));
-    }
-  }
-}
 
 
 // Send a heartbeat message to the Pi every 10 seconds
@@ -232,19 +205,6 @@ void sendJson(const JsonDocument &doc)
   #endif
 }
 
-
-
-// Handle the handshake response from the Pi
-void handleHandshake(const JsonDocument& doc)
-{
-  jsonDoc.clear();
-  jsonDoc["type"] = "ack";
-  jsonDoc["command"] = "handshake";
-  sendJson(jsonDoc);
-
-  systemConnectionState = STATE_RUNNING;
-  Serial.println("[INFO] Handshake ACK sent. Now running.");
-}
 
 
 // Handle the "get_data" command from the Pi
