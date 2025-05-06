@@ -1517,3 +1517,4 @@
 [2025-05-06 18:31:51] [ERROR] Failed to parse frame: {yetye":"heartbeat","payload":"alive"}
 [2025-05-06 18:32:01] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
 [2025-05-06 18:32:01] [ERROR] Failed to parse frame: {"p"type":"heartbeat","payload":"alive"}
+[2025-05-06 18:32:11] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
