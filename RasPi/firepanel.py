@@ -410,7 +410,7 @@ def socket_command_listener():
     server = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
     server.bind(SOCKET_PATH)
     server.listen(1)
-    write_log("[SOCKET] Listening on /home/Dale/firepanel/RasPi/firepanel.sock")
+    write_log(f"[SOCKET] Listening on {SOCKET_PATH}")
 
     while not stop_event.is_set():
         try:
@@ -418,16 +418,33 @@ def socket_command_listener():
             with conn:
                 data = conn.recv(1024).decode().strip()
                 write_log(f"[SOCKET] Received command: {data}")
+
                 if data.startswith("thermal_trigger:"):
-                    ch = int(data.split(":")[1])
-                    if 0 <= ch < 8:
-                        update_status_fields(thermal=[i == ch for i in range(8)])
-                        write_log(f"[SOCKET] Thermal trigger on channel {ch}")
+                    ch0 = int(data.split(":",1)[1])
+                    if 0 <= ch0 < 8:
+                        # 1) Update your status file immediately:
+                        update_status_fields(thermal=[i == ch0 for i in range(8)])
+                        write_log(f"[SOCKET] Thermal trigger on channel {ch0}")
+
+                        # 2) Forward to Arduino on Serial1:
+                        #    Arduino expects "trigger_thermal" and 1–8 channels:
+                        msg = {
+                          "type":    "trigger_thermal",
+                          "channel": ch0 + 1
+                        }
+                        frame = json.dumps(msg)
+                        # frame it exactly as you do elsewhere:
+                        ser.write(f'<{frame}>'.encode('utf-8'))
+                        ser.flush()
+                        write_log(f"[SOCKET] Forwarded to Arduino: {frame}")
+
                         conn.sendall(b"OK\n")
                     else:
                         conn.sendall(b"ERR: Invalid channel\n")
+
                 else:
                     conn.sendall(b"ERR: Unknown command\n")
+
         except Exception as e:
             write_log(f"[SOCKET] Error: {e}")
 
