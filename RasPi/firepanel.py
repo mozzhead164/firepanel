@@ -100,10 +100,10 @@ def read_from_serial(ser):
                 elif in_frame:
                     # accumulate, but guard against runaway
                     buffer.append(ch)
-                    if len(buffer) > MAX_FRAME_LENGTH:
-                        write_log(f"[SERIAL] Frame too long ({len(buffer)} bytes), resyncing")
-                        buffer.clear()
-                        in_frame = False
+                    # if len(buffer) > MAX_FRAME_LENGTH:
+                    #     write_log(f"[SERIAL] Frame too long ({len(buffer)} bytes), resyncing")
+                    #     buffer.clear()
+                    #     in_frame = False
 
         except serial.SerialException as e:
             write_log(f"[ERROR] Serial exception: {e}. Reopening port in 1s.")
