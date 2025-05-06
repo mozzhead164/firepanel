@@ -19,7 +19,7 @@ BAUD_RATE = 115200
 # How long (in seconds) before we consider a partial frame “stale”
 FRAME_TIMEOUT    = 1.0
 # Maximum bytes we’ll accumulate between markers before we give up
-MAX_FRAME_LENGTH = 512
+MAX_FRAME_LENGTH = 1024
 
 
 STATUS_FILE = "/home/Dale/firepanel/RasPi/system_status.json"
