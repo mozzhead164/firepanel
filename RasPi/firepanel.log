@@ -1646,3 +1646,4 @@
 [2025-05-06 18:42:58] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
 [2025-05-06 18:43:08] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
 [2025-05-06 18:43:08] [ERROR] Failed to parse frame: {"p:"heartbeat","payload":"alive"}
+[2025-05-06 18:43:18] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
