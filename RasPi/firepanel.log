@@ -1149,3 +1149,5 @@
 [2025-05-06 18:10:51] Received heartbeat
 [2025-05-06 18:10:51] SENT: <{"type": "get_data"}>
 [2025-05-06 18:10:51] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 0.186563}}
+[2025-05-06 18:10:59] [ALERT] MODE_CHANGE received: {"type": "alert", "alertType": "mode_change", "mode": "NO_OUTPUT"}
+[2025-05-06 18:10:59] [INFO] Mode changed to: NO_OUTPUT
