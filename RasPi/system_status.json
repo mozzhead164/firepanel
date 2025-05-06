@@ -21,12 +21,12 @@
     false,
     false
   ],
-  "avgTemp": 29.225,
+  "avgTemp": 29.2375,
   "lastAlert": {
     "type": "alert",
     "alertType": "temp_alert",
     "data": {
-      "avgTemp": 1.471723e-31
+      "avgTemp": 4.6e-05
     }
   },
   "thermal": [
