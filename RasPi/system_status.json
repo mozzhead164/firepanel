@@ -34,8 +34,10 @@
   ],
   "lastAlert": {
     "type": "alert",
-    "alertType": "mode_change",
-    "mode": "ARMED"
+    "alertType": "temp_alert",
+    "data": {
+      "avgTemp": 4.142532e-17
+    }
   },
   "lastUnhandled": {
     "ye": "heartbeat",
