@@ -176,17 +176,20 @@ def handle_frame(frame):
                 update_status_fields(thermal=thermal)
                 write_log(f"[INFO] Thermal trigger received on channel {ch}")
 
-        elif msg_type == "ack" and data.get("command") == "trigger_thermal":
-            write_log("Received ACK for thermal trigger – ignoring for display")
-            # no update_status_fields() here, so LCD won’t do a full redraw
-
-        elif msg_type == "ack" and data.get("command") == "handshake":
-            update_status_fields(stage="connected", mode="ARMED")
-            write_watchdog_status(False)
-            handshake_complete = True
-            last_heartbeat = time.time()
-            write_log("Received ACK for handshake")
-            write_watchdog_status(False)
+        elif msg_type == "ack":
+            cmd = data.get("command", "<none>")
+            if cmd == "handshake":
+                # your current handshake logic
+                update_status_fields(stage="connected", mode="ARMED")
+                write_watchdog_status(False)
+                handshake_complete = True
+                last_heartbeat = time.time()
+                write_log("Received ACK for handshake")
+            else:
+                # generic acks—just log them, no status‐file writes
+                write_log(f"Received ACK for {cmd!r}")
+            # and then return, so we don't fall into the final else
+            return
 
 
         elif msg_type == "data":
