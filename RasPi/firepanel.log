@@ -3025,3 +3025,8 @@
 [2025-05-06 21:55:41] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 1.035633e-17}}
 [2025-05-06 21:55:51] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 4.142532e-17}}
 [2025-05-06 21:56:01] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 6.628051e-16}}
+[2025-05-06 21:56:11] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 1.060488e-14}}
+[2025-05-06 21:56:16] [SOCKET] Received command: thermal_trigger:2
+[2025-05-06 21:56:16] [SOCKET] Thermal trigger on channel 2
+[2025-05-06 21:56:16] [SOCKET] Forwarded to Arduino: {"type": "trigger_thermal", "channel": 2}
+[2025-05-06 21:56:16] Unhandled message: {"type":"ack","command":"trigger_thermal","channel":2}
