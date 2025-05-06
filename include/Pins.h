@@ -42,12 +42,12 @@
 
         // Thermal Alarm Output Pins
         #define THERMAL_1 28
-        #define THERMAL_2 29
-        #define THERMAL_3 30
-        #define THERMAL_4 31
-        #define THERMAL_5 32
-        #define THERMAL_6 33
-        #define THERMAL_7 34
+        #define THERMAL_2 30
+        #define THERMAL_3 32
+        #define THERMAL_4 34
+        #define THERMAL_5 29
+        #define THERMAL_6 31
+        #define THERMAL_7 33
         #define THERMAL_8 35
 
         // Test / Dummy Output Pins - Triggers Dummy Output Channels from FP Buttons
@@ -79,21 +79,21 @@
 
         // Camera Pins and related arrays
         const uint8_t PROGMEM cameraPins_P[] = {  Camera_CH1, Camera_CH2, Camera_CH3, Camera_CH4, 
-                                                Camera_CH5, Camera_CH6, Camera_CH7, Camera_CH8  };
+                                                  Camera_CH5, Camera_CH6, Camera_CH7, Camera_CH8  };
 
         const int numCameras = sizeof(cameraPins_P) / sizeof(cameraPins_P[0]);
 
 
         // Thermal Pins Array
         const uint8_t PROGMEM thermalPins_P[] = { THERMAL_1, THERMAL_2, THERMAL_3, THERMAL_4, 
-                                                THERMAL_5, THERMAL_6, THERMAL_7, THERMAL_8 };
+                                                  THERMAL_5, THERMAL_6, THERMAL_7, THERMAL_8 };
 
         const int numThermals = sizeof(thermalPins_P) / sizeof(thermalPins_P[0]);
 
 
         // Dummy Pins Array
         const uint8_t PROGMEM dummyPins_P[] = {  DUMMY_OUT_1, DUMMY_OUT_2, DUMMY_OUT_3, DUMMY_OUT_4, 
-                                               DUMMY_OUT_5, DUMMY_OUT_6, DUMMY_OUT_7, DUMMY_OUT_8  };
+                                                 DUMMY_OUT_5, DUMMY_OUT_6, DUMMY_OUT_7, DUMMY_OUT_8  };
 
         const int numDummy = sizeof(dummyPins_P) / sizeof(dummyPins_P[0]);
 
