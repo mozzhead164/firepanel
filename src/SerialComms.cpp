@@ -294,6 +294,9 @@ void handleTriggerThermal()
   }
 
   uint8_t ch = jsonDoc["channel"];
+  Serial.print(F("[DEBUG] handleTriggerThermal() got channel: "));
+  Serial.println(ch);
+
   if (ch < 1 || ch > 8)
   {
     sendNack("Invalid channel number");
@@ -304,6 +307,9 @@ void handleTriggerThermal()
   systemData.channels[ch - 1].thermalLastTrigger = millis();
 
   uint8_t pin = pgm_read_byte_near(thermalPins_P + (ch - 1));
+  Serial.print(F("[DEBUG] mapping to pin: "));
+  Serial.println(pin);
+
   digitalWrite(pin, HIGH);
 
   Serial.print(F("[THERMAL] Activated - Channel "));
