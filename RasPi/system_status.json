@@ -1,5 +1,5 @@
 {
-  "stage": "booting",
+  "stage": "connected",
   "mode": "BOOTING",
   "avgTemp": null,
   "conn": [
@@ -31,5 +31,12 @@
     false,
     false,
     false
-  ]
+  ],
+  "lastAlert": {
+    "type": "alert",
+    "alertType": "temp_alert",
+    "data": {
+      "avgTemp": 5.886891e-31
+    }
+  }
 }
