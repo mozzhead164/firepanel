@@ -2633,3 +2633,6 @@
 [2025-05-06 20:57:50] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 1.580251e-22}}
 [2025-05-06 20:57:57] [SOCKET] Received command: thermal_trigger:2
 [2025-05-06 20:57:57] [SOCKET] Thermal trigger on channel 2
+[2025-05-06 20:58:00] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 1.403544e-37}}
+[2025-05-06 20:58:01] [SOCKET] Received command: thermal_trigger:2
+[2025-05-06 20:58:01] [SOCKET] Thermal trigger on channel 2
