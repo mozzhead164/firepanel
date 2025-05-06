@@ -1894,3 +1894,4 @@
 [2025-05-06 19:11:18] [SOCKET] Thermal trigger on channel 2
 [2025-05-06 19:11:19] [SERIAL] Frame too long (513 bytes), resyncing
 [2025-05-06 19:11:19] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 2.846726e-06}}
+[2025-05-06 19:11:21] [DEBUG] Cleared expired thermal flags
