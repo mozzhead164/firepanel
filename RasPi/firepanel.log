@@ -1933,3 +1933,4 @@
 [2025-05-06 19:13:04] [SOCKET] Listening on /home/Dale/firepanel/RasPi/firepanel.sock
 [2025-05-06 19:13:09] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 6.950015e-10}}
 [2025-05-06 19:13:19] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 9.876565e-24}}
+[2025-05-06 19:13:27] [INFO] Channel 2 triggered
