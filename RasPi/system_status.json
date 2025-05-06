@@ -21,13 +21,13 @@
     false,
     false
   ],
-  "avgTemp": 0,
+  "avgTemp": 29.125,
   "thermal": [
-    false,
-    false,
     true,
-    false,
-    false,
+    true,
+    true,
+    true,
+    true,
     false,
     false,
     false
