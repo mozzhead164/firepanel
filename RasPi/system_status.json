@@ -23,8 +23,8 @@
   ],
   "avgTemp": 29.35,
   "thermal": [
-    true,
     false,
+    true,
     false,
     false,
     false,
