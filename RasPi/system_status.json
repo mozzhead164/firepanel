@@ -1,7 +1,7 @@
 {
   "stage": "connected",
   "mode": "NO_OUTPUT",
-  "avgTemp": 29.8875,
+  "avgTemp": 29.75,
   "conn": [
     true,
     true,
@@ -34,8 +34,10 @@
   ],
   "lastAlert": {
     "type": "alert",
-    "alertType": "mode_change",
-    "mode": "NO_OUTPUT"
+    "alertType": "temp_alert",
+    "data": {
+      "avgTemp": 6.028177e-28
+    }
   },
   "lastUnhandled": {
     "tye": "heartbeat",
