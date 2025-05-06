@@ -140,14 +140,25 @@ def handle_frame(frame):
             send_json(ser, HANDSHAKE_PAYLOAD)
 
 
-        elif msg_type == "channel_trigger" or msg_type == "output_confirm":
+        elif msg_type in ("channel_trigger", "output_confirm"):
+            # Reset Heartbeat as We Just Heard From Arduino
             last_heartbeat = time.time()
+
+            # Get The Channel Data
             ch = data.get("channel")
-            if ch is not None and 0 <= ch < 8:
-                current_status = load_status_file()
-                trig = current_status.get("trig", [False]*8)
-                if ch is not None and 1 <= ch <= 8:
-                    trig[ch-1] = True  # mark as triggered
+            # Check if 1 < Channel < 8
+            if ch is not None and 1 <= ch <= 8:
+                idx = ch - 1
+
+                # 1) Mark the trigger
+                current = load_status_file()
+                trig    = current.get("trig", [False]*8)
+                trig[idx] = True
+
+                # 2) Record when it happened so cleanup knows how long to wait
+                camera_trigger_times[idx] = time.time()
+
+                # 3) Persist to disk
                 update_status_fields(trig=trig)
                 write_log(f"[INFO] Channel {ch} triggered")
 
