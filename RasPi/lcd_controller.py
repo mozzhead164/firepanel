@@ -21,6 +21,11 @@ current_data = {
     'thermal': [False]*8  
 }
 
+
+BOOT_DURATION = 10.0  # seconds
+start_time = time.time()
+heartbeat_received = False
+
 last_stage = None
 booting_idx = 0
 handshake_left = 0
