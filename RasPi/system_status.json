@@ -1,7 +1,7 @@
 {
   "stage": "connected",
   "mode": "NO_OUTPUT",
-  "avgTemp": 30.0125,
+  "avgTemp": 30,
   "conn": [
     true,
     true,
