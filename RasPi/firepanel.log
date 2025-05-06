@@ -1808,3 +1808,4 @@
 [2025-05-06 18:55:37] [MAIN] socket_thread started
 [2025-05-06 18:55:37] [SOCKET] Listening on /home/Dale/firepanel/RasPi/firepanel.sock
 [2025-05-06 18:55:38] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
+[2025-05-06 18:55:48] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
