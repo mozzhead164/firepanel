@@ -81,3 +81,7 @@ Traceback (most recent call last):
     handle_frame_obj(data)
     ^^^^^^^^^^^^^^^^
 NameError: name 'handle_frame_obj' is not defined. Did you mean: 'handle_frame'?
+  File "/home/Dale/firepanel/RasPi/firepanel.py", line 472
+    else:
+    ^^^^
+SyntaxError: invalid syntax
