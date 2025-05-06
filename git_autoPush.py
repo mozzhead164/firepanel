@@ -51,4 +51,5 @@ def after_upload(source, target, env):
 
 # register with PlatformIO
 Import("env")
-env.AddPostAction("upload", after_upload)
+env.AddPostAction("buildprog", after_upload)
+env.AddPostAction("upload",    after_upload)
