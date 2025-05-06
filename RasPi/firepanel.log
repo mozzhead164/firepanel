@@ -1619,3 +1619,7 @@
 [2025-05-06 18:40:01] [ERROR] Failed to parse frame: {"te:"heartbeat","payload":"alive"}
 [2025-05-06 18:40:11] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
 [2025-05-06 18:40:11] [ERROR] Failed to parse frame: "type":"heartbeat","payload":"alive"}
+[2025-05-06 18:40:18] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
+[2025-05-06 18:40:18] [ERROR] Failed to parse frame: {yyp"{{"type":"handshake","payload":"HELLO_ATMEGA"}
+[2025-05-06 18:40:19] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
+[2025-05-06 18:40:19] [ERROR] Failed to parse frame: {pe":"alert","alertType":"psu_undervoltage","psu":2,"voltage":0}
