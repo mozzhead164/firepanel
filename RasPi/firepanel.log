@@ -1628,3 +1628,4 @@
 [2025-05-06 18:40:38] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
 [2025-05-06 18:40:48] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
 [2025-05-06 18:40:58] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
+[2025-05-06 18:41:08] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
