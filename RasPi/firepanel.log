@@ -1740,3 +1740,6 @@
 [2025-05-06 18:51:58] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
 [2025-05-06 18:51:58] Received heartbeat
 [2025-05-06 18:51:58] SENT: <{"type": "get_data"}>
+[2025-05-06 18:52:00] Firepanel controller started
+[2025-05-06 18:52:00] [MAIN] socket_thread started
+[2025-05-06 18:52:00] [SOCKET] Listening on /home/Dale/firepanel/RasPi/firepanel.sock
