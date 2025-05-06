@@ -2938,3 +2938,4 @@
 [2025-05-06 21:46:22] [SOCKET] Received command: thermal_trigger:8
 [2025-05-06 21:46:31] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 9.198269e-33}}
 [2025-05-06 21:46:31] [SOCKET] Received command: thermal_trigger:8
+[2025-05-06 21:46:41] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 0.01166}}
