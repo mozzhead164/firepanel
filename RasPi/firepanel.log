@@ -1574,3 +1574,5 @@
 [2025-05-06 18:36:31] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
 [2025-05-06 18:36:31] [ERROR] Failed to parse frame: "type":"heartbeat","payload":"alive"}
 [2025-05-06 18:36:33] [DEBUG] Cleared expired thermal flags
+[2025-05-06 18:36:37] [SOCKET] Received command: thermal_trigger:2
+[2025-05-06 18:36:37] [SOCKET] Thermal trigger on channel 2
