@@ -4352,3 +4352,4 @@
 [2025-05-06 22:52:57] [DATA IN ] cam=[False, False, False, False, False, False, False, False] th=[False, False, False, False, False, False, False, False]
 [2025-05-06 22:52:57] [DATA OUT] trig=[False, False, False, False, False, False, False, False] thermal=[False, False, False, False, False, False, True, True]
 [2025-05-06 22:52:57] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 7.116835e-07}}
+[2025-05-06 22:52:58] [DEBUG] Cleared expired thermal flags
