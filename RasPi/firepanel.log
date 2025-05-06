@@ -1571,3 +1571,5 @@
 [2025-05-06 18:36:26] [SOCKET] Thermal trigger on channel 3
 [2025-05-06 18:36:27] [SOCKET] Received command: thermal_trigger:3
 [2025-05-06 18:36:27] [SOCKET] Thermal trigger on channel 3
+[2025-05-06 18:36:31] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
+[2025-05-06 18:36:31] [ERROR] Failed to parse frame: "type":"heartbeat","payload":"alive"}
