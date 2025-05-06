@@ -18,7 +18,7 @@ BAUD_RATE = 115200
 STATUS_FILE = "/home/Dale/system_status.json"
 WATCHDOG_FILE = "/home/Dale/watchdog_status.json"
 LOG_FILE = "/home/Dale/firepanel.log"
-SOCKET_PATH = "/tmp/firepanel.sock"
+SOCKET_PATH = "/home/Dale/firepanel/RasPi/firepanel.sock"
 
 HANDSHAKE_PAYLOAD = {"type": "handshake", "payload": "HELLO_PI"}
 ACK_HANDSHAKE = {"type": "ack", "command": "handshake"}
@@ -348,7 +348,7 @@ def socket_command_listener():
     server = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
     server.bind(SOCKET_PATH)
     server.listen(1)
-    write_log("[SOCKET] Listening on /tmp/firepanel.sock")
+    write_log("[SOCKET] Listening on /home/Dale/firepanel/RasPi/firepanel.sock")
 
     while not stop_event.is_set():
         try:
