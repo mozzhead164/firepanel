@@ -26,7 +26,7 @@
     "type": "alert",
     "alertType": "temp_alert",
     "data": {
-      "avgTemp": 1.657013e-16
+      "avgTemp": 3.767611e-29
     }
   }
 }
