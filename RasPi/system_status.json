@@ -1,12 +1,12 @@
 {
   "stage": "connected",
-  "mode": "BOOTING",
-  "avgTemp": null,
+  "mode": "TEST",
+  "avgTemp": 29.7375,
   "conn": [
-    false,
-    false,
-    false,
-    false,
+    true,
+    true,
+    true,
+    true,
     false,
     false,
     false,
@@ -36,7 +36,7 @@
     "type": "alert",
     "alertType": "temp_alert",
     "data": {
-      "avgTemp": 1.035633e-17
+      "avgTemp": 4.045441e-20
     }
   }
 }
