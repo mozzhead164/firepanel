@@ -204,7 +204,7 @@ def handle_frame(frame):
             for i in range(8):
                 if incoming_trig[i]:
                     camera_trigger_times[i] = time.time()
-                    
+
                 merged_trig.append(incoming_trig[i] or current_trig[i])
 
             update_status_fields(
@@ -441,7 +441,7 @@ if __name__ == "__main__":
         exit(1)
 
     write_log("Firepanel controller started")
-    update_status_fields(stage="booting", mode="BOOTING", conn=[False]*8, trig=[False]*8)
+    update_status_fields(stage="booting", mode="BOOTING", conn=[False]*8, trig=[False]*8, thermal=[False]*8)
 
     serial_thread = threading.Thread(target=read_from_serial, args=(ser,))
     serial_thread.start()
