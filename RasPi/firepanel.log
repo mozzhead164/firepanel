@@ -955,3 +955,5 @@
 [2025-05-06 18:00:11] [SOCKET] Received command: thermal_trigger:0
 [2025-05-06 18:00:11] [SOCKET] Thermal trigger on channel 0
 [2025-05-06 18:00:14] [DEBUG] Cleared expired thermal flags
+[2025-05-06 18:00:16] [SOCKET] Received command: thermal_trigger:0
+[2025-05-06 18:00:16] [SOCKET] Thermal trigger on channel 0
