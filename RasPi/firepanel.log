@@ -4,3 +4,4 @@
 [2025-05-06 17:07:13] [SOCKET] Received command: thermal_trigger:0
 [2025-05-06 17:07:13] [SOCKET] Thermal trigger on channel 0
 [2025-05-06 17:07:16] [DEBUG] Cleared expired thermal flags
+[2025-05-06 17:07:30] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
