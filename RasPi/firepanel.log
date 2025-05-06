@@ -3047,3 +3047,4 @@
 [2025-05-06 21:58:05] [SOCKET] Forwarded to Arduino: {"type": "trigger_thermal", "channel": 2}
 [2025-05-06 21:58:05] Unhandled message: {"type":"ack","command":"trigger_thermal","channel":2}
 [2025-05-06 21:58:11] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 9.876565e-24}}
+[2025-05-06 21:58:12] [DEBUG] Cleared expired thermal flags
