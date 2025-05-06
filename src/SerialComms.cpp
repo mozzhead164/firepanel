@@ -1,0 +1,342 @@
+#include "SerialComms.h"    // for JSON handling
+#include "SystemState.h"    // for systemConnectionState
+#include "SystemData.h"     // for systemData
+#include "SelfTest.h"       // for selfTestPassed
+#include "Pins.h"           // for Serial1
+#include "LedControl.h"     // for mode LED updates
+#include "HandleInputs.h"   // for thermalPins access
+#include "EventManager.h"   // for dispatching events if needed
+// #define ARDUINOJSON_USE_LONG_LONG 1
+#include <ArduinoJson.h>    // for JSON handling
+
+
+
+
+
+extern SystemConnectionState systemConnectionState; // for tracking Pi status
+
+bool piHandshakeComplete = false; // Flag to indicate if the handshake is complete
+bool sentHandshake = false;      // Have we sent handshake TO Pi?
+bool receivedHandshake = false;  // Have we received handshake FROM Pi?
+bool handshakeComplete = false;  // Has full handshake been completed?
+
+
+// Serial Communication Defines
+#define SERIAL_BAUD 115200
+#define START_MARKER '<'
+#define END_MARKER '>'
+#define MAX_DATA_LENGTH 64
+
+
+
+// Initialize the Serial1 port for communication with the Pi
+void initPiSerial()
+{
+  Serial1.begin(SERIAL_BAUD);
+  // Optional: give it a moment and flush
+  delay(10);
+  while (Serial1.available())
+    Serial1.read();
+
+  jsonDoc.clear();
+  // optionally send initial handshake:
+  jsonDoc["type"] = "handshake";
+  jsonDoc["payload"] = "HELLO_ATMEGA";
+  sendJson(jsonDoc);
+}
+
+
+// Accumulate incoming <…> frames, parse JSON, dispatch by "type"
+void pollJsonSerial()
+{
+  static bool receiving = false;
+  static char  buffer[MAX_DATA_LENGTH+1];
+  static uint8_t bufpos = 0;
+
+  while (Serial1.available())
+  {
+    char c = Serial1.read();
+
+    #ifdef DEBUG_PI_SERIAL
+      Serial.print(c);
+    #endif
+
+    if (!receiving)
+    {
+      if (c == START_MARKER)
+      {
+        receiving = true;
+        bufpos    = 0;
+      }
+    }
+    else
+    {
+      if (c == END_MARKER)
+      {
+        receiving = false;
+        buffer[bufpos] = '\0';
+
+        // Attempt to parse JSON
+        DeserializationError err = deserializeJson(jsonDoc, buffer);
+        if (!err)
+        {
+          handleIncomingCommand(jsonDoc);  // 🔥 CALL PROPER COMMAND HANDLER
+        }
+        else
+        {
+          Serial.print(F("[ERROR] JSON parse error: "));
+          Serial.println(err.c_str());
+        }
+      }
+      else if (bufpos < MAX_DATA_LENGTH) {
+        buffer[bufpos++] = c;
+      }
+    }
+  }
+}
+
+
+// Handle incoming commands from the Pi
+void handleIncomingCommand(const JsonDocument& doc) {
+  if (!doc["type"].is<const char*>()) {
+    sendNack("Missing type field");
+    return;
+  }
+
+  const char* type = doc["type"].as<const char*>();
+
+  if (!type)
+  {
+    sendNack("Missing type field");
+    return;
+  }
+
+  if (strcmp(type, "handshake") == 0) {
+    handleHandshake(doc);
+  }
+  else if (strcmp(type, "get_data") == 0) {
+    handleGetData();
+  }
+  else if (strcmp(type, "trigger_thermal") == 0) {
+    handleTriggerThermal();
+  }
+  else if (strcmp(type, "reset_thermal") == 0) {
+    handleResetThermal();
+  }
+  else {
+    sendNack("Unknown command type");
+  }
+}
+
+
+// Validate the incoming JSON command
+bool validateCommand(const JsonDocument& doc, const char* requiredType, const char* requiredField) {
+  if (!doc["type"].is<const char*>()) {
+    return false;
+  }
+
+  const char* type = doc["type"].as<const char*>();
+  if (strcmp(type, requiredType) != 0) {
+    return false;
+  }
+
+  if (requiredField && !doc[requiredField].is<JsonVariantConst>()) {
+    return false;
+  }
+
+  return true;
+}
+
+
+// Convert SystemMode enum to string for debugging
+const char* modeToStr(SystemMode mode) {
+  switch (mode) {
+    case MODE_ARMED: return "ARMED";
+    case MODE_TEST: return "TEST";
+    case MODE_NO_OUTPUT: return "NO_OUTPUT";
+    default: return "UNKNOWN";
+  }
+}
+
+
+// Send an ACK or NACK response to the Pi
+void sendAck(const char *type, uint8_t channel)
+{
+  jsonDoc.clear();
+  jsonDoc["type"] = "ack";
+  jsonDoc["command"] = type;
+  if (channel > 0)
+  {
+    jsonDoc["channel"] = channel; // optional if related to a channel
+  }
+  sendJson(jsonDoc);
+}
+
+
+// Send a NACK response to the Pi with a reason
+void sendNack(const char *reason)
+{
+  jsonDoc.clear();
+  jsonDoc["type"] = "nack";
+  jsonDoc["reason"] = reason;
+  sendJson(jsonDoc);
+}
+
+
+// Send a handshake request to the Pi
+void testPiHandshake() {
+  static unsigned long lastPing = 0;
+
+  if (!handshakeComplete) {
+    if (millis() - lastPing > 2000) {  // 2 second gap
+      jsonDoc.clear();
+      jsonDoc["type"] = "handshake";
+      jsonDoc["payload"] = "HELLO_ATMEGA";
+      sendJson(jsonDoc);
+
+      sentHandshake = true;
+      lastPing = millis();
+      Serial.println(F("[INFO] Handshake ping sent."));
+    }
+  }
+}
+
+
+// Send a heartbeat message to the Pi every 10 seconds
+void sendHeartbeat()
+{
+  static unsigned long lastHeartbeat = 0;
+
+  if (millis() - lastHeartbeat > 10*1000UL) { // every 10 seconds
+    jsonDoc.clear();
+    jsonDoc["type"] = "heartbeat";
+    jsonDoc["payload"] = "alive";
+    sendJson(jsonDoc);
+    lastHeartbeat = millis();
+  }
+}
+
+
+
+// Send a framed JSON document over Serial1
+void sendJson(const JsonDocument &doc)
+{
+  Serial1.write(START_MARKER);
+  serializeJson(doc, Serial1);
+  Serial1.write(END_MARKER);
+
+  #ifdef DEBUG_PI_SERIAL
+    Serial.print(F("[DEBUG] Sending framed JSON: <"));
+    serializeJsonPretty(doc, Serial);
+    Serial.println(F(">"));
+  #endif
+}
+
+
+
+// Handle the handshake response from the Pi
+void handleHandshake(const JsonDocument& doc)
+{
+  jsonDoc.clear();
+  jsonDoc["type"] = "ack";
+  jsonDoc["command"] = "handshake";
+  sendJson(jsonDoc);
+
+  systemConnectionState = STATE_RUNNING;
+  Serial.println("[INFO] Handshake ACK sent. Now running.");
+}
+
+
+// Handle the "get_data" command from the Pi
+void handleGetData()
+{
+  jsonDoc.clear();
+  jsonDoc["type"] = "data";
+
+  JsonObject d = jsonDoc["data"].to<JsonObject>();  
+
+  d["avgTemp"] = systemData.averageTemp;
+  d["alert"] = systemData.tempAlert;
+  d["breakGlass"] = systemData.bgTriggered;
+  d["systemMode"] = systemData.systemMode;
+  d["systemModeStr"] = modeToStr(systemData.systemMode);
+
+  JsonArray channels = d["channels"].to<JsonArray>();
+
+  for (uint8_t i = 0; i < 8; ++i)
+  {
+    JsonObject ch = channels.createNestedObject();
+
+    ch["cameraTriggered"]    = systemData.channels[i].cameraTriggered;
+    ch["lastTriggerTime"]    = systemData.channels[i].lastTriggerTime;
+    ch["thermalTriggered"]   = systemData.channels[i].thermalTriggered;
+    ch["thermalLastTrigger"] = systemData.channels[i].thermalLastTrigger;
+    ch["cableConnected"]     = systemData.channels[i].cableConnected;
+  }
+
+  #ifdef DEBUG_SERIAL
+    Serial.println(F("[DEBUG] Sending system data to Pi"));
+    serializeJson(jsonDoc, Serial);
+    Serial.println();
+  #endif
+
+  sendJson(jsonDoc);
+}
+
+
+// Handle the "trigger_thermal" command from the Pi
+void handleTriggerThermal()
+{
+  if (!jsonDoc["channel"].is<int>())
+  {
+    sendNack("Missing channel field");
+    return;
+  }
+
+  uint8_t ch = jsonDoc["channel"];
+  if (ch < 1 || ch > 8)
+  {
+    sendNack("Invalid channel number");
+    return;
+  }
+
+  systemData.channels[ch - 1].thermalTriggered = true;
+  systemData.channels[ch - 1].thermalLastTrigger = millis();
+
+  uint8_t pin = pgm_read_byte_near(thermalPins_P + (ch - 1));
+  digitalWrite(pin, HIGH);
+
+  Serial.print(F("[THERMAL] Activated - Channel "));
+  Serial.println(ch);
+
+  sendAck("trigger_thermal", ch);
+}
+
+
+// Handle the "reset_thermal" command from the Pi
+void handleResetThermal()
+{
+  if (!jsonDoc["channel"].is<int>())
+  {
+    sendNack("Missing channel field");
+    return;
+  }
+
+  uint8_t ch = jsonDoc["channel"];
+  if (ch < 1 || ch > 8)
+  {
+    sendNack("Invalid channel number");
+    return;
+  }
+
+  systemData.channels[ch - 1].thermalTriggered = false;
+
+  uint8_t pin = pgm_read_byte_near(thermalPins_P + (ch - 1));
+  digitalWrite(pin, LOW);
+
+  Serial.print(F("[THERMAL] Deactivated channel "));
+  Serial.println(ch);
+
+  sendAck("reset_thermal", ch);
+}
+

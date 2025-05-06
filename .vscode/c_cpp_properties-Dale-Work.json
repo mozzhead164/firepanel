@@ -1,0 +1,78 @@
+//
+// !!! WARNING !!! AUTO-GENERATED FILE!
+// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
+// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
+//
+{
+    "configurations": [
+        {
+            "name": "PlatformIO",
+            "includePath": [
+                "C:/Users/dale_/OneDrive/MAS Electronics/Projects/PlatformIO/Fire Suppression PCB Initial Testing/src",
+                "C:/Users/dale_/.platformio/packages/framework-arduino-avr-megacore/libraries/Wire/src",
+                "C:/Users/dale_/OneDrive/MAS Electronics/Projects/PlatformIO/Fire Suppression PCB Initial Testing/.pio/libdeps/ATmega128/ArduinoJson/src",
+                "C:/Users/dale_/OneDrive/MAS Electronics/Projects/PlatformIO/Fire Suppression PCB Initial Testing/.pio/libdeps/ATmega128/Bounce2/src",
+                "C:/Users/dale_/OneDrive/MAS Electronics/Projects/PlatformIO/Fire Suppression PCB Initial Testing/.pio/libdeps/ATmega128/OneWire",
+                "C:/Users/dale_/OneDrive/MAS Electronics/Projects/PlatformIO/Fire Suppression PCB Initial Testing/include",
+                "C:/Users/dale_/.platformio/packages/framework-arduino-avr-megacore/cores/MegaCore",
+                "C:/Users/dale_/.platformio/packages/framework-arduino-avr-megacore/variants/64-pin-avr",
+                "C:/Users/dale_/.platformio/packages/framework-arduino-avr-megacore/libraries/AVR_examples/src",
+                "C:/Users/dale_/.platformio/packages/framework-arduino-avr-megacore/libraries/EEPROM/src",
+                "C:/Users/dale_/.platformio/packages/framework-arduino-avr-megacore/libraries/Flash/src",
+                "C:/Users/dale_/.platformio/packages/framework-arduino-avr-megacore/libraries/SD/src",
+                "C:/Users/dale_/.platformio/packages/framework-arduino-avr-megacore/libraries/SPI/src",
+                "C:/Users/dale_/.platformio/packages/framework-arduino-avr-megacore/libraries/Servo/src",
+                "C:/Users/dale_/.platformio/packages/framework-arduino-avr-megacore/libraries/SoftwareSerial/src",
+                "C:/Users/dale_/.platformio/packages/framework-arduino-avr-megacore/libraries/Timer/src",
+                ""
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "path": [
+                    "C:/Users/dale_/OneDrive/MAS Electronics/Projects/PlatformIO/Fire Suppression PCB Initial Testing/src",
+                    "C:/Users/dale_/.platformio/packages/framework-arduino-avr-megacore/libraries/Wire/src",
+                    "C:/Users/dale_/OneDrive/MAS Electronics/Projects/PlatformIO/Fire Suppression PCB Initial Testing/.pio/libdeps/ATmega128/ArduinoJson/src",
+                    "C:/Users/dale_/OneDrive/MAS Electronics/Projects/PlatformIO/Fire Suppression PCB Initial Testing/.pio/libdeps/ATmega128/Bounce2/src",
+                    "C:/Users/dale_/OneDrive/MAS Electronics/Projects/PlatformIO/Fire Suppression PCB Initial Testing/.pio/libdeps/ATmega128/OneWire",
+                    "C:/Users/dale_/OneDrive/MAS Electronics/Projects/PlatformIO/Fire Suppression PCB Initial Testing/include",
+                    "C:/Users/dale_/.platformio/packages/framework-arduino-avr-megacore/cores/MegaCore",
+                    "C:/Users/dale_/.platformio/packages/framework-arduino-avr-megacore/variants/64-pin-avr",
+                    "C:/Users/dale_/.platformio/packages/framework-arduino-avr-megacore/libraries/AVR_examples/src",
+                    "C:/Users/dale_/.platformio/packages/framework-arduino-avr-megacore/libraries/EEPROM/src",
+                    "C:/Users/dale_/.platformio/packages/framework-arduino-avr-megacore/libraries/Flash/src",
+                    "C:/Users/dale_/.platformio/packages/framework-arduino-avr-megacore/libraries/SD/src",
+                    "C:/Users/dale_/.platformio/packages/framework-arduino-avr-megacore/libraries/SPI/src",
+                    "C:/Users/dale_/.platformio/packages/framework-arduino-avr-megacore/libraries/Servo/src",
+                    "C:/Users/dale_/.platformio/packages/framework-arduino-avr-megacore/libraries/SoftwareSerial/src",
+                    "C:/Users/dale_/.platformio/packages/framework-arduino-avr-megacore/libraries/Timer/src",
+                    ""
+                ]
+            },
+            "defines": [
+                "PLATFORMIO=60118",
+                "ARDUINO_AVR_ATmega128",
+                "USE_ATMEGA128",
+                "SKIP_STARTUP_ANIMATION",
+                "DEBUG_MODE_CHANGE",
+                "DEBUG_LED_EXPANDER",
+                "DEBUG_TRIGGER",
+                "DEBUG_PI_SERIAL",
+                "DEBUG_EXPANDER",
+                "DEBUG_FRONT_PANEL",
+                "F_CPU=16000000L",
+                "ARDUINO_ARCH_AVR",
+                "ARDUINO=10808",
+                "__AVR_ATmega128__",
+                ""
+            ],
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++17",
+            "compilerPath": "C:/Users/dale_/.platformio/packages/toolchain-atmelavr/bin/avr-gcc.exe",
+            "compilerArgs": [
+                "-mmcu=atmega128",
+                ""
+            ]
+        }
+    ],
+    "version": 4
+}
