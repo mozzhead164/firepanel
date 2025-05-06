@@ -1477,3 +1477,5 @@
 [2025-05-06 18:27:31] Unhandled message: {"tye":"heartbeat","payload":"alive"}
 [2025-05-06 18:27:36] [SOCKET] Received command: ping
 [2025-05-06 18:27:41] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
+[2025-05-06 18:27:51] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
+[2025-05-06 18:27:51] [ERROR] Failed to parse frame: "ype":"heartbeat","payload":"alive"}
