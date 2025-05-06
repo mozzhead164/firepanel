@@ -92,7 +92,7 @@ def init_lcd():
         lcd = None
         return False
 
-STATUS_FILE = "/home/Dale/system_status.json"
+STATUS_FILE = "/home/Dale/firepanel/RasPi/system_status.json"
 
 lcd_cache = [[' ' for _ in range(20)] for _ in range(4)]
 current_data = {
@@ -369,9 +369,9 @@ def handle_status_file_update():
         global previous_trig_states
         previous_trig_states = current_data.get("trig", [False]*8)
 
-    if os.path.exists("/home/Dale/watchdog_status.json"):
+    if os.path.exists("/home/Dale/firepanel/RasPi/watchdog_status.json"):
         try:
-            with open("/home/Dale/watchdog_status.json", 'r') as f:
+            with open("/home/Dale/firepanel/RasPi/watchdog_status.json", 'r') as f:
                 status = json.load(f)
                 watchdogActive = status.get('active', False)
         except Exception:
@@ -405,7 +405,7 @@ def main():
 
     event_handler = StatusChangeHandler()
     observer = Observer()
-    observer.schedule(event_handler, path="/home/Dale", recursive=False)
+    observer.schedule(event_handler, path="/home/Dale/firepanel/RasPi/", recursive=False)
     observer.start()
 
     try:
