@@ -1302,3 +1302,5 @@
 [2025-05-06 18:18:01] Received heartbeat
 [2025-05-06 18:18:01] SENT: <{"type": "get_data"}>
 [2025-05-06 18:18:01] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 1.507044e-28}}
+[2025-05-06 18:18:08] [SOCKET] Received command: 
+[2025-05-06 18:18:08] [SOCKET] Received command: 
