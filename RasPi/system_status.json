@@ -29,14 +29,14 @@
     false,
     false,
     false,
-    false,
+    true,
     false
   ],
   "lastAlert": {
     "type": "alert",
     "alertType": "temp_alert",
     "data": {
-      "avgTemp": 1.01136e-20
+      "avgTemp": 6.950015e-10
     }
   }
 }
