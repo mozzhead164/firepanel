@@ -99,7 +99,8 @@ current_data = {
     'stage': 'booting',
     'mode': 'BOOTING',
     'conn': [False]*8,
-    'trig': [False]*8
+    'trig': [False]*8,
+    'thermal': [False]*8  
 }
 
 last_stage = None
@@ -353,6 +354,7 @@ def load_status_file():
                 'mode': data.get('mode', 'UNKNOWN').upper(),
                 'conn': data.get('conn', [False]*8),
                 'trig': data.get('trig', [False]*8),
+                'thermal':data.get('thermal', [False]*8), 
                 'avgTemp': data.get('avgTemp', None)
             }
     except Exception as e:
