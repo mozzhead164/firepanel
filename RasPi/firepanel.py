@@ -187,32 +187,48 @@ def handle_frame(frame):
 
 
         elif msg_type == "data":
+            # 1) raw dump
+            write_log(f"[DATA RAW ] {data!r}")
+
             system_data = data.get("data", {})
             last_heartbeat = time.time()
 
-            mode = system_data.get("systemModeStr", "UNKNOWN")
-            avg_temp = system_data.get("avgTemp", None)
-            conn = [ch.get("cableConnected", False) for ch in system_data.get("channels", [])]
+            # 2) build incoming lists
+            incoming_cam = [ch.get("cameraTriggered", False)
+                            for ch in system_data.get("channels", [])]
+            incoming_th  = [ch.get("thermalTriggered", False)
+                            for ch in system_data.get("channels", [])]
 
-            incoming_trig = [ch.get("cameraTriggered", False) or ch.get("thermalTriggered", False) for ch in system_data.get("channels", [])]
+            write_log(f"[DATA IN ] cam={incoming_cam} th={incoming_th}")
 
-            # Load existing trig values to merge with new ones
-            existing_status = load_status_file()
-            current_trig = existing_status.get("trig", [False] * 8)
-            merged_trig = []
+            # load existing flags
+            existing = load_status_file()
+            curr_trig    = existing.get("trig",     [False]*8)
+            curr_thermal = existing.get("thermal",  [False]*8)
 
+            # 3) do your merge and timestamp stamping
+            now = time.time()
+            merged_trig    = []
+            merged_thermal = []
             for i in range(8):
-                if incoming_trig[i]:
-                    camera_trigger_times[i] = time.time()
+                if incoming_cam[i]:
+                    camera_trigger_times[i] = now
+                if incoming_th[i]:
+                    thermal_trigger_times[i] = now
 
-                merged_trig.append(incoming_trig[i] or current_trig[i])
+                merged_trig   .append(incoming_cam[i]    or curr_trig[i])
+                merged_thermal.append(incoming_th[i]     or curr_thermal[i])
 
+            write_log(f"[DATA OUT] trig={merged_trig} thermal={merged_thermal}")
+
+            # finally write it
             update_status_fields(
-                stage="connected",
-                mode=mode,
-                avgTemp=avg_temp,
-                conn=conn,
-                trig=merged_trig
+                stage=   "connected",
+                mode=    system_data.get("systemModeStr","UNKNOWN"),
+                avgTemp= system_data.get("avgTemp",None),
+                conn=    [c.get("cableConnected",False) for c in system_data.get("channels",[])],
+                trig=    merged_trig,
+                thermal= merged_thermal
             )
 
             # write_log("[DEBUG] Wrote merged status from data packet")
