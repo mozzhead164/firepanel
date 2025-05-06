@@ -1734,3 +1734,5 @@
 [2025-05-06 18:51:08] [ERROR] Failed to parse frame: "type":"heartbeat","payload":"alive"}
 [2025-05-06 18:51:18] [ERROR] Failed to parse frame: ype":tba","payload"}
 [2025-05-06 18:51:28] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
+[2025-05-06 18:51:38] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
+[2025-05-06 18:51:38] [ERROR] Failed to parse frame: "type":"heartbeat","payload":"alive"}
