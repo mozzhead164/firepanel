@@ -1856,3 +1856,6 @@
 [2025-05-06 18:58:21] [SOCKET] Listening on /home/Dale/firepanel/RasPi/firepanel.sock
 [2025-05-06 18:58:28] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
 [2025-05-06 18:58:38] [ERROR] Failed to parse frame: type":"heartbeat","payload":"alive"}
+[2025-05-06 18:58:48] Received heartbeat
+[2025-05-06 18:58:48] SENT: <{"type": "get_data"}>
+[2025-05-06 18:58:48] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 9.645083e-27}}
