@@ -1812,3 +1812,6 @@
 [2025-05-06 18:55:58] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
 [2025-05-06 18:55:58] [ERROR] Bad JSON between <>: '"type":"heartbeat","payload":"alive"}'
 [2025-05-06 18:56:08] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
+[2025-05-06 18:56:18] Received heartbeat
+[2025-05-06 18:56:18] SENT: <{"type": "get_data"}>
+[2025-05-06 18:56:18] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 6.787124e-13}}

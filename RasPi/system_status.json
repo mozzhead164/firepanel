@@ -1,12 +1,12 @@
 {
-  "stage": "booting",
-  "mode": "BOOTING",
-  "avgTemp": 29.6375,
+  "stage": "connected",
+  "mode": "NO_OUTPUT",
+  "avgTemp": 29.625,
   "conn": [
-    false,
-    false,
-    false,
-    false,
+    true,
+    true,
+    true,
+    true,
     false,
     false,
     false,
@@ -36,7 +36,7 @@
     "type": "alert",
     "alertType": "temp_alert",
     "data": {
-      "avgTemp": 0.01166
+      "avgTemp": 6.787124e-13
     }
   },
   "lastUnhandled": {
