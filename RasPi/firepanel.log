@@ -1170,3 +1170,6 @@
 [2025-05-06 18:11:05] [INFO] Mode changed to: ARMED
 [2025-05-06 18:11:06] [ALERT] MODE_CHANGE received: {"type": "alert", "alertType": "mode_change", "mode": "NO_OUTPUT"}
 [2025-05-06 18:11:06] [INFO] Mode changed to: NO_OUTPUT
+[2025-05-06 18:11:11] Received heartbeat
+[2025-05-06 18:11:11] SENT: <{"type": "get_data"}>
+[2025-05-06 18:11:11] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 0.000729}}
