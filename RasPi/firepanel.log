@@ -4138,3 +4138,4 @@
 [2025-05-06 22:46:42] [SOCKET] Thermal trigger on channel 2
 [2025-05-06 22:46:42] [SOCKET] Forwarded to Arduino: {"type": "trigger_thermal", "channel": 2}
 [2025-05-06 22:46:42] Received ACK for thermal trigger – ignoring for display
+[2025-05-06 22:46:48] [DEBUG] Cleared expired thermal flags
