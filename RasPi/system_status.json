@@ -42,6 +42,6 @@
   "lastUnhandled": {
     "type": "ack",
     "command": "trigger_thermal",
-    "channel": 3
+    "channel": 7
   }
 }
