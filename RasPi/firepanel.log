@@ -2040,3 +2040,5 @@
 [2025-05-06 19:27:49] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 1.01136e-20}}
 [2025-05-06 19:27:59] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 1.43723e-34}}
 [2025-05-06 19:28:09] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 4.34376e-11}}
+[2025-05-06 19:28:19] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 3.858033e-26}}
+[2025-05-06 19:28:19] [INFO] Channel 1 triggered
