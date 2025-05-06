@@ -8,3 +8,8 @@ Traceback (most recent call last):
     socket_thread = threading.Thread(target=socket_command_listener)
                     ^^^^^^^^^
 NameError: name 'threading' is not defined
+Traceback (most recent call last):
+  File "/home/Dale/firepanel/RasPi/firepanel.py", line 395, in <module>
+    socket_thread = threading.Thread(target=socket_command_listener)
+                    ^^^^^^^^^
+NameError: name 'threading' is not defined
