@@ -58,22 +58,37 @@ def read_from_serial(ser):
     in_frame = False
 
     while not stop_event.is_set():
-        try:
-            byte = ser.read(1).decode("utf-8", errors="ignore")
-            if not byte:
-                continue
-
-            if byte == "<":
+        byte = ser.read(1)
+        if byte == b'':
+            # timeout: flush partial if we’re mid-frame
+            if in_frame:
                 buffer = ""
-                in_frame = True
-            elif byte == ">" and in_frame:
                 in_frame = False
-                handle_frame(buffer.strip())
-            elif in_frame:
-                buffer += byte
-        except Exception as e:
-            write_log(f"[ERROR] Serial read failed: {e}")
-            time.sleep(1)
+            continue
+
+        ch = byte.decode('utf-8', errors='ignore')
+
+        if ch == '<':
+            # start of a new frame: reset state
+            buffer = ""
+            in_frame = True
+        elif ch == '>' and in_frame:
+            # end of frame: process and reset
+            frame_str = buffer
+            in_frame = False
+            buffer = ""
+            try:
+                data = json.loads(frame_str)
+                handle_frame_obj(data)
+            except json.JSONDecodeError:
+                write_log(f"[ERROR] Bad JSON between <>: {frame_str!r}")
+            continue
+        elif in_frame:
+            # accumulate only when inside <>
+            buffer += ch
+        # else: ignore any bytes outside <…>
+
+
 
 
 def handle_frame(frame):
@@ -371,7 +386,7 @@ def socket_command_listener():
 
 if __name__ == "__main__":
     try:
-        ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=0.5)
+        ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=0.5, exclusive=True)
     except Exception as e:
         write_log(f"[FATAL] Could not open serial port: {e}")
         exit(1)
