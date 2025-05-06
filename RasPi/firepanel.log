@@ -1680,3 +1680,7 @@
 [2025-05-06 18:46:08] Received heartbeat
 [2025-05-06 18:46:08] SENT: <{"type": "get_data"}>
 [2025-05-06 18:46:08] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 9.198269e-33}}
+[2025-05-06 18:46:18] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
+[2025-05-06 18:46:18] Received heartbeat
+[2025-05-06 18:46:18] SENT: <{"type": "get_data"}>
+[2025-05-06 18:46:18] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 1.618176e-19}}
