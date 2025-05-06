@@ -38,5 +38,9 @@
     "data": {
       "avgTemp": 4.34376e-11
     }
+  },
+  "lastUnhandled": {
+    "tye": "heartbeat",
+    "payload": "alive"
   }
 }
