@@ -2087,3 +2087,14 @@
 [2025-05-06 19:31:47] [INFO] Channel 3 triggered
 [2025-05-06 19:31:47] [INFO] Channel 3 triggered
 [2025-05-06 19:31:47] [INFO] Channel 3 triggered
+[2025-05-06 19:31:49] [INFO] Channel 1 triggered
+[2025-05-06 19:31:49] [INFO] Channel 1 triggered
+[2025-05-06 19:31:49] [INFO] Channel 1 triggered
+[2025-05-06 19:31:49] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 6.628051e-16}}
+[2025-05-06 19:31:49] [INFO] Channel 2 triggered
+[2025-05-06 19:31:49] [INFO] Channel 2 triggered
+[2025-05-06 19:31:49] [INFO] Channel 1 triggered
+[2025-05-06 19:31:49] [INFO] Channel 4 triggered
+[2025-05-06 19:31:49] [INFO] Channel 3 triggered
+[2025-05-06 19:31:49] [INFO] Channel 4 triggered
+[2025-05-06 19:31:49] [INFO] Channel 3 triggered
