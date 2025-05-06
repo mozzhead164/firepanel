@@ -26,13 +26,13 @@
     "type": "alert",
     "alertType": "temp_alert",
     "data": {
-      "avgTemp": 2.65122e-15
+      "avgTemp": 3.950626e-23
     }
   },
   "thermal": [
     false,
-    false,
-    false,
+    true,
+    true,
     false,
     false,
     false,
