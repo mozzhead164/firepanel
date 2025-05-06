@@ -1886,3 +1886,7 @@
 [2025-05-06 19:11:04] [INFO] Channel 2 triggered
 [2025-05-06 19:11:09] [SERIAL] Frame too long (513 bytes), resyncing
 [2025-05-06 19:11:09] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 2.354757e-30}}
+[2025-05-06 19:11:16] [SOCKET] Received command: thermal_trigger:2
+[2025-05-06 19:11:16] [SOCKET] Thermal trigger on channel 2
+[2025-05-06 19:11:16] [SOCKET] Received command: thermal_trigger:2
+[2025-05-06 19:11:16] [SOCKET] Thermal trigger on channel 2
