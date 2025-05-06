@@ -18,3 +18,6 @@
 [2025-05-06 17:10:20] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
 [2025-05-06 17:10:30] [ERROR] Failed to parse frame: "type":"heartbeat","payload":"alive"}
 [2025-05-06 17:10:50] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
+[2025-05-06 17:11:10] Received heartbeat
+[2025-05-06 17:11:10] SENT: <{"type": "get_data"}>
+[2025-05-06 17:11:10] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 1.035633e-17}}
