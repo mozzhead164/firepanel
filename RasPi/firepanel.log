@@ -3012,3 +3012,7 @@
 [2025-05-06 21:54:11] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 2.65122e-15}}
 [2025-05-06 21:54:21] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 1.060488e-14}}
 [2025-05-06 21:54:31] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 4.241952e-14}}
+[2025-05-06 21:54:33] [INFO] Channel 2 triggered
+[2025-05-06 21:54:33] [INFO] Channel 2 triggered
+[2025-05-06 21:54:34] [INFO] Channel 2 triggered
+[2025-05-06 21:54:34] [INFO] Channel 2 triggered
