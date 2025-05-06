@@ -1973,3 +1973,6 @@
 [2025-05-06 19:18:11] [SOCKET] Thermal trigger on channel 2
 [2025-05-06 19:18:14] [DEBUG] Cleared expired thermal flags
 [2025-05-06 19:18:19] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 1.01136e-20}}
+[2025-05-06 19:18:22] [SOCKET] Received command: thermal_trigger:2
+[2025-05-06 19:18:22] [SOCKET] Thermal trigger on channel 2
+[2025-05-06 19:18:24] [DEBUG] Cleared expired thermal flags
