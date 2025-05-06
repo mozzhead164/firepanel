@@ -1560,3 +1560,8 @@
 [2025-05-06 18:36:11] [ERROR] Failed to parse frame: {{""type":"heartbeat","payload":"alive"}
 [2025-05-06 18:36:20] [SOCKET] Received command: thermal_trigger:3
 [2025-05-06 18:36:20] [SOCKET] Thermal trigger on channel 3
+[2025-05-06 18:36:21] [ERROR] Serial read failed: device reports readiness to read but returned no data (device disconnected or multiple access on port?)
+[2025-05-06 18:36:21] Received heartbeat
+[2025-05-06 18:36:21] SENT: <{"type": "get_data"}>
+[2025-05-06 18:36:21] [ALERT] TEMP_ALERT received: {"type": "alert", "alertType": "temp_alert", "data": {"avgTemp": 5.789362e-39}}
+[2025-05-06 18:36:23] [DEBUG] Cleared expired thermal flags
