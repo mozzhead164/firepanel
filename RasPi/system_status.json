@@ -26,7 +26,22 @@
     "type": "alert",
     "alertType": "temp_alert",
     "data": {
-      "avgTemp": 4.241952e-14
+      "avgTemp": 0.01166
     }
+  },
+  "thermal": [
+    false,
+    false,
+    true,
+    false,
+    false,
+    false,
+    false,
+    false
+  ],
+  "lastUnhandled": {
+    "type": "ack",
+    "command": "trigger_thermal",
+    "channel": 2
   }
 }
