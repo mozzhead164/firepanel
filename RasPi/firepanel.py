@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-# This is a TEST for Github #3
 
 import serial
 import json
@@ -15,9 +14,9 @@ DEBUG_STATUS = False
 
 SERIAL_PORT = "/dev/ttyS0"
 BAUD_RATE = 115200
-STATUS_FILE = "/home/Dale/system_status.json"
-WATCHDOG_FILE = "/home/Dale/watchdog_status.json"
-LOG_FILE = "/home/Dale/firepanel.log"
+STATUS_FILE = "/home/Dale/firepanel/RasPi/system_status.json"
+WATCHDOG_FILE = "/home/Dale/firepanel/RasPi/watchdog_status.json"
+LOG_FILE = "/home/Dale/firepanel/RasPi/firepanel.log"
 SOCKET_PATH = "/home/Dale/firepanel/RasPi/firepanel.sock"
 
 HANDSHAKE_PAYLOAD = {"type": "handshake", "payload": "HELLO_PI"}
