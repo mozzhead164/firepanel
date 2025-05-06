@@ -1,0 +1,46 @@
+{
+  "stage": "connected",
+  "mode": "NO_OUTPUT",
+  "avgTemp": 29.625,
+  "conn": [
+    true,
+    true,
+    true,
+    true,
+    false,
+    false,
+    false,
+    false
+  ],
+  "trig": [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ],
+  "thermal": [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ],
+  "lastAlert": {
+    "type": "alert",
+    "alertType": "temp_alert",
+    "data": {
+      "avgTemp": 1.657013e-16
+    }
+  },
+  "lastUnhandled": {
+    "ye": "heartbeat",
+    "payload": "alive"
+  }
+}
