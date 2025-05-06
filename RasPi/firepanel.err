@@ -13,3 +13,13 @@ Traceback (most recent call last):
     socket_thread = threading.Thread(target=socket_command_listener)
                     ^^^^^^^^^
 NameError: name 'threading' is not defined
+Exception in thread Thread-1 (read_from_serial):
+Traceback (most recent call last):
+  File "/usr/lib/python3.11/threading.py", line 1038, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.11/threading.py", line 975, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/Dale/firepanel/RasPi/firepanel.py", line 82, in read_from_serial
+    handle_frame_obj(data)
+    ^^^^^^^^^^^^^^^^
+NameError: name 'handle_frame_obj' is not defined. Did you mean: 'handle_frame'?
