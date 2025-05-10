@@ -353,11 +353,12 @@ void HandleInterrupts() {
     if (int6Flag) 
     {
         updateBreakGlassInput();  // Read the break-glass IO expander
-        int6Flag = false;         // Reset The Flag
 
         #ifdef DEBUG_TRIGGER
           Serial.println("Break Glass Interrupt Triggered!");
         #endif
+
+        int6Flag = false;       // Reset the flag
     }
 
     // Output sense triggered:
@@ -523,6 +524,7 @@ void updateBreakGlassInput() {
   // Check if the break-glass input has just been pressed.
   if (systemData.bgDebouncer.read() == LOW) 
   {
+    Serial.println("\n\n Break Glass Pressed!");
     systemData.bgState     = LOW;
     systemData.bgTriggered = true;
     systemData.bgTimestamp = now;

@@ -152,6 +152,9 @@ void loop()
   // Check Camera Inputs
   updateInputs();
 
+  // Check Break Glass Input
+  updateBreakGlassInput();
+
   // Check For Channel Triggers and Activate Outputs
   processChannelStates();
 
