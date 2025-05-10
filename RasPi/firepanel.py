@@ -564,17 +564,17 @@ def socket_command_listener():
                     except (ValueError, IndexError):
                         conn.sendall(b"ERR: Bad format\n")
                     else:
-                        if 0 <= ch < 8:
+                        if 1 <= ch <= 8:
+                            idx = ch - 1
+
                             # 1) update status
-                            update_status_fields(
-                                thermal=[i == ch for i in range(8)]
-                            )
+                            update_status_fields( thermal=[i == idx for i in range(8)] )
                             # 2) log with ch defined
                             logger.info("🌡️ Thermal Alarm Triggered – Channel %d", ch)
                             # 3) acknowledge back to Node-RED
                             conn.sendall(b"OK\n")
                             # 4) forward to Arduino
-                            cmd = {"type": "trigger_thermal", "channel": ch + 1}
+                            cmd = {"type": "trigger_thermal", "channel": ch}
                             send_json(ser, cmd)
                             logger.debug("Forwarded to Arduino: %s", cmd)
                         else:
