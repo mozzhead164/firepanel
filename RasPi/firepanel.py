@@ -277,23 +277,23 @@ def handle_frame(frame):
             # Bit-mask unpacking
             cam_mask    = system.get("cameraMask", 0)
             th_mask     = system.get("thermalMask", 0)
-            cb_mask     = system.get("cableMask", 0)
+            cab_mask    = system.get("cableMask", 0)
             conf_mask   = system.get("confirmMask", 0)
 
             # Unpack the bitmasks into lists of bools
             incoming_cam  = [(cam_mask  >> i) & 1 == 1 for i in range(8)]
             incoming_th   = [(th_mask   >> i) & 1 == 1 for i in range(8)]
-            incoming_conn = [(cb_mask   >> i) & 1 == 1 for i in range(8)]
+            incoming_conn = [(cab_mask  >> i) & 1 == 1 for i in range(8)]
             incoming_conf = [(conf_mask >> i) & 1 == 1 for i in range(8)]
             
             # Log the data
             logger.debug(
                 "\n DATA Received:\n"
                 "  Mode=%s, Temp=%.1f, BG=%s, TempA=%s, PSU1_UV=%s, PSU2_UV=%s \n Masks:\n"
-                "  cam:     %s\n"
-                "  th:      %s\n"
-                "  cb:      %s\n"
-                "  confirm: %s\n",
+                "  Camera:  %s\n"
+                "  Thermal: %s\n"
+                "  Confirm: %s\n"
+                "  Connect: %s\n",
                 mode, 
                 avg_temp, 
                 break_glass, 
@@ -302,8 +302,8 @@ def handle_frame(frame):
                 psu2_uv, 
                 f"{cam_mask:08b}",
                 f"{th_mask:08b}",
-                f"{cb_mask:08b}",
-                f"{conf_mask:08b}"
+                f"{conf_mask:08b}",
+                f"{cab_mask:08b}"
             )
 
 
