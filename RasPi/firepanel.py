@@ -233,7 +233,6 @@ def handle_frame(frame):
                 logger.info("✅Confirmed Camera trigger on channel %d✅", ch)
 
 
-
         elif msg_type == "trigger_thermal":
             ch = data.get("channel")
             if ch is not None and 1 <= ch <= 8:
