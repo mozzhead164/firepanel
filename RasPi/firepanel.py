@@ -106,13 +106,13 @@ file_handler.setFormatter(
 logger.addHandler(file_handler)
 
 # — Console Handler ——
-console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.INFO)   # only INFO+ to console
-console_handler.setFormatter(
-    logging.Formatter("%(asctime)s %(levelname)-5s %(message)s",
-                      datefmt="%H:%M:%S")
-)
-logger.addHandler(console_handler)
+# console_handler = logging.StreamHandler()
+# console_handler.setLevel(logging.INFO)   # only INFO+ to console
+# console_handler.setFormatter(
+#     logging.Formatter("%(asctime)s %(levelname)-5s %(message)s",
+#                       datefmt="%H:%M:%S")
+# )
+# logger.addHandler(console_handler)
 
 
 
