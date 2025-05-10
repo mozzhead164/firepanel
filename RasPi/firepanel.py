@@ -116,12 +116,6 @@ logger.addHandler(console_handler)
 
 
 
-# def write_log(entry):
-#     timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
-#     with open(LOG_FILE, "a") as f:
-#         f.write(f"[{timestamp}] {entry}\n")
-
-
 def send_json(ser, obj):
     try:
         frame = "<" + json.dumps(obj) + ">"
@@ -129,7 +123,7 @@ def send_json(ser, obj):
         ser.flush()
         if DEBUG_STATUS:
             if SHOW_ALERTS:
-                write_log(f"SENT: {frame}")
+                logger.debug("Sent JSON frame: %s", frame)
     except Exception:
         logger.exception("Failed to send JSON frame")
 
@@ -169,12 +163,16 @@ def read_from_serial(ser):
                     if frame:
                         handle_frame(frame)
                 elif in_frame:
-                    # accumulate, but guard against runaway
                     buffer.append(ch)
-                    # if len(buffer) > MAX_FRAME_LENGTH:
-                    #     write_log(f"[SERIAL] Frame too long ({len(buffer)} bytes), resyncing")
-                    #     buffer.clear()
-                    #     in_frame = False
+
+                    # guard against runaway frames
+                    if len(buffer) > MAX_FRAME_LENGTH:
+                        logger.warning(
+                            "Serial frame exceeded %d bytes—resyncing",
+                            MAX_FRAME_LENGTH
+                        )
+                        buffer.clear()
+                        in_frame = False
 
         except serial.SerialException:
             logger.exception("Serial port exception—trying to reopen in 1s")
@@ -206,7 +204,7 @@ def handle_frame(frame):
         msg_type = data.get("type")
 
         if msg_type == "handshake" and data.get("payload") == "HELLO_ATMEGA":
-            write_log("Received handshake from Arduino")
+            logger.debug("Received handshake from Arduino")
             send_json(ser, HANDSHAKE_PAYLOAD)
 
 
@@ -353,8 +351,9 @@ def handle_frame(frame):
 
         elif msg_type == "heartbeat":
             last_heartbeat = time.time()
+
             if DEBUG_HEARTBEAT:
-                # write_log("Received heartbeat")
+                logger.debug("Received heartbeat")
 
             # Ensure screen is set to connected mode
             update_status_fields(stage="connected")
@@ -364,8 +363,7 @@ def handle_frame(frame):
         
 
         else:
-            write_log(f"[FRAME] Unhandled message, ignoring for status: {frame}")
-            write_log(f"Unhandled message: {frame}")
+            logger.debug("Ignoring unhandled frame for status: %s", frame)
 
 
     except json.JSONDecodeError:
@@ -392,14 +390,14 @@ def load_status_file():
 def update_status_fields(**updates):
     try:
         if DEBUG_STATUS:
-            write_log("[DEBUG] update_status_fields() called")
+            logger.debug("update_status_fields() called")
 
         # Load existing file or fallback
         if os.path.exists(STATUS_FILE):
             with open(STATUS_FILE, 'r') as f:
                 current = json.load(f)
             if DEBUG_STATUS:
-                write_log("[DEBUG] Loaded current status file")
+                logger.debug("Loaded current status file")
         else:
             current = {
                 "stage": "booting",
@@ -409,7 +407,7 @@ def update_status_fields(**updates):
                 "trig": [False]*8
             }
             if DEBUG_STATUS:
-                write_log("[DEBUG] Created new default status")
+                logger.debug("Created new default status")
 
         # write_log(f"[DEBUG] Updates received: {json.dumps(updates, indent=2)}")
 
@@ -421,7 +419,7 @@ def update_status_fields(**updates):
             json.dump(current, f, indent=2)
 
         if DEBUG_STATUS:
-            write_log(f"[DEBUG] Status file updated with fields: {list(updates.keys())}")
+            logger.debug("Status file updated with fields: %s", list(updates.keys()))
 
     except Exception:
         logger.exception("Failed to update system_status.json")
@@ -443,7 +441,7 @@ def trig_cleanup_loop():
         if updated:
             update_status_fields(trig=trig)
             if DEBUG_TRIG:
-                write_log("[DEBUG] Cleared expired trig flags")
+                logger.debug("Cleared expired camera trig flags")
 
         time.sleep(10)
 
@@ -463,7 +461,7 @@ def thermal_cleanup_loop():
 
         if updated:
             update_status_fields(thermal=thermal)
-            write_log("[DEBUG] Cleared expired thermal flags")
+            logger.debug("Cleared expired thermal flags")
 
         time.sleep(10)
 
