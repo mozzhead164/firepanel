@@ -87,6 +87,9 @@ void read_psuVoltages()
   }
 
   #ifdef DEBUG_VOLTAGE
+    
+    static uint32_t lastPrint = 0;
+    
     // Periodically Print Voltage Readings
     if(timeNow - lastPrint >= 9500L)
     {
