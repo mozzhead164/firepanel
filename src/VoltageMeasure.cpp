@@ -34,7 +34,8 @@ void read_psuVoltages()
     psu2_voltage = (psu2_voltage / 1024.0) * 16.8;
 
     // Check For Under Voltage on PSU 1
-    if(psu1_voltage <= 5.0 && !underVoltage_1) {
+    if(psu1_voltage <= 1.5 && !underVoltage_1) 
+    {
       Serial.println("\n\n PSU 1 - UNDER VOLTAGE ALERT!!!");
       underVoltage_1 = true;
       
@@ -45,7 +46,7 @@ void read_psuVoltages()
     }
     
     // Check For Voltage Restored on PSU 1
-    else if(underVoltage_1 == 1 && psu1_voltage >= 10.0) 
+    else if(underVoltage_1 == 1 && psu1_voltage >= 10.5) 
     { 
       underVoltage_1 = false; 
       Serial.println("\n PSU 1 - Voltage Restored"); 
@@ -58,7 +59,8 @@ void read_psuVoltages()
 
 
     // Check For Under Voltage on PSU 2
-    if(psu2_voltage <= 5.0 && !underVoltage_2) {
+    if(psu2_voltage <= 5.0 && !underVoltage_2) 
+    {
       Serial.println("\n\n PSU 2 - UNDER VOLTAGE ALERT!!!");
       underVoltage_2 = true;
 
