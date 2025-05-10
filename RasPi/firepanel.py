@@ -230,7 +230,7 @@ def handle_frame(frame):
 
                 # 3) Persist to disk
                 update_status_fields(trig=trig)
-                logger.info("Camera trigger on channel %d", ch)
+                logger.info("✅Confirmed Camera trigger on channel %d✅", ch)
 
 
         elif msg_type == "trigger_thermal":
