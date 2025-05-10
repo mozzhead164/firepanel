@@ -80,8 +80,8 @@ struct SystemData
   // ——— PSU Voltage Fields ———
   float psu1Voltage;                // PSU 1 Voltage
   float psu2Voltage;                // PSU 2 Voltage
-  bool psu1UnderVoltage;            // PSU 1 Under Voltage Flag
-  bool psu2UnderVoltage;            // PSU 2 Under Voltage Flag
+  bool psu1UnderVolt;            // PSU 1 Under Voltage Flag
+  bool psu2UnderVolt;            // PSU 2 Under Voltage Flag
   
   // ——— LED caching ———
   uint8_t sysLedRed;                // System LED Red State

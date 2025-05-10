@@ -215,6 +215,20 @@ void sendJson(const JsonDocument &doc)
 // Handle the "get_data" command from the Pi
 void handleGetData()
 {
+
+  // Create Bitmasks for camera, thermal, and cable states
+  uint8_t cameraMask = 0, thermalMask = 0, cableMask = 0;
+
+  for (uint8_t i = 0; i < 8; ++i) {
+    if (systemData.channels[i].cameraTriggered)
+      cameraMask  |= (1 << i);
+    if (systemData.channels[i].thermalTriggered)
+      thermalMask |= (1 << i);
+    if (systemData.channels[i].cableConnected)
+      cableMask   |= (1 << i);
+  }
+
+  // Create JSON object
   jsonDoc.clear();
   jsonDoc["type"] = "data";
 
@@ -225,6 +239,8 @@ void handleGetData()
   d["breakGlass"] = systemData.bgTriggered;
   d["systemMode"] = systemData.systemMode;
   d["systemModeStr"] = modeToStr(systemData.systemMode);
+  d["psu1UnderVolt"] = systemData.psu1UnderVolt;
+  d["psu2UnderVolt"] = systemData.psu2UnderVolt;
 
   JsonArray channels = d["channels"].to<JsonArray>();
 

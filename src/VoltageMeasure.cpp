@@ -38,7 +38,6 @@ void read_psuVoltages()
       Serial.println("\n\n PSU 1 - UNDER VOLTAGE ALERT!!!");
       underVoltage_1 = true;
       
-
       // dispatch undervoltage event for PSU1
       Event e{ EVENT_PSU_UNDERVOLTAGE, 1, false };
       dispatchEvent(&e);
@@ -48,7 +47,8 @@ void read_psuVoltages()
     // Check For Voltage Restored on PSU 1
     else if(underVoltage_1 == 1 && psu1_voltage >= 10.0) 
     { 
-      underVoltage_1 = 0; Serial.println("\n PSU 1 - Voltage Restored"); 
+      underVoltage_1 = false; 
+      Serial.println("\n PSU 1 - Voltage Restored"); 
       Event e{ EVENT_PSU_RESTORED, 1, false };
       dispatchEvent(&e);
 
@@ -70,7 +70,8 @@ void read_psuVoltages()
     // Check For Voltage Restored on PSU 2
     if(underVoltage_2 == 1 && psu2_voltage >= 10.0) 
     { 
-      underVoltage_2 = 0; Serial.println("\n PSU 2 - Voltage Restored");
+      underVoltage_2 = false; 
+      Serial.println("\n PSU 2 - Voltage Restored");
       Event e{ EVENT_PSU_RESTORED, 2, false };
       dispatchEvent(&e);
     }
