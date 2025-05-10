@@ -14,6 +14,15 @@
 
 
 
+// Voltage Measurement Constants
+const float PSU1_VOLTAGE_SCALE = 16.8f;
+const float PSU2_VOLTAGE_SCALE = 16.8f;
+
+const float VOLTAGE_RESTORE = 10.5f; // threshold for voltage restoration check
+const float VOLTAGE_UNDER   = 1.5f;  // threshold for undervoltage check
+
+
+
 
 // LED Control Settings
 
