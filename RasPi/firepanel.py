@@ -68,8 +68,8 @@ except Exception as e:
 # ——— Logger Setup ———
 logger = logging.getLogger("firepanel")
 
-logger.setLevel(logging.DEBUG)     # capture everything; filter on handlers
-# logger.setLevel(logging.INFO)
+# logger.setLevel(logging.DEBUG)     # capture everything; filter on handlers
+logger.setLevel(logging.INFO)
 # logger.setLevel(logging.WARNNG)
 # logger.setLevel(logging.ERROR)
 # logger.setLevel(logging.EXCEPTION)
