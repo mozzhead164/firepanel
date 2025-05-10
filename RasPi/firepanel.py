@@ -415,7 +415,7 @@ def handle_frame(frame):
             logger.info(
                 "➤ Startup v%s: selfTest=%s, mode=%s, PSUs UV=%s/%s, I2C=%s%s",
                 rpt["fwVersion"],
-                rpt["selfTestPassed"],
+                rpt["passed"],
                 rpt["systemMode"],
                 rpt["psu1UnderVolt"],
                 rpt["psu2UnderVolt"],
