@@ -225,7 +225,12 @@ def handle_frame(frame):
                 trig[idx] = True
                 camera_trigger_times[idx] = time.time()
                 update_status_fields(trig=trig)
-                logger.info("🔥 Camera Trigger Detected - Channel %d 🔥", ch)
+
+                # load the current mode straight from disk
+                status = load_status_file()
+                mode   = status.get("mode", "UNKNOWN")
+
+                logger.info("🔥 Camera Trigger Detected 🔥 - Channel %d | Mode: %s", ch, mode)
 
 
         elif msg_type == "output_confirm":
@@ -242,9 +247,9 @@ def handle_frame(frame):
                 update_status_fields(confirm=confirm)
 
                 if dummy:
-                    logger.info("✅ Confirmed Dummy Output - Channel %d ✅", ch)
+                    logger.info("✅ Confirmed Dummy Output ✅ - Channel %d", ch)
                 else:
-                    logger.info("✅ Confirmed Live Output - Channel %d ✅", ch)
+                    logger.info("✅ Confirmed Live Output ✅ - Channel %d", ch)
 
 
         elif msg_type == "trigger_thermal":
@@ -258,7 +263,7 @@ def handle_frame(frame):
                 thermal_trigger_times[ch_index] = time.time()
 
                 update_status_fields(thermal=thermal)
-                logger.info("Thermal trigger received on channel %d", ch)
+                logger.info("♨️ Thermal Trigger Received ♨️ - Channel %d", ch)
 
 
         elif msg_type == "ack":
@@ -273,7 +278,7 @@ def handle_frame(frame):
             elif cmd == "trigger_thermal":
                 ch = data.get("channel", 0)
                 if 1 <= ch <= 8:
-                    logger.info("✔️ Thermal Trigger Confirmed - Channel %d", ch)
+                    logger.info("✅ Thermal Trigger Confirmed ✅ - Channel %d", ch)
             else:
                 # generic acks—just log them, no status‐file writes
                 logger.debug("Received ACK for command %r", cmd)
