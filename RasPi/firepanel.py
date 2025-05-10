@@ -301,7 +301,7 @@ def handle_frame(frame):
                 f"{cam_mask:08b}",
                 f"{th_mask:08b}",
                 f"{cb_mask:08b}",
-                f"{confirm_mask:08b}"
+                f"{conf_mask:08b}"
             )
 
             # Merge triggers with existing state as before:
