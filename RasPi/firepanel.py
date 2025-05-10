@@ -206,9 +206,11 @@ def handle_frame(frame):
         data = json.loads(frame)
         msg_type = data.get("type")
 
+
         if msg_type == "handshake" and data.get("payload") == "HELLO_ATMEGA":
             logger.debug("Received handshake from Arduino")
             send_json(ser, HANDSHAKE_PAYLOAD)
+
 
         elif msg_type == "channel_trigger":
             # Incoming camera trigger (before we know if the output fired)
@@ -225,9 +227,9 @@ def handle_frame(frame):
                 update_status_fields(raw_trig=raw_trig)
                 logger.info("🔥 Camera Trigger Detected - Channel %d 🔥", ch)
 
+
         elif msg_type == "output_confirm":
             # Confirmation from Arduino that the output actually fired
-            last_heartbeat = time.time()
             ch = data.get("channel")
             dummy = data.get("dummy", False)
             if ch and 1 <= ch <= 8:
@@ -238,10 +240,12 @@ def handle_frame(frame):
                 confirmed = current.get("confirmed", [False]*8)
                 confirmed[idx] = True
                 update_status_fields(confirmed=confirmed)
+
                 if dummy:
                     logger.info("✅ Confirmed Dummy Output - Channel %d ✅", ch)
                 else:
                     logger.info("✅ Confirmed Live Output - Channel %d ✅", ch)
+
 
         elif msg_type == "trigger_thermal":
             ch = data.get("channel")
@@ -255,6 +259,7 @@ def handle_frame(frame):
 
                 update_status_fields(thermal=thermal)
                 logger.info("Thermal trigger received on channel %d", ch)
+
 
         elif msg_type == "ack":
             cmd = data.get("command", "<none>")
@@ -270,6 +275,7 @@ def handle_frame(frame):
                 logger.debug("Received ACK for command %r", cmd)
             # and then return, so we don't fall into the final else
             return
+
 
         elif msg_type == "data":
             system = data
@@ -340,6 +346,7 @@ def handle_frame(frame):
                 confirm=incoming_conf
             )
 
+
         elif msg_type == "alert":
             last_heartbeat = time.time()
             alert_type = data.get("alertType") or data.get("subtype") or data.get("type")
@@ -380,6 +387,7 @@ def handle_frame(frame):
             # Optionally: reflect alert visually in status file
             update_status_fields(lastAlert=data)
 
+
         elif msg_type == "heartbeat":
             last_heartbeat = time.time()
 
@@ -392,8 +400,10 @@ def handle_frame(frame):
             # Send get_data request in response to heartbeat
             send_json(ser, {"type": "get_data"})
         
+
         else:
             logger.debug("Ignoring unhandled frame for status: %s", frame)
+
 
     except json.JSONDecodeError:
         logger.error("Failed to parse incoming frame as JSON: %s", frame)
