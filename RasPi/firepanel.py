@@ -201,6 +201,7 @@ def handle_frame(frame):
 
     try:
         # write_log(f"[DEBUG] Raw frame received: {frame}")
+        logger.debug("Raw frame received: %s", frame)
 
         data = json.loads(frame)
         msg_type = data.get("type")
@@ -230,7 +231,7 @@ def handle_frame(frame):
 
                 # 3) Persist to disk
                 update_status_fields(trig=trig)
-                logger.info("✅Confirmed Camera trigger on channel %d✅", ch)
+                logger.info("✅ Confirmed Camera Trigger - Channel %d ✅", ch)
 
 
         elif msg_type == "trigger_thermal":
@@ -290,7 +291,7 @@ def handle_frame(frame):
             logger.debug(
                 "  DATA Received:\n"
                 " System Status\n"
-                "  Mode=%s, Temp=%.1f, BG=%s, TempA=%s, PSU1_UV=%s, PSU2_UV=%s \n
+                "  Mode=%s, Temp=%.1f, BG=%s, TempA=%s, PSU1_UV=%s, PSU2_UV=%s \n"
                 " Masks:\n"
                 "  Camera:  %s\n"
                 "  Thermal: %s\n"
