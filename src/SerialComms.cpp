@@ -215,52 +215,39 @@ void sendJson(const JsonDocument &doc)
 // Handle the "get_data" command from the Pi
 void handleGetData()
 {
-
+  // 1) compute bitmasks
   // Create Bitmasks for camera, thermal, and cable states
   uint8_t cameraMask = 0, thermalMask = 0, cableMask = 0;
-
   for (uint8_t i = 0; i < 8; ++i) {
-    if (systemData.channels[i].cameraTriggered)
-      cameraMask  |= (1 << i);
-    if (systemData.channels[i].thermalTriggered)
-      thermalMask |= (1 << i);
-    if (systemData.channels[i].cableConnected)
-      cableMask   |= (1 << i);
+    if (systemData.channels[i].cameraTriggered)   cameraMask  |= (1 << i);
+    if (systemData.channels[i].thermalTriggered)  thermalMask |= (1 << i);
+    if (systemData.channels[i].cableConnected)    cableMask   |= (1 << i);
   }
 
   // Create JSON object
   jsonDoc.clear();
   jsonDoc["type"] = "data";
 
-  JsonObject d = jsonDoc["data"].to<JsonObject>();  
+  // Scalars
+  jsonDoc["systemModeStr"]   = modeToStr(systemData.systemMode);
+  jsonDoc["avgTemp"]         = systemData.averageTemp;
+  jsonDoc["breakGlass"]      = systemData.bgTriggered;
+  jsonDoc["tempAlert"]       = systemData.tempAlert;
+  jsonDoc["psu1UnderVolt"]   = systemData.psu1UnderVolt;
+  jsonDoc["psu2UnderVolt"]   = systemData.psu2UnderVolt;
 
-  d["avgTemp"] = systemData.averageTemp;
-  d["alert"] = systemData.tempAlert;
-  d["breakGlass"] = systemData.bgTriggered;
-  d["systemMode"] = systemData.systemMode;
-  d["systemModeStr"] = modeToStr(systemData.systemMode);
-  d["psu1UnderVolt"] = systemData.psu1UnderVolt;
-  d["psu2UnderVolt"] = systemData.psu2UnderVolt;
+  // Masks
+  jsonDoc["cameraMask"]      = cameraMask;
+  jsonDoc["thermalMask"]     = thermalMask;
+  jsonDoc["cableMask"]       = cableMask;
 
-  JsonArray channels = d["channels"].to<JsonArray>();
-
-  for (uint8_t i = 0; i < 8; ++i)
-  {
-    JsonObject ch = channels.createNestedObject();
-
-    ch["cameraTriggered"]    = systemData.channels[i].cameraTriggered;
-    ch["lastTriggerTime"]    = systemData.channels[i].lastTriggerTime;
-    ch["thermalTriggered"]   = systemData.channels[i].thermalTriggered;
-    ch["thermalLastTrigger"] = systemData.channels[i].thermalLastTrigger;
-    ch["cableConnected"]     = systemData.channels[i].cableConnected;
-  }
-
-  Serial.print("[DEBUG] Masks C,T,CB = ");
-  Serial.print(cameraMask, BIN); Serial.print(", ");
-  Serial.print(thermalMask, BIN); Serial.print(", ");
-  Serial.println(cableMask, BIN);
 
   #ifdef DEBUG_SERIAL
+    Serial.print("[DEBUG] Masks C,T,CB = ");
+    Serial.print(cameraMask, BIN); Serial.print(", ");
+    Serial.print(thermalMask, BIN); Serial.print(", ");
+    Serial.println(cableMask, BIN);
+
     Serial.println(F("[DEBUG] Sending system data to Pi"));
     serializeJson(jsonDoc, Serial);
     Serial.println();
