@@ -68,8 +68,8 @@ except Exception as e:
 # ——— Logger Setup ———
 logger = logging.getLogger("firepanel")
 
-logger.setLevel(logging.DEBUG)     # capture everything; filter on handlers
-# logger.setLevel(logging.INFO)
+# logger.setLevel(logging.DEBUG)     # capture everything; filter on handlers
+logger.setLevel(logging.INFO)
 # logger.setLevel(logging.WARNNG)
 # logger.setLevel(logging.ERROR)
 # logger.setLevel(logging.EXCEPTION)
@@ -351,7 +351,7 @@ def handle_frame(frame):
         elif msg_type == "alert":
             last_heartbeat = time.time()
             alert_type = data.get("alertType") or data.get("subtype") or data.get("type")
-            logger.warning("Alert %s received: %s", alert_type.upper(), data)
+            logger.debug("Alert %s received: %s", alert_type.upper(), data)
 
             if alert_type == "mode_change":
                 mode = data.get("mode", "UNKNOWN")
