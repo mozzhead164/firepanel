@@ -262,7 +262,7 @@ def handle_frame(frame):
 
 
         elif msg_type == "data":
-            system = data["data"]
+            system = data
             last_heartbeat = time.time()
 
             # Scalars
