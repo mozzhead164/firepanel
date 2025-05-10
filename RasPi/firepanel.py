@@ -4,6 +4,7 @@
 import serial
 import json
 import os
+import sys
 import time
 import socket
 import threading
@@ -129,8 +130,8 @@ def send_json(ser, obj):
         if DEBUG_STATUS:
             if SHOW_ALERTS:
                 write_log(f"SENT: {frame}")
-    except Exception as e:
-        write_log(f"[ERROR] Failed to send: {e}")
+    except Exception:
+        logger.exception("Failed to send JSON frame")
 
 
 def read_from_serial(ser):
@@ -146,7 +147,7 @@ def read_from_serial(ser):
             if not data:
                 # timeout: if we were mid-frame and nothing’s changed for FRAME_TIMEOUT, resync
                 if in_frame and (time.monotonic() - last_byte_time) > FRAME_TIMEOUT:
-                    write_log("[SERIAL] Frame timeout, discarding partial frame")
+                    logger.warning("Serial frame timeout – discarding partial buffer")
                     buffer.clear()
                     in_frame = False
                 continue
@@ -175,8 +176,8 @@ def read_from_serial(ser):
                     #     buffer.clear()
                     #     in_frame = False
 
-        except serial.SerialException as e:
-            write_log(f"[ERROR] Serial exception: {e}. Reopening port in 1s.")
+        except serial.SerialException:
+            logger.exception("Serial port exception—trying to reopen in 1s")
             try:
                 ser.close()
             except Exception:
@@ -185,12 +186,11 @@ def read_from_serial(ser):
             try:
                 ser.open()
                 ser.reset_input_buffer()
-                write_log("[SERIAL] Port reopened and buffer flushed")
+                logger.info("Serial port reopened and input buffer flushed")
             except Exception as reopen_err:
-                write_log(f"[ERROR] Failed to reopen port: {reopen_err}")
-        except Exception as e:
-            write_log(f"[ERROR] Unexpected error in serial read loop: {e}")
-            # small sleep to prevent busy‐spin on unexpected errors
+                logger.exception("Failed to reopen serial port")
+        except Exception:
+            logger.exception("Unexpected error in serial read loop")
             time.sleep(0.1)
 
 
@@ -230,7 +230,7 @@ def handle_frame(frame):
 
                 # 3) Persist to disk
                 update_status_fields(trig=trig)
-                write_log(f"[INFO] Channel {ch} triggered")
+                logger.info("Camera trigger on channel %d", ch)
 
 
         elif msg_type == "trigger_thermal":
@@ -244,7 +244,7 @@ def handle_frame(frame):
                 thermal_trigger_times[ch_index] = time.time()
 
                 update_status_fields(thermal=thermal)
-                write_log(f"[INFO] Thermal trigger received on channel {ch}")
+                logger.info("Thermal trigger received on channel %d", ch)
 
         elif msg_type == "ack":
             cmd = data.get("command", "<none>")
@@ -254,17 +254,17 @@ def handle_frame(frame):
                 write_watchdog_status(False)
                 handshake_complete = True
                 last_heartbeat = time.time()
-                write_log("Received ACK for handshake")
+                logger.info("Received handshake ACK from Arduino")
             else:
                 # generic acks—just log them, no status‐file writes
-                write_log(f"Received ACK for {cmd!r}")
+                logger.debug("Received ACK for command %r", cmd)
             # and then return, so we don't fall into the final else
             return
 
 
         elif msg_type == "data":
             # 1) raw dump
-            write_log(f"[DATA RAW ] {data!r}")
+            logger.debug("Raw DATA message: %r", data)
 
             system_data = data.get("data", {})
             last_heartbeat = time.time()
@@ -275,7 +275,7 @@ def handle_frame(frame):
             incoming_th  = [ch.get("thermalTriggered", False)
                             for ch in system_data.get("channels", [])]
 
-            write_log(f"[DATA IN ] cam={incoming_cam} th={incoming_th}")
+            logger.debug("Parsed DATA lists—camera: %s; thermal: %s", incoming_cam, incoming_th)
 
             # load existing flags
             existing = load_status_file()
@@ -295,7 +295,7 @@ def handle_frame(frame):
                 merged_trig   .append(incoming_cam[i]    or curr_trig[i])
                 merged_thermal.append(incoming_th[i]     or curr_thermal[i])
 
-            write_log(f"[DATA OUT] trig={merged_trig} thermal={merged_thermal}")
+            logger.debug("Merged status—trig: %s; thermal: %s", merged_trig, merged_thermal)
 
             # finally write it
             update_status_fields(
@@ -313,39 +313,39 @@ def handle_frame(frame):
         elif msg_type == "alert":
             last_heartbeat = time.time()
             alert_type = data.get("alertType") or data.get("subtype") or data.get("type")
-            write_log(f"[ALERT] {alert_type.upper()} received: {json.dumps(data)}")
+            logger.warning("Alert %s received: %s", alert_type.upper(), data)
 
             if alert_type == "mode_change":
                 mode = data.get("mode", "UNKNOWN")
                 update_status_fields(mode=mode)
-                write_log(f"[INFO] Mode changed to: {mode}")
+                logger.info("System mode changed to %s", mode)
 
             elif alert_type == "psu_undervoltage":
                 psu = data.get("psu")
                 voltage = data.get("voltage")
-                write_log(f"[ALERT] PSU{psu} Undervoltage: {voltage:.2f}V")
+                logger.warning("PSU%d undervoltage: %.2f V", psu, voltage)
             
             elif alert_type == "psu_restored":
                 psu = data.get("psu")
                 voltage = data.get("voltage")
-                write_log(f"[ALERT] PSU{psu} Voltage Restored: {voltage:.2f}V")
+                logger.info("PSU%d voltage restored: %.2f V", psu, voltage)
 
             elif alert_type == "break_glass":
                 ch = data.get("channel")
-                write_log(f"[ALERT] Break glass trigger on channel {ch}")
+                logger.critical("Break‐glass alarm on channel %d", ch)
 
             elif alert_type == "temperature_alert":
                 temp = data.get("avgTemp", "--")
-                write_log(f"[ALERT] High Temperature Alert: {temp}C")
+                logger.warning("High temperature alert: %s°C", temp)
 
             elif alert_type == "thermal_trigger":
                 ch = data.get("channel")
                 temp = data.get("temperature", "--")
-                write_log(f"[ALERT] Thermal camera trigger on channel {ch}, temp={temp}C")
+                logger.warning("Thermal camera alarm on channel %d at %s°C", ch, temp)
 
             elif alert_type == "camera_trigger":
                 ch = data.get("channel")
-                write_log(f"[ALERT] Camera trigger on channel {ch}")
+                logger.warning("Camera trigger on channel %d", ch)
 
             # Optionally: reflect alert visually in status file
             update_status_fields(lastAlert=data)
@@ -354,7 +354,7 @@ def handle_frame(frame):
         elif msg_type == "heartbeat":
             last_heartbeat = time.time()
             if DEBUG_HEARTBEAT:
-                write_log("Received heartbeat")
+                # write_log("Received heartbeat")
 
             # Ensure screen is set to connected mode
             update_status_fields(stage="connected")
@@ -369,7 +369,7 @@ def handle_frame(frame):
 
 
     except json.JSONDecodeError:
-        write_log(f"[ERROR] Failed to parse frame: {frame}")
+        logger.error("Failed to parse incoming frame as JSON: %s", frame)
 
 
 
@@ -423,8 +423,8 @@ def update_status_fields(**updates):
         if DEBUG_STATUS:
             write_log(f"[DEBUG] Status file updated with fields: {list(updates.keys())}")
 
-    except Exception as e:
-        write_log(f"[ERROR] Failed to update status file: {e}")
+    except Exception:
+        logger.exception("Failed to update system_status.json")
 
 
 def trig_cleanup_loop():
@@ -472,8 +472,8 @@ def write_watchdog_status(active):
     try:
         with open(WATCHDOG_FILE, "w") as f:
             json.dump({"active": active}, f)
-    except Exception as e:
-        write_log(f"[ERROR] Failed to write watchdog file: {e}")
+    except Exception:
+        logger.exception("Failed to write watchdog_status.json")
 
 
 def watchdog_loop():
@@ -482,11 +482,11 @@ def watchdog_loop():
         now = time.time()
         if handshake_complete and (now - last_heartbeat > watchdog_timeout):
             if not watchdog_active:
-                write_log("[WARN] Watchdog timeout! Activating trouble screen.")
+                logger.warning("Watchdog timeout – activating trouble screen")
                 watchdog_active = True
                 write_watchdog_status(True)
         elif watchdog_active and (now - last_heartbeat <= watchdog_timeout):
-            write_log("[INFO] Watchdog recovered, clearing trouble screen.")
+            logger.info("Watchdog recovered – clearing trouble state")
             watchdog_active = False
             write_watchdog_status(False)
         time.sleep(1)
@@ -502,7 +502,7 @@ def socket_command_listener():
     server = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
     server.bind(SOCKET_PATH)
     server.listen(1)
-    write_log(f"[SOCKET] Listening on {SOCKET_PATH}")
+    logger.info("Socket listening on %s", SOCKET_PATH)
 
 
     while not stop_event.is_set():
@@ -511,7 +511,7 @@ def socket_command_listener():
             with conn:
                 data = conn.recv(1024).decode().strip()
                 t0 = time.time()
-                write_log(f"[SOCKET] Received command: {data} @ {t0:.3f}s")
+                logger.debug("Socket received command %r at %.3fs", data, t0)
 
                 if data.startswith("thermal_trigger:"):
                     ch1 = int(data.split(":",1)[1])
@@ -520,7 +520,7 @@ def socket_command_listener():
 
                         # Update status file immediately
                         update_status_fields(thermal=[i == idx for i in range(8)])
-                        write_log(f"[SOCKET] Status update @ {time.time():.3f}s")
+                        logger.debug("Status file updated for thermal trigger at %.3fs", time.time())
 
                         # Prepare and send to Arduino
                         msg = {"type":"trigger_thermal","channel":ch1}
@@ -529,7 +529,10 @@ def socket_command_listener():
                         ser.write(f'<{frame}>'.encode())
                         ser.flush()
                         t2 = time.time()
-                        write_log(f"[SOCKET] Wrote to serial @ {t2:.3f}s (write took {t2-t1:.3f}s), frame={frame}")
+                        logger.debug(
+                            "Wrote to serial at %.3fs (took %.3f s): %s",
+                            t2, t2 - t1, frame
+                        )
 
                         conn.sendall(b"OK\n")
                     else:
@@ -537,7 +540,7 @@ def socket_command_listener():
                 else:
                     conn.sendall(b"ERR: Unknown command\n")
         except Exception as e:
-            write_log(f"[SOCKET] Error: {e}")
+            logger.error("Socket listener error", exc_info=e)
 
 
 
@@ -546,11 +549,11 @@ if __name__ == "__main__":
     try:
         ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=0.5, exclusive=True)
         ser.reset_input_buffer()
-    except Exception as e:
-        write_log(f"[FATAL] Could not open serial port: {e}")
-        exit(1)
+    except Exception:
+        logger.exception("FATAL: could not open serial port, exiting")
+        sys.exit(1)
 
-    write_log("Firepanel controller started")
+    logger.info("Firepanel controller started")
     update_status_fields(stage="booting", mode="BOOTING", conn=[False]*8, trig=[False]*8, thermal=[False]*8)
 
     serial_thread = threading.Thread(target=read_from_serial, args=(ser,))
@@ -570,7 +573,7 @@ if __name__ == "__main__":
         daemon=True
     )
     socket_thread.start()
-    write_log("[MAIN] socket_thread started")
+    logger.debug("Socket listener thread started")
     print("[MAIN] socket_thread started")
 
     try:
@@ -588,4 +591,4 @@ if __name__ == "__main__":
             os.unlink(SOCKET_PATH)
         except Exception:
             pass
-        write_log("Firepanel controller stopped")
+        logger.info("Firepanel controller stopped")
