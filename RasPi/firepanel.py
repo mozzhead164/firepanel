@@ -262,51 +262,58 @@ def handle_frame(frame):
 
 
         elif msg_type == "data":
-            # 1) raw dump
-            logger.debug("Raw DATA message: %r", data)
-
-            system_data = data.get("data", {})
+            system = data["data"]
             last_heartbeat = time.time()
 
-            # 2) build incoming lists
-            incoming_cam = [ch.get("cameraTriggered", False)
-                            for ch in system_data.get("channels", [])]
-            incoming_th  = [ch.get("thermalTriggered", False)
-                            for ch in system_data.get("channels", [])]
+            # Scalars
+            mode     = system.get("systemModeStr", "UNKNOWN")
+            avg_temp = system.get("avgTemp", None)
+            break_glass = system.get("breakGlass", False)
+            temp_alert  = system.get("tempAlert", False)
+            psu1_uv     = system.get("psu1UnderVolt", False)
+            psu2_uv     = system.get("psu2UnderVolt", False)
 
-            logger.debug("Parsed DATA lists—camera: %s; thermal: %s", incoming_cam, incoming_th)
+            # Bit-mask unpacking
+            cam_mask = system.get("cameraMask", 0)
+            th_mask  = system.get("thermalMask", 0)
+            cb_mask  = system.get("cableMask", 0)
 
-            # load existing flags
-            existing = load_status_file()
-            curr_trig    = existing.get("trig",     [False]*8)
-            curr_thermal = existing.get("thermal",  [False]*8)
+            incoming_cam  = [(cam_mask >> i) & 1 == 1 for i in range(8)]
+            incoming_th   = [(th_mask  >> i) & 1 == 1 for i in range(8)]
+            incoming_conn = [(cb_mask  >> i) & 1 == 1 for i in range(8)]
 
-            # 3) do your merge and timestamp stamping
-            now = time.time()
-            merged_trig    = []
-            merged_thermal = []
-            for i in range(8):
-                if incoming_cam[i]:
-                    camera_trigger_times[i] = now
-                if incoming_th[i]:
-                    thermal_trigger_times[i] = now
-
-                merged_trig   .append(incoming_cam[i]    or curr_trig[i])
-                merged_thermal.append(incoming_th[i]     or curr_thermal[i])
-
-            logger.debug("Merged status—trig: %s; thermal: %s", merged_trig, merged_thermal)
-
-            # finally write it
-            update_status_fields(
-                stage=   "connected",
-                mode=    system_data.get("systemModeStr","UNKNOWN"),
-                avgTemp= system_data.get("avgTemp",None),
-                conn=    [c.get("cableConnected",False) for c in system_data.get("channels",[])],
-                trig=    merged_trig,
-                thermal= merged_thermal
+            logger.debug(
+                "DATA recv—mode=%s, T=%.1f, BG=%s, TA=%s, PSU1UV=%s, PSU2UV=%s",
+                mode, avg_temp, break_glass, temp_alert, psu1_uv, psu2_uv
+            )
+            logger.debug(
+                "Masks—cam=%s, th=%s, cb=%s",
+                format(cam_mask, '#010b'),
+                format(th_mask,  '#010b'),
+                format(cb_mask,  '#010b')
             )
 
-            # write_log("[DEBUG] Wrote merged status from data packet")
+            # Merge triggers with existing state as before:
+            existing = load_status_file()
+            current_trig = existing.get("trig", [False]*8)
+            merged_trig = [incoming_cam[i] or current_trig[i] for i in range(8)]
+            # (Thermal stays separate now, if you’re displaying separately)
+            existing_therm = existing.get("thermal", [False]*8)
+            merged_therm = [incoming_th[i] or existing_therm[i] for i in range(8)]
+
+            update_status_fields(
+                stage="connected",
+                mode=mode,
+                avgTemp=avg_temp,
+                breakGlass=break_glass,
+                tempAlert=temp_alert,
+                psu1UnderVolt=psu1_uv,
+                psu2UnderVolt=psu2_uv,
+                conn=incoming_conn,
+                trig=merged_trig,
+                thermal=merged_therm
+            )
+
 
 
         elif msg_type == "alert":
