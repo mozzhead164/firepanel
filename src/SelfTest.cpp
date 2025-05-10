@@ -71,8 +71,9 @@ void runSystemSelfTest() {
     #ifdef DEBUG_STARTUP
       // Optional: send a JSON frame to the Pi
       jsonDoc.clear();
-      jsonDoc["type"] = "self_test";
-      jsonDoc["passed"] = selfTestPassed;
+      jsonDoc["type"]           = "self_test";
+      jsonDoc["passed"]         = selfTestPassed;
+      // jsonDoc["fwVersion"]      = FW_VERSION;
       jsonDoc["systemMode"]     = modeToStr(systemData.systemMode);
       jsonDoc["psu1UnderVolt"]  = systemData.psu1UnderVolt;
       jsonDoc["psu2UnderVolt"]  = systemData.psu2UnderVolt;
