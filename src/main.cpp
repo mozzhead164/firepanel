@@ -36,7 +36,7 @@ SystemConnectionState systemConnectionState = STATE_BOOTING;
 // Historical System Mode for Comparison
 SystemMode prevSystemMode = MODE_NO_OUTPUT;
 
-StaticJsonDocument<500> jsonDoc;
+StaticJsonDocument<2048> jsonDoc;
 
 
 // the setup function runs once when you press reset or power the board

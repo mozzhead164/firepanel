@@ -1,9 +1,6 @@
 
 #include <Arduino.h>
-#include "SystemData.h"
 #include "Temperature.h"
-#include "Pins.h"       // Include pin definitions
-#include "Config.h"     // Include configuration
 
 
 // Raw-state for our non-blocking DS18B20 driver
@@ -12,10 +9,7 @@ TempState tempState = TS_IDLE;
 
 
 
-
-
 static void updateTemperatureAlerts();
-
 
 
 

@@ -6,15 +6,11 @@
 #include "LedControl.h"     // for mode LED updates
 #include "HandleInputs.h"   // for thermalPins access
 #include "EventManager.h"   // for dispatching events if needed
-// #define ARDUINOJSON_USE_LONG_LONG 1
 #include <ArduinoJson.h>    // for JSON handling
 
 
 
-
-
 extern SystemConnectionState systemConnectionState; // for tracking Pi status
-
 
 
 

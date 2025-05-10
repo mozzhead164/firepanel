@@ -7,7 +7,7 @@
 
 
 
-extern StaticJsonDocument<500> jsonDoc;
+extern StaticJsonDocument<2048> jsonDoc;
 
 // Public Functions
 void initPiSerial();

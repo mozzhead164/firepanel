@@ -54,18 +54,7 @@ const float chasePeriod = 1500.0;  // Full period of one chase cycle (ms).
 const unsigned long testedFadeDuration = 1000;  // 1000 ms total fade per LED
 
 
-// === Startup Animation Colours ===
-static const uint8_t CHASE_COLOR_R = 16;
-static const uint8_t CHASE_COLOR_G = 0;
 
-const uint8_t FLASH_RED = 24;
-const uint8_t FLASH_GRN = 16;
-
-
-// 60% target brightness (60% of 255 ≈ 153)
-const uint8_t TARGET_RED = 32;
-const uint8_t TARGET_GRN = 32;
-const uint8_t TARGET_BLU = 32;
 
 
 

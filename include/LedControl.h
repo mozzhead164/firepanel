@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include "SystemData.h"
 #include <stdint.h>
+#include "Config.h"
 #include <Wire.h>
 #include "Pins.h"  // Include pin definitions
 
