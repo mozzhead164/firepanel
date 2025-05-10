@@ -267,31 +267,41 @@ def handle_frame(frame):
             last_heartbeat = time.time()
 
             # Scalars
-            mode     = system.get("systemModeStr", "UNKNOWN")
-            avg_temp = system.get("avgTemp", None)
+            mode        = system.get("systemModeStr", "UNKNOWN")
+            avg_temp    = system.get("avgTemp", None)
             break_glass = system.get("breakGlass", False)
             temp_alert  = system.get("tempAlert", False)
             psu1_uv     = system.get("psu1UnderVolt", False)
             psu2_uv     = system.get("psu2UnderVolt", False)
 
             # Bit-mask unpacking
-            cam_mask = system.get("cameraMask", 0)
-            th_mask  = system.get("thermalMask", 0)
-            cb_mask  = system.get("cableMask", 0)
+            cam_mask    = system.get("cameraMask", 0)
+            th_mask     = system.get("thermalMask", 0)
+            cb_mask     = system.get("cableMask", 0)
+            conf_mask   = system.get("confirmMask", 0)
 
-            incoming_cam  = [(cam_mask >> i) & 1 == 1 for i in range(8)]
-            incoming_th   = [(th_mask  >> i) & 1 == 1 for i in range(8)]
-            incoming_conn = [(cb_mask  >> i) & 1 == 1 for i in range(8)]
-
+            # Unpack the bitmasks into lists of bools
+            incoming_cam  = [(cam_mask  >> i) & 1 == 1 for i in range(8)]
+            incoming_th   = [(th_mask   >> i) & 1 == 1 for i in range(8)]
+            incoming_conn = [(cb_mask   >> i) & 1 == 1 for i in range(8)]
+            incoming_conf = [(conf_mask >> i) & 1 == 1 for i in range(8)]
+            
+            # Log the data
             logger.debug(
-                "DATA rec \n mode=%s, Temp=%.1f, BG=%s, TempA=%s, PSU1_UV=%s, PSU2_UV=%s",
+                "DATA recv:\n"
+                "  mode=%s, Temp=%.1f, BG=%s, TempA=%s, PSU1_UV=%s, PSU2_UV=%s",
                 mode, avg_temp, break_glass, temp_alert, psu1_uv, psu2_uv
             )
             logger.debug(
-                "Masks \n cam=%s, th=%s, cb=%s",
-                format(cam_mask, '#010b'), 
-                format(th_mask,  '#010b'),
-                format(cb_mask,  '#010b') 
+                "Masks:\n"
+                "  cam:     %s\n"
+                "  th:      %s\n"
+                "  cb:      %s\n"
+                "  confirm: %s",
+                f"{cam_mask:08b}",
+                f"{th_mask:08b}",
+                f"{cb_mask:08b}",
+                f"{confirm_mask:08b}"
             )
 
             # Merge triggers with existing state as before:
@@ -312,7 +322,8 @@ def handle_frame(frame):
                 psu2UnderVolt=psu2_uv,
                 conn=incoming_conn,
                 trig=merged_trig,
-                thermal=merged_therm
+                thermal=merged_therm,
+                confirm=incoming_conf
             )
 
 
