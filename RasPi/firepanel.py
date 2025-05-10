@@ -283,11 +283,11 @@ def handle_frame(frame):
             incoming_conn = [(cb_mask  >> i) & 1 == 1 for i in range(8)]
 
             logger.debug(
-                "DATA recv—mode=%s, T=%.1f, BG=%s, TA=%s, PSU1UV=%s, PSU2UV=%s",
+                "DATA rec \n mode=%s, Temp=%.1f, BG=%s, TempA=%s, PSU1_UV=%s, PSU2_UV=%s",
                 mode, avg_temp, break_glass, temp_alert, psu1_uv, psu2_uv
             )
             logger.debug(
-                "Masks—cam=%s, th=%s, cb=%s",
+                "Masks \n cam=%s, th=%s, cb=%s",
                 format(cam_mask, '#010b'),
                 format(th_mask,  '#010b'),
                 format(cb_mask,  '#010b')
