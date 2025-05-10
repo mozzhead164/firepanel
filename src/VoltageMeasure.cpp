@@ -23,7 +23,7 @@ void read_psuVoltages()
 
 
   // Periodically Read PSU Voltages
-  if(timeNow - lastVoltage >= 250UL)
+  if(timeNow - lastVoltage >= 550UL)
   {
     // Take Raw Reading - PSU 1
     psu1_voltage = analogRead(ADC0);
@@ -71,7 +71,7 @@ void read_psuVoltages()
     }
 
     // Check For Voltage Restored on PSU 2
-    if(underVoltage_2 == 1 && psu2_voltage >= 10.0) 
+    else if(underVoltage_2 == 1 && psu2_voltage >= 10.0) 
     { 
       underVoltage_2 = false; 
       Serial.println("\n PSU 2 - Voltage Restored");
@@ -91,7 +91,7 @@ void read_psuVoltages()
     static uint32_t lastPrint = 0;
     
     // Periodically Print Voltage Readings
-    if(timeNow - lastPrint >= 9500L)
+    if(timeNow - lastPrint >= 550L)
     {
         Serial.print("\n # PSU Voltages # - ");
         Serial.print(" PSU 1: ");

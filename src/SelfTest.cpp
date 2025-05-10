@@ -73,7 +73,7 @@ void runSystemSelfTest() {
       jsonDoc.clear();
       jsonDoc["type"]           = "self_test";
       jsonDoc["passed"]         = selfTestPassed;
-      // jsonDoc["fwVersion"]      = FW_VERSION;
+      jsonDoc["fwVersion"]      = FIRMWARE_VERSION;
       jsonDoc["systemMode"]     = modeToStr(systemData.systemMode);
       jsonDoc["psu1UnderVolt"]  = systemData.psu1UnderVolt;
       jsonDoc["psu2UnderVolt"]  = systemData.psu2UnderVolt;

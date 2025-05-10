@@ -113,7 +113,7 @@ void eventHandler(const Event *event)
     uint8_t psu = event->channel;  // 1 or 2
 
     // Local alert
-    Serial.print("[ALERT⚠️ ] PSU ");
+    Serial.print("[⚠️  ALERT ⚠️] PSU ");
     Serial.print(psu);
     Serial.println(" undervoltage!");
 
@@ -131,9 +131,9 @@ void eventHandler(const Event *event)
   // Handle PSU Voltage Restoration
   if (event->type == EVENT_PSU_RESTORED) {
       uint8_t psu = event->channel;
-      Serial.print(" ℹ️] PSU ");
+      Serial.print("ℹ️  Alert ℹ️] PSU ");
       Serial.print(psu);
-      Serial.println(" voltage restored.");
+      Serial.println(" Voltage Restored.");
       jsonDoc.clear();
       jsonDoc["type"] = "alert";
       jsonDoc["alertType"] = "psu_restored";
