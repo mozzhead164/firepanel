@@ -370,7 +370,7 @@ def handle_frame(frame):
 
             elif alert_type == "break_glass":
                 ch = data.get("channel")
-                logger.info("Break Glass Triggered! on channel %d", ch)
+                logger.info("Break Glass Triggered!")
 
             elif alert_type == "temperature_alert":
                 temp = data.get("avgTemp", "--")
