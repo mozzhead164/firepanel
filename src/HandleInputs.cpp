@@ -518,8 +518,8 @@ void updateBreakGlassInput() {
   // Current Timestamp
   uint32_t now = millis();
 
-  Serial.print("Checking Break Glass Input...");
-  Serial.println(systemData.bgDebouncer.read());
+  // Serial.print("Checking Break Glass Input...");
+  // Serial.println(systemData.bgDebouncer.read());
 
   // Check if the break-glass input has just been pressed.
   if (systemData.bgDebouncer.read() == LOW) 
