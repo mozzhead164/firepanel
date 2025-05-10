@@ -369,12 +369,12 @@ def handle_frame(frame):
             elif alert_type == "psu_undervoltage":
                 psu = data.get("psu")
                 voltage = data.get("voltage")
-                logger.warning("🪫 PSU%d undervoltage: %.2f V 🪫", psu, voltage)
+                logger.warning("🪫  PSU%d undervoltage: %.2f V 🪫", psu, voltage)
             
             elif alert_type == "psu_restored":
                 psu = data.get("psu")
                 voltage = data.get("voltage")
-                logger.info("🔋 PSU%d voltage restored: %.2f V 🔋", psu, voltage)
+                logger.info("🔋  PSU%d voltage restored: %.2f V 🔋", psu, voltage)
 
             elif alert_type == "break_glass":
                 ch = data.get("channel")
