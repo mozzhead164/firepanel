@@ -7,6 +7,10 @@ import os
 import time
 import socket
 import threading
+import logging
+from logging.handlers import TimedRotatingFileHandler
+
+# TEST 1
 
 DEBUG_FILE = False
 DEBUG_TRIG = False
@@ -24,7 +28,6 @@ MAX_FRAME_LENGTH = 1024
 
 STATUS_FILE = "/home/Dale/firepanel/RasPi/system_status.json"
 WATCHDOG_FILE = "/home/Dale/firepanel/RasPi/watchdog_status.json"
-LOG_FILE = "/home/Dale/firepanel/RasPi/firepanel.log"
 SOCKET_PATH = "/home/Dale/firepanel/RasPi/firepanel.sock"
 
 HANDSHAKE_PAYLOAD = {"type": "handshake", "payload": "HELLO_PI"}
@@ -45,10 +48,46 @@ THERMAL_HOLD_TIME = 20  # seconds
 stop_event = threading.Event()
 
 
-def write_log(entry):
-    timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
-    with open(LOG_FILE, "a") as f:
-        f.write(f"[{timestamp}] {entry}\n")
+# ——— Logging Setup ———
+LOG_FILE = "/home/Dale/firepanel/RasPi/firepanel.log"
+
+# Ensure log directory exists
+os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
+
+# ——— Logger Setup ———
+logger = logging.getLogger("firepanel")
+logger.setLevel(logging.INFO)
+
+# Rotate at midnight, keep 7 days, compress old logs
+handler = TimedRotatingFileHandler(
+    LOG_FILE,
+    when="midnight",
+    interval=1,
+    backupCount=7,
+    encoding="utf-8",
+    utc=False
+)
+# Compress rotated files to .gz
+handler.namer = lambda name: name + ".gz"
+def rotator(source, dest):
+    import gzip, shutil
+    with open(source, 'rb') as sf, gzip.open(dest, 'wb') as df:
+        shutil.copyfileobj(sf, df)
+    os.remove(source)
+handler.rotator = rotator
+
+formatter = logging.Formatter("[%(asctime)s] %(levelname)s: %(message)s",
+                              datefmt="%Y-%m-%d %H:%M:%S")
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+
+
+
+
+# def write_log(entry):
+#     timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+#     with open(LOG_FILE, "a") as f:
+#         f.write(f"[{timestamp}] {entry}\n")
 
 
 def send_json(ser, obj):
@@ -434,44 +473,42 @@ def socket_command_listener():
     server.listen(1)
     write_log(f"[SOCKET] Listening on {SOCKET_PATH}")
 
+
     while not stop_event.is_set():
         try:
             conn, _ = server.accept()
             with conn:
                 data = conn.recv(1024).decode().strip()
-                write_log(f"[SOCKET] Received command: {data}")
+                t0 = time.time()
+                write_log(f"[SOCKET] Received command: {data} @ {t0:.3f}s")
 
                 if data.startswith("thermal_trigger:"):
-
-
-                    # parse the 1–8 channel from Node-RED
                     ch1 = int(data.split(":",1)[1])
                     if 1 <= ch1 <= 8:
-                        idx = ch1 - 1          # now zero-based for our Python arrays
+                        idx = ch1 - 1
 
-                        # 1) immediately update the Pi’s status with the correct index
-                        update_status_fields(
-                        thermal=[i == idx for i in range(8)]
-                        )
-                        write_log(f"[SOCKET] Thermal trigger on channel {ch1}")
+                        # Update status file immediately
+                        update_status_fields(thermal=[i == idx for i in range(8)])
+                        write_log(f"[SOCKET] Status update @ {time.time():.3f}s")
 
-                        # 2) forward the exact same 1–8 channel to Arduino
-                        msg = {"type":"trigger_thermal", "channel": ch1}
+                        # Prepare and send to Arduino
+                        msg = {"type":"trigger_thermal","channel":ch1}
                         frame = json.dumps(msg)
-                        ser.write(f'<{frame}>'.encode('utf-8'))
+                        t1 = time.time()
+                        ser.write(f'<{frame}>'.encode())
                         ser.flush()
-                        write_log(f"[SOCKET] Forwarded to Arduino: {frame}")
+                        t2 = time.time()
+                        write_log(f"[SOCKET] Wrote to serial @ {t2:.3f}s (write took {t2-t1:.3f}s), frame={frame}")
 
                         conn.sendall(b"OK\n")
                     else:
                         conn.sendall(b"ERR: Invalid channel\n")
-
-
                 else:
                     conn.sendall(b"ERR: Unknown command\n")
-
         except Exception as e:
             write_log(f"[SOCKET] Error: {e}")
+
+
 
 
 if __name__ == "__main__":

@@ -1,15 +1,15 @@
 {
   "stage": "connected",
-  "mode": "ARMED",
+  "mode": "NO_OUTPUT",
   "conn": [
     true,
     true,
     true,
     true,
-    false,
-    false,
-    false,
-    false
+    true,
+    true,
+    true,
+    true
   ],
   "trig": [
     false,
@@ -21,7 +21,7 @@
     false,
     false
   ],
-  "avgTemp": 29.125,
+  "avgTemp": 27.525,
   "thermal": [
     false,
     false,
@@ -31,12 +31,5 @@
     false,
     false,
     false
-  ],
-  "lastAlert": {
-    "type": "alert",
-    "alertType": "temp_alert",
-    "data": {
-      "avgTemp": 1.1e-05
-    }
-  }
+  ]
 }
