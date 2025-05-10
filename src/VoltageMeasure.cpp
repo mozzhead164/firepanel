@@ -79,7 +79,7 @@ void read_psuVoltages()
             raw = analogRead(ADC0);
             voltage = raw / 1024.0 * PSU1_VOLTAGE_SCALE; 
             systemData.psu1UnderVolt = false;    // update the flag
-            systemData.psu1Voltage   = (voltage / 1024.0) * PSU1_VOLTAGE_SCALE;  // add this member too
+            systemData.psu1Voltage   = voltage;  // add this member too
 
             Event e{ EVENT_PSU_RESTORED, 1, false };
             dispatchEvent(&e);
@@ -132,7 +132,7 @@ void read_psuVoltages()
             raw = analogRead(ADC1);
             voltage = raw / 1024.0 * PSU2_VOLTAGE_SCALE;
             systemData.psu2UnderVolt = false;    // update the flag
-            systemData.psu2Voltage   = (voltage / 1024.0) * PSU2_VOLTAGE_SCALE; 
+            systemData.psu2Voltage   = voltage; 
 
             Event e{ EVENT_PSU_RESTORED, 2, false };
             dispatchEvent(&e);
