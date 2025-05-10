@@ -48,39 +48,69 @@ THERMAL_HOLD_TIME = 20  # seconds
 stop_event = threading.Event()
 
 
+
 # ——— Logging Setup ———
-LOG_DIR  = os.path.expanduser("home/Dale/firepanel/RasPi/logs")
+LOG_DIR  = os.path.expanduser("~/firepanel/RasPi/logs")
 LOG_FILE = os.path.join(LOG_DIR, "firepanel.log")
 
 # Ensure log directory exists
-os.makedirs(LOG_DIR, exist_ok=True)
+try:
+    os.makedirs(LOG_DIR, exist_ok=True)
+except Exception as e:
+    # If we can’t create it, fallback to /tmp
+    LOG_DIR  = "/tmp/firepanel-logs"
+    LOG_FILE = os.path.join(LOG_DIR, "firepanel.log")
+    os.makedirs(LOG_DIR, exist_ok=True)
+
 
 # ——— Logger Setup ———
 logger = logging.getLogger("firepanel")
-logger.setLevel(logging.INFO)
 
-# Rotate at midnight, keep 7 days, compress old logs
-handler = TimedRotatingFileHandler(
+# logger.setLevel(logging.DEBUG)     # capture everything; filter on handlers
+logger.setLevel(logging.INFO)
+# logger.setLevel(logging.WARNNG)
+# logger.setLevel(logging.ERROR)
+# logger.setLevel(logging.EXCEPTION)
+
+logger.propagate = False           # don’t pass to root logger
+
+
+# — File Handler: rotate every Monday at 00:01, keep ~52 weeks of logs ——
+file_handler = TimedRotatingFileHandler(
     LOG_FILE,
-    when="midnight",
-    interval=1,
-    backupCount=7,
+    when="W0",           # weekly on Monday
+    interval=4,          # every 4 weeks
+    backupCount=12,      # keep the last 12 → ~48 weeks (~11 months)
     encoding="utf-8",
-    utc=False
+    utc=False,
+    atTime=datetime.time(hour=0, minute=1)
 )
-# Compress rotated files to .gz
-handler.namer = lambda name: name + ".gz"
+
+
+# compress rotated files to .gz
+file_handler.namer = lambda name: name + ".gz"
 def rotator(source, dest):
     import gzip, shutil
-    with open(source, 'rb') as sf, gzip.open(dest, 'wb') as df:
+    with open(source, "rb") as sf, gzip.open(dest, "wb") as df:
         shutil.copyfileobj(sf, df)
     os.remove(source)
-handler.rotator = rotator
+file_handler.rotator = rotator
 
-formatter = logging.Formatter("[%(asctime)s] %(levelname)s: %(message)s",
-                              datefmt="%Y-%m-%d %H:%M:%S")
-handler.setFormatter(formatter)
-logger.addHandler(handler)
+file_handler.setLevel(logging.DEBUG)  # log everything to file
+file_handler.setFormatter(
+    logging.Formatter("[%(asctime)s] %(levelname)-5s %(message)s",
+                      datefmt="%Y-%m-%d %H:%M:%S")
+)
+logger.addHandler(file_handler)
+
+# — Console Handler ——
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.INFO)   # only INFO+ to console
+console_handler.setFormatter(
+    logging.Formatter("%(asctime)s %(levelname)-5s %(message)s",
+                      datefmt="%H:%M:%S")
+)
+logger.addHandler(console_handler)
 
 
 
