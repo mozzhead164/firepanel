@@ -78,25 +78,16 @@ logger.propagate = False           # don’t pass to root logger
 
 
 # — File Handler: rotate every Monday at 00:01, keep ~52 weeks of logs ——
-# file_handler = TimedRotatingFileHandler(
-#     LOG_FILE,
-#     when="W0",           # weekly on Monday
-#     interval=4,          # every 4 weeks
-#     backupCount=12,      # keep the last 12 → ~48 weeks (~11 months)
-#     encoding="utf-8",
-#     utc=False,
-#     atTime=datetime.time(hour=0, minute=1)
-# )
-
 file_handler = TimedRotatingFileHandler(
     LOG_FILE,
-    when="S",           # weekly on Monday
-    interval=10,          # every 4 weeks
-    backupCount=1,      # keep the last 12 → ~48 weeks (~11 months)
+    when="W0",           # weekly on Monday
+    interval=4,          # every 4 weeks
+    backupCount=12,      # keep the last 12 → ~48 weeks (~11 months)
     encoding="utf-8",
     utc=False,
     atTime=datetime.time(hour=0, minute=1)
 )
+
 
 
 # compress rotated files to .gz
