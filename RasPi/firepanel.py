@@ -10,7 +10,7 @@ import threading
 import logging
 from logging.handlers import TimedRotatingFileHandler
 
-# TEST 3
+# TEST 2
 
 DEBUG_FILE = False
 DEBUG_TRIG = False
