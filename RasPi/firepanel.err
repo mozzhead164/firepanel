@@ -2181,3 +2181,13 @@ Traceback (most recent call last):
     write_log("Firepanel controller started")
     ^^^^^^^^^
 NameError: name 'write_log' is not defined
+Traceback (most recent call last):
+  File "/home/Dale/firepanel/RasPi/firepanel.py", line 522, in <module>
+    write_log("Firepanel controller started")
+    ^^^^^^^^^
+NameError: name 'write_log' is not defined
+Traceback (most recent call last):
+  File "/home/Dale/firepanel/RasPi/firepanel.py", line 522, in <module>
+    write_log("Firepanel controller started")
+    ^^^^^^^^^
+NameError: name 'write_log' is not defined
