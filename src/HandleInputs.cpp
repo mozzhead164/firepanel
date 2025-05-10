@@ -352,19 +352,12 @@ void HandleInterrupts() {
     // Break glass triggered:
     if (int6Flag) 
     {
-       if (bgPending) { 
         updateBreakGlassInput();  // Read the break-glass IO expander
-        if (millis() - bgLastInterrupt > 50) {
-          // After 50 ms of sampling, give up
-          bgPending = false;
-          // Reset the flag
-          int6Flag = false;
-        }
-    }
+        int6Flag = false;         // Reset The Flag
+
         #ifdef DEBUG_TRIGGER
-          Serial.println("Break glass interrupt triggered!");
+          Serial.println("Break Glass Interrupt Triggered!");
         #endif
-        
     }
 
     // Output sense triggered:
@@ -518,23 +511,14 @@ void updateInputs() {
 // Update Break Glass Input State
 void updateBreakGlassInput() {
  
-  bool raw = digitalRead(INT6_BRK_GLS);
-  Serial.print("[DBG] BG raw level: ");
-  Serial.println(raw ? "HIGH" : "LOW");
-
   // Check break‐glass input state
   systemData.bgDebouncer.update();
-
-  Serial.print("[DBG] Debouncer state: last=");
-  Serial.print(systemData.bgDebouncer.read() ? "HIGH" : "LOW");
-  Serial.print(" fell=");
-  Serial.println(systemData.bgDebouncer.fell() ? "YES" : "NO");
 
   // Current Timestamp
   uint32_t now = millis();
 
   // Check if the break-glass input has just been pressed.
-  if (systemData.bgDebouncer.fell()) 
+  if (systemData.bgDebouncer.read() == LOW) 
   {
     systemData.bgState     = LOW;
     systemData.bgTriggered = true;
@@ -552,6 +536,7 @@ void updateBreakGlassInput() {
 
     systemData.bgTriggered = false;   // reset the flag
   }
+
   else if (systemData.bgDebouncer.rose()) {
       systemData.bgState = HIGH;      // Break Glass Released
   }
