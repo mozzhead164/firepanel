@@ -14,6 +14,8 @@ from logging.handlers import TimedRotatingFileHandler
 
 
 # ——— Logging Setup ———
+logger = logging.getLogger("firepanel")
+logger.propagate = False           # don’t pass to root logger
 
 # logger.setLevel(logging.DEBUG)     # capture everything; filter on handlers
 logger.setLevel(logging.INFO)
@@ -71,10 +73,6 @@ except Exception as e:
     LOG_FILE = os.path.join(LOG_DIR, "firepanel.log")
     os.makedirs(LOG_DIR, exist_ok=True)
 
-
-# ——— Logger Setup ———
-logger = logging.getLogger("firepanel")
-logger.propagate = False           # don’t pass to root logger
 
 
 # — File Handler: rotate every Monday at 00:01, keep ~52 weeks of logs ——
