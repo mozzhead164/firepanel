@@ -200,8 +200,9 @@ def handle_frame(frame):
     global handshake_complete, last_heartbeat, trig
 
     try:
-        # write_log(f"[DEBUG] Raw frame received: {frame}")
-        logger.debug("Raw frame received: %s", frame)
+        parsed = json.loads(frame)
+        pretty = json.dumps(parsed, indent=2, sort_keys=True)
+        logger.debug("Raw frame received:\n%s", pretty)
 
         data = json.loads(frame)
         msg_type = data.get("type")
@@ -221,10 +222,10 @@ def handle_frame(frame):
 
                 # mark the raw trigger
                 current = load_status_file()
-                raw_trig = current.get("raw_trig", [False]*8)
-                raw_trig[idx] = True
+                trig = current.get("trig", [False]*8)
+                trig[idx] = True
                 camera_trigger_times[idx] = time.time()
-                update_status_fields(raw_trig=raw_trig)
+                update_status_fields(trig=trig)
                 logger.info("🔥 Camera Trigger Detected - Channel %d 🔥", ch)
 
 
@@ -237,9 +238,9 @@ def handle_frame(frame):
 
                 # mark the confirmed trigger
                 current = load_status_file()
-                confirmed = current.get("confirmed", [False]*8)
-                confirmed[idx] = True
-                update_status_fields(confirmed=confirmed)
+                confirm = current.get("confirm", [False]*8)
+                confirm[idx] = True
+                update_status_fields(confirm=confirm)
 
                 if dummy:
                     logger.info("✅ Confirmed Dummy Output - Channel %d ✅", ch)
@@ -406,7 +407,7 @@ def handle_frame(frame):
 
 
     except json.JSONDecodeError:
-        logger.error("Failed to parse incoming frame as JSON: %s", frame)
+        logger.debug("Raw frame received (invalid JSON): %s", frame)
 
 
 
@@ -439,11 +440,14 @@ def update_status_fields(**updates):
                 logger.debug("Loaded current status file")
         else:
             current = {
-                "stage": "booting",
-                "mode": "UNKNOWN",
-                "avgTemp": None,
-                "conn": [False]*8,
-                "trig": [False]*8
+                "stage":     "booting",
+                "mode":      "UNKNOWN",
+                "avgTemp":   None,
+                "conn":      [False]*8,
+                "trig":      [False]*8,
+                "thermal":   [False]*8,
+                "confirm":   [False]*8,
+
             }
             if DEBUG_STATUS:
                 logger.debug("Created new default status")
