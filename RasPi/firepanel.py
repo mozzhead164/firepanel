@@ -12,7 +12,14 @@ import threading
 import logging
 from logging.handlers import TimedRotatingFileHandler
 
-# TEST 3
+
+# ——— Logging Setup ———
+
+# logger.setLevel(logging.DEBUG)     # capture everything; filter on handlers
+logger.setLevel(logging.INFO)
+# logger.setLevel(logging.WARNNG)
+# logger.setLevel(logging.ERROR)
+# logger.setLevel(logging.EXCEPTION)
 
 DEBUG_FILE = False
 DEBUG_TRIG = False
@@ -67,13 +74,6 @@ except Exception as e:
 
 # ——— Logger Setup ———
 logger = logging.getLogger("firepanel")
-
-logger.setLevel(logging.DEBUG)     # capture everything; filter on handlers
-# logger.setLevel(logging.INFO)
-# logger.setLevel(logging.WARNNG)
-# logger.setLevel(logging.ERROR)
-# logger.setLevel(logging.EXCEPTION)
-
 logger.propagate = False           # don’t pass to root logger
 
 
