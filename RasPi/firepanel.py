@@ -107,13 +107,14 @@ file_handler.setFormatter(
 logger.addHandler(file_handler)
 
 # — Console Handler ——
-# console_handler = logging.StreamHandler()
-# console_handler.setLevel(logging.INFO)   # only INFO+ to console
-# console_handler.setFormatter(
-#     logging.Formatter("%(asctime)s %(levelname)-5s %(message)s",
-#                       datefmt="%H:%M:%S")
-# )
-# logger.addHandler(console_handler)
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.INFO)   # only INFO+ to console
+console_handler.setFormatter(
+    logging.Formatter("%(asctime)s %(levelname)-5s %(message)s",
+                      datefmt="%H:%M:%S")
+)
+console_handler.stream = open(sys.stdout.fileno(), 'w', encoding='utf-8', closefd=False)
+logger.addHandler(console_handler)
 
 
 
@@ -275,9 +276,6 @@ def handle_frame(frame):
                 ch = data.get("channel", 0)
                 if 1 <= ch <= 8:
                     logger.info("✔️ Thermal Trigger Confirmed - Channel %d", ch)
-
-
-
             else:
                 # generic acks—just log them, no status‐file writes
                 logger.debug("Received ACK for command %r", cmd)
