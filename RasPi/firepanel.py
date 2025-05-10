@@ -20,7 +20,7 @@ DEBUG_STATUS = False
 DEBUG_HEARTBEAT = False
 SHOW_ALERTS = False
 
-SERIAL_PORT = "/dev/ttyS0"
+SERIAL_PORT = "/dev/ttyS0" 
 BAUD_RATE = 115200
 # How long (in seconds) before we consider a partial frame “stale”
 FRAME_TIMEOUT    = 1.0
