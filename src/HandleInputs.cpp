@@ -522,7 +522,7 @@ void updateBreakGlassInput() {
   // Serial.println(systemData.bgDebouncer.read());
 
   // Check if the break-glass input has just been pressed.
-  if (systemData.bgDebouncer.read() == LOW) 
+  if (systemData.bgDebouncer.fell()) 
   {
     Serial.println("\n\n Break Glass Pressed!");
     systemData.bgState     = LOW;
