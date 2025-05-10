@@ -65,7 +65,7 @@ void read_psuVoltages()
 
       if (voltage >= VOLTAGE_RESTORE) 
       {
-          if (++psu1_restore_count >= 6) 
+          if (++psu1_restore_count >= 2) 
           {
             // OK, sustained high voltage
             underVoltage_1     = false;
@@ -118,7 +118,7 @@ void read_psuVoltages()
 
       if (voltage >= VOLTAGE_RESTORE) 
       {
-          if (++psu2_restore_count >= 6) 
+          if (++psu2_restore_count >= 2) 
           {
             // OK, sustained high voltage
             underVoltage_2     = false;
