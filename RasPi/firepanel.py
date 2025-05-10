@@ -228,6 +228,7 @@ def handle_frame(frame):
                 # 2) Record when it happened so cleanup knows how long to wait
                 camera_trigger_times[idx] = time.time()
 
+
                 # 3) Persist to disk
                 update_status_fields(trig=trig)
                 logger.info("✅Confirmed Camera trigger on channel %d✅", ch)
