@@ -288,7 +288,7 @@ def handle_frame(frame):
             )
             logger.debug(
                 "Masks \n cam=%s, th=%s, cb=%s",
-                format(cam_mask, '#010b'),
+                format(cam_mask, '#010b'), 
                 format(th_mask,  '#010b'),
                 format(cb_mask,  '#010b')
             )
