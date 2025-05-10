@@ -44,9 +44,9 @@ const uint32_t ALERT_CONFIRMATION_TIME = 5000UL; // 5 seconds
 // below FAN_OFF_TEMP the fan stays off
 const float FAN_OFF_TEMP = 25.0f;
 // once this temp exceeded, fan switches on
-const float FAN_ON_TEMP  = 30.0f;
+const float FAN_ON_TEMP  = 33.0f;
 // start speed ramp at this temperature
-const float FAN_MIN_TEMP = 30.0f;
+const float FAN_MIN_TEMP = 34.0f;
 // hit this temp (or above) for full speed
 const float FAN_MAX_TEMP = 50.0f;
 // Minimum PWM value for the fan (X-255)
