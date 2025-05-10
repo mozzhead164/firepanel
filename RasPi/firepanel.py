@@ -359,34 +359,34 @@ def handle_frame(frame):
             if alert_type == "mode_change":
                 mode = data.get("mode", "UNKNOWN")
                 update_status_fields(mode=mode)
-                logger.info("System mode changed to %s", mode)
+                logger.info("🗝️ System mode changed to %s 🗝️", mode)
 
             elif alert_type == "psu_undervoltage":
                 psu = data.get("psu")
                 voltage = data.get("voltage")
-                logger.warning("PSU%d undervoltage: %.2f V", psu, voltage)
+                logger.warning("🪫 PSU%d undervoltage: %.2f V 🪫", psu, voltage)
             
             elif alert_type == "psu_restored":
                 psu = data.get("psu")
                 voltage = data.get("voltage")
-                logger.info("PSU%d voltage restored: %.2f V", psu, voltage)
+                logger.info("🔋 PSU%d voltage restored: %.2f V 🔋", psu, voltage)
 
             elif alert_type == "break_glass":
                 ch = data.get("channel")
-                logger.info("Break Glass Triggered!")
+                logger.info("🥊 Break Glass Triggered! 🥊")
 
             elif alert_type == "temperature_alert":
                 temp = data.get("avgTemp", "--")
-                logger.warning("High temperature alert: %s°C", temp)
+                logger.warning("♨️ High temperature alert: %s°C ♨️", temp)
 
             elif alert_type == "thermal_trigger":
                 ch = data.get("channel")
                 temp = data.get("temperature", "--")
-                logger.warning("Thermal camera alarm on channel %d at %s°C", ch, temp)
+                logger.warning("♨️ Thermal camera alarm on channel %d at %s°C ♨️", ch, temp)
 
             elif alert_type == "camera_trigger":
                 ch = data.get("channel")
-                logger.warning("Camera trigger on channel %d", ch)
+                logger.warning("🔥 Camera trigger on channel %d 🔥", ch)
 
             # Optionally: reflect alert visually in status file
             update_status_fields(lastAlert=data)
