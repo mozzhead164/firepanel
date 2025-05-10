@@ -46,8 +46,8 @@ void read_psuVoltages()
       Serial.println("\n\n PSU 1 - UNDER VOLTAGE ALERT!!!");
       underVoltage_1 = true;
 
-      // systemData.psu1UnderVolt = true;    // update the flag
-      // systemData.psu1Voltage   = psu1_voltage;  // add this member too
+      systemData.psu1UnderVolt = true;    // update the flag
+      systemData.psu1Voltage   = psu1_voltage;  // add this member too
       
       // dispatch undervoltage event for PSU1
       Event e{ EVENT_PSU_UNDERVOLTAGE, 1, false };
@@ -99,8 +99,8 @@ void read_psuVoltages()
       Serial.println("\n\n PSU 2 - UNDER VOLTAGE ALERT!!!");
       underVoltage_2 = true;
 
-      // systemData.psu2UnderVolt = true;    // update the flag
-      // systemData.psu2Voltage   = psu2_voltage;  // add this member too
+      systemData.psu2UnderVolt = true;    // update the flag
+      systemData.psu2Voltage   = psu2_voltage;  // add this member too
 
       // dispatch undervoltage event for PSU2
       Event e{ EVENT_PSU_UNDERVOLTAGE, 2, false };
