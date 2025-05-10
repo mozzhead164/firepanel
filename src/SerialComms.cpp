@@ -217,11 +217,19 @@ void handleGetData()
 {
   // 1) compute bitmasks
   // Create Bitmasks for camera, thermal, and cable states
-  uint8_t cameraMask = 0, thermalMask = 0, cableMask = 0;
+  uint8_t cameraMask = 0, thermalMask = 0, confirmMask = 0, cableMask = 0;
   for (uint8_t i = 0; i < 8; ++i) {
-    if (systemData.channels[i].cameraTriggered)   cameraMask  |= (1 << i);
-    if (systemData.channels[i].thermalTriggered)  thermalMask |= (1 << i);
-    if (systemData.channels[i].cableConnected)    cableMask   |= (1 << i);
+    // Update Camera Mask
+    if (systemData.channels[i].cameraTriggered)  cameraMask  |= (1 << i);
+    // Update Thermal Mask
+    if (systemData.channels[i].thermalTriggered) thermalMask |= (1 << i);
+    // Update Cable Connected Mask
+    if (systemData.channels[i].cableConnected)   cableMask   |= (1 << i);
+    // Update Confirm Mask
+    bool driven = (systemData.systemMode == MODE_ARMED)
+                  ? systemData.channels[i].liveOutputConfirmed
+                  : systemData.channels[i].dummyOutputConfirmed;
+    if (driven) confirmMask |= (1 << i);
   }
 
   // Create JSON object
@@ -229,23 +237,25 @@ void handleGetData()
   jsonDoc["type"] = "data";
 
   // Scalars
-  jsonDoc["systemModeStr"]   = modeToStr(systemData.systemMode);
-  jsonDoc["avgTemp"]         = systemData.averageTemp;
-  jsonDoc["breakGlass"]      = systemData.bgTriggered;
-  jsonDoc["tempAlert"]       = systemData.tempAlert;
-  jsonDoc["psu1UnderVolt"]   = systemData.psu1UnderVolt;
-  jsonDoc["psu2UnderVolt"]   = systemData.psu2UnderVolt;
+  jsonDoc["systemModeStr"] = modeToStr(systemData.systemMode);
+  jsonDoc["avgTemp"]       = systemData.averageTemp;
+  jsonDoc["breakGlass"]    = systemData.bgTriggered;
+  jsonDoc["tempAlert"]     = systemData.tempAlert;
+  jsonDoc["psu1UnderVolt"] = systemData.psu1UnderVolt;
+  jsonDoc["psu2UnderVolt"] = systemData.psu2UnderVolt;
 
   // Masks
-  jsonDoc["cameraMask"]      = cameraMask;
-  jsonDoc["thermalMask"]     = thermalMask;
-  jsonDoc["cableMask"]       = cableMask;
+  jsonDoc["cameraMask"]    = cameraMask;
+  jsonDoc["thermalMask"]   = thermalMask;
+  jsonDoc["cableMask"]     = cableMask;
+  jsonDoc["confirmMask"]   = confirmMask;
 
 
   #ifdef DEBUG_SERIAL
     Serial.print("[DEBUG 🔧] Masks C,T,CB = ");
-    Serial.print(cameraMask, BIN); Serial.print(", ");
+    Serial.print(cameraMask, BIN);  Serial.print(", ");
     Serial.print(thermalMask, BIN); Serial.print(", ");
+    Serial.print(confirmMask, BIN); Serial.print(", ");
     Serial.println(cableMask, BIN);
 
     Serial.println(F("[DEBUG 🔧] Sending system data to Pi"));
