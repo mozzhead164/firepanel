@@ -288,8 +288,10 @@ def handle_frame(frame):
             
             # Log the data
             logger.debug(
-                "\n DATA Received:\n"
-                "  Mode=%s, Temp=%.1f, BG=%s, TempA=%s, PSU1_UV=%s, PSU2_UV=%s \n Masks:\n"
+                "  DATA Received:\n"
+                " System Status\n"
+                "  Mode=%s, Temp=%.1f, BG=%s, TempA=%s, PSU1_UV=%s, PSU2_UV=%s \n
+                " Masks:\n"
                 "  Camera:  %s\n"
                 "  Thermal: %s\n"
                 "  Confirm: %s\n"
