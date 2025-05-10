@@ -46,10 +46,10 @@ void eventHandler(const Event *event)
     jsonDoc["channel"] = humanCh;
     sendJson(jsonDoc);
 
-#ifdef DEBUG_TRIGGER
-    Serial.print(F("↔ Sent channel_trigger for CH"));
-    Serial.println(humanCh);
-#endif
+    #ifdef DEBUG_SERIAL
+        Serial.print(F("↔ Sent channel_trigger for CH"));
+        Serial.println(humanCh);
+    #endif
   }
 
   // Handle Output Confirmation Event
@@ -61,11 +61,13 @@ void eventHandler(const Event *event)
     bool isDmy = event->connected; // true=dummy, false=live
 
     // 1) Local log
-    Serial.print(" ↔ Confirmed output on channel ");
-    Serial.print(humanCh);
-    if (isDmy)
-      Serial.print(" (Dummy)");
-    Serial.println(".");
+    #ifdef DEBUG_OUTPUT_SENSE
+      Serial.print(" ↔ Confirmed output on channel ");
+      Serial.print(humanCh);
+      if (isDmy)
+        Serial.print(" (Dummy)");
+      Serial.println(".");
+    #endif
 
     // 2) Build + debug‐print the raw JSON
     jsonDoc.clear();
@@ -79,7 +81,7 @@ void eventHandler(const Event *event)
     systemData.channels[idx].lastTriggerTime      = millis();
 
 
-    #ifdef DEBUG_OUTPUT_SENSE
+    #ifdef DEBUG_SERIAL
         Serial.print("[DEBUG 🔧] → ");
         serializeJson(jsonDoc, Serial);
         Serial.println();
