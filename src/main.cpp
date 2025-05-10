@@ -89,7 +89,9 @@ void setup()
   // Setup Complete
   Serial.println(F("\n\n ✅ Initialisation Complete...✅\n\n"));
 
-  runSystemSelfTest();
+  #ifdef DEBUG_STARTUP
+    runSystemSelfTest();
+  #endif
 
   #ifdef SKIP_STARTUP_ANIMATION
     startupPhase = FINAL_WAIT;

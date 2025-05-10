@@ -151,16 +151,21 @@ void initPCF8574(uint8_t chipAddress) {
   Wire.beginTransmission(chipAddress);
   Wire.write(0xFF);  // Set all pins high (inputs with pullups)
   uint8_t err = Wire.endTransmission();
-  #ifdef DEBUG_EXPANDER
+  
     if (err != 0) {
-      Serial.print(" ⚠️ Error Initializing PCF8574 at Address 0x");
-      Serial.print(chipAddress, HEX);
+
+      #ifdef DEBUG_EXPANDER
+        Serial.print(" ⚠️ Error Initializing PCF8574 at Address 0x");
+        Serial.print(chipAddress, HEX);
+      #endif
     } else {
-      Serial.print(" ✅ PCF8574 Detected at Address 0x");
-      Serial.print(chipAddress, HEX);
-      Serial.println(" Initialized.");
+
+      #ifdef DEBUG_EXPANDER
+        Serial.print(" ✅ PCF8574 Detected at Address 0x");
+        Serial.print(chipAddress, HEX);
+        Serial.println(" Initialized.");
+      #endif
     }
-  #endif
 }
 
 // Initialize the PCA9555 chip

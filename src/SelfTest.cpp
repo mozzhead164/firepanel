@@ -5,6 +5,7 @@
 #include "SystemData.h"
 #include <Arduino.h>
 #include <Wire.h>
+#include "MemoryUtils.h"
 
 
 bool selfTestPassed = false;
@@ -58,14 +59,28 @@ void runSystemSelfTest() {
 
     // Final Summary
     if (i2cOk) {
-    Serial.println(F("[PASS ✅] All I2C devices OK."));
+    Serial.println(F("[✅ Self Test - PASS ✅] All I2C devices OK."));
     } else {
-    Serial.println(F("[FAIL ❌] One or more I2C devices missing!"));
+    Serial.println(F("[❌ Self Test - FAIL ❌] One or More I2C Devices Are Missing!"));
     // Optional: flash RED LED, or send special alert to Pi
     }
 
     selfTestPassed = i2cOk;       // true if all I2C devices OK
     selfTestCompleted = true;     // mark self-test done
+
+    #ifdef DEBUG_STARTUP
+      // Optional: send a JSON frame to the Pi
+      jsonDoc.clear();
+      jsonDoc["type"] = "self_test";
+      jsonDoc["passed"] = selfTestPassed;
+      jsonDoc["systemMode"]     = modeToStr(systemData.systemMode);
+      jsonDoc["psu1UnderVolt"]  = systemData.psu1UnderVolt;
+      jsonDoc["psu2UnderVolt"]  = systemData.psu2UnderVolt;
+      jsonDoc["channelCount"]   = 8;
+      jsonDoc["i2cOk"]          = (Wire.endTransmission() == 0);
+      jsonDoc["heapFree"]       = freeMemory();  // if you have this helper
+      sendJson(jsonDoc);
+    #endif
 
 }
 
