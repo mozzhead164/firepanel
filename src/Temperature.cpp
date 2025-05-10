@@ -204,7 +204,7 @@ static void updateTemperatureAlerts() {
       }
       else if (millis() - tempHighStartTime > ALERT_CONFIRMATION_TIME) {
         systemData.tempAlert = true;
-        Serial.println(F("[ALERT] High temperature detected!"));
+        Serial.println(F("[ALERT ⚠️] High temperature detected!"));
       }
     } else {
       tempHighPending = false;
@@ -213,7 +213,7 @@ static void updateTemperatureAlerts() {
   else {
     if (temp < LOW_TEMP_RESET_THRESHOLD) {
       systemData.tempAlert = false;
-      Serial.println(F("[INFO] Temperature back to safe level."));
+      Serial.println(F("[INFO ℹ️] Temperature back to safe level."));
     }
   }
 }

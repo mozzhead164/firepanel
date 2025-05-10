@@ -481,9 +481,11 @@ void updateInputs() {
       // Record the timestamp of when this input was triggered.
       ch.triggerTimestamp = now;  // Record the trigger time.
 
-      Serial.print(" Camera Input ");
-      Serial.print(i + 1);
-      Serial.print(" Triggered ");
+      #ifdef DEBUG_TRIGGER
+        Serial.print("[Trigger 🔥] Camera Input ");
+        Serial.print(i + 1);
+        Serial.print(" Triggered ");
+      #endif
     }
 
     // Check if the Input is Still LOW (Output To Buzzer)
@@ -997,7 +999,7 @@ void updateOutputSenseStates() {
   }
 
   #ifdef DEBUG_OUTPUT_SENSE
-      Serial.println("[DEBUG]: ISR [Output Sense] fired");
+      Serial.println("[DEBUG 🔧]: ISR [Output Sense] fired");
   #endif
 
 }  // updateOutputSenseStates(); // Read and debounce the PCA9555 bits

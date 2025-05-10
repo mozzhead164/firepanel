@@ -82,7 +82,7 @@ void pollJsonSerial()
         }
         else
         {
-          Serial.print(F("[ERROR] JSON parse error: "));
+          Serial.print(F("[ERROR 💥] JSON parse error: "));
           Serial.println(err.c_str());
         }
       }
@@ -204,7 +204,7 @@ void sendJson(const JsonDocument &doc)
   Serial1.write(END_MARKER);
 
   #ifdef DEBUG_PI_SERIAL
-    Serial.print(F("[DEBUG] Sending framed JSON: <"));
+    Serial.print(F("[DEBUG 🔧] Sending framed JSON: <"));
     serializeJsonPretty(doc, Serial);
     Serial.println(F(">"));
   #endif
@@ -243,12 +243,12 @@ void handleGetData()
 
 
   #ifdef DEBUG_SERIAL
-    Serial.print("[DEBUG] Masks C,T,CB = ");
+    Serial.print("[DEBUG 🔧] Masks C,T,CB = ");
     Serial.print(cameraMask, BIN); Serial.print(", ");
     Serial.print(thermalMask, BIN); Serial.print(", ");
     Serial.println(cableMask, BIN);
 
-    Serial.println(F("[DEBUG] Sending system data to Pi"));
+    Serial.println(F("[DEBUG 🔧] Sending system data to Pi"));
     serializeJson(jsonDoc, Serial);
     Serial.println();
   #endif
@@ -267,11 +267,7 @@ void handleTriggerThermal()
   }
 
   uint8_t ch = jsonDoc["channel"];
-  #ifdef DEBUG_PI_SERIAL
-    Serial.print(millis()); 
-    Serial.print(" ms: handleTriggerThermal start for channel ");
-    Serial.println(ch);
-  #endif
+
 
   if (ch < 1 || ch > 8)
   {
@@ -283,7 +279,8 @@ void handleTriggerThermal()
   systemData.channels[ch - 1].thermalLastTrigger = millis();
 
   uint8_t pin = pgm_read_byte_near(thermalPins_P + (ch - 1));
-  Serial.print(F("[DEBUG] mapping to pin: "));
+
+  Serial.print(F("[THERMAL 🔥] Triggered channel: "));
   Serial.println(pin);
 
   digitalWrite(pin, HIGH);
@@ -318,7 +315,7 @@ void handleResetThermal()
   uint8_t pin = pgm_read_byte_near(thermalPins_P + (ch - 1));
   digitalWrite(pin, LOW);
 
-  Serial.print(F("[THERMAL] Deactivated channel "));
+  Serial.print(F("[THERMAL 🔥] Deactivated channel "));
   Serial.println(ch);
 
   sendAck("reset_thermal", ch);

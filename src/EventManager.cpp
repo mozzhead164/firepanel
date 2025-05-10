@@ -80,7 +80,7 @@ void eventHandler(const Event *event)
 
 
     #ifdef DEBUG_OUTPUT_SENSE
-        Serial.print("[DEBUG] → ");
+        Serial.print("[DEBUG 🔧] → ");
         serializeJson(jsonDoc, Serial);
         Serial.println();
     #endif
@@ -93,7 +93,7 @@ void eventHandler(const Event *event)
   // Handle Break‐Glass Event
   if (event->type == EVENT_BREAK_GLASS) {
     // 1) Local alert
-    Serial.println("[ALERT] Break Glass Triggered!");
+    Serial.println("[ALERT ⚠️] Break Glass Triggered!");
 
     // 2) Send a JSON frame to the Pi
     jsonDoc.clear();
@@ -102,7 +102,7 @@ void eventHandler(const Event *event)
     sendJson(jsonDoc);
 
   #ifdef DEBUG_BREAK_GLASS
-      Serial.println("[DEBUG] → { \"type\": \"break_glass\" }");
+      Serial.println("[DEBUG 🔧] → { \"type\": \"break_glass\" }");
   #endif
 }
 
@@ -111,7 +111,7 @@ void eventHandler(const Event *event)
     uint8_t psu = event->channel;  // 1 or 2
 
     // Local alert
-    Serial.print("[ALERT] PSU ");
+    Serial.print("[ALERT ⚠️] PSU ");
     Serial.print(psu);
     Serial.println(" undervoltage!");
 
@@ -129,7 +129,7 @@ void eventHandler(const Event *event)
   // Handle PSU Voltage Restoration
   if (event->type == EVENT_PSU_RESTORED) {
       uint8_t psu = event->channel;
-      Serial.print("[INFO] PSU ");
+      Serial.print(" ℹ️] PSU ");
       Serial.print(psu);
       Serial.println(" voltage restored.");
       jsonDoc.clear();
