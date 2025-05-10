@@ -271,6 +271,13 @@ def handle_frame(frame):
                 handshake_complete = True
                 last_heartbeat = time.time()
                 logger.info("Received handshake ACK from Arduino")
+            elif cmd == "trigger_thermal":
+                ch = data.get("channel", 0)
+                if 1 <= ch <= 8:
+                    logger.info("✔️ Thermal Trigger Confirmed - Channel %d", ch)
+
+
+
             else:
                 # generic acks—just log them, no status‐file writes
                 logger.debug("Received ACK for command %r", cmd)
@@ -559,7 +566,7 @@ def socket_command_listener():
 
                         # Update status file immediately
                         update_status_fields(thermal=[i == idx for i in range(8)])
-                        logger.debug("Status file updated for thermal trigger at %.3fs", time.time())
+                        logger.info("🌡️ Thermal Alarm Triggered – Channel %d", ch)
 
                         # Prepare and send to Arduino
                         msg = {"type":"trigger_thermal","channel":ch1}
