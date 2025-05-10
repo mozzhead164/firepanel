@@ -49,7 +49,7 @@ void read_psuVoltages()
     else if(underVoltage_1 == 1 && psu1_voltage >= 10.5) 
     { 
       underVoltage_1 = false; 
-      delay(100);
+      delay(1000);
       Serial.println("\n PSU 1 - Voltage Restored"); 
       Event e{ EVENT_PSU_RESTORED, 1, false };
       dispatchEvent(&e);
