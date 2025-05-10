@@ -134,6 +134,7 @@ void eventHandler(const Event *event)
       Serial.print("ℹ️  Alert ℹ️] PSU ");
       Serial.print(psu);
       Serial.println(" Voltage Restored.");
+      
       jsonDoc.clear();
       jsonDoc["type"] = "alert";
       jsonDoc["alertType"] = "psu_restored";

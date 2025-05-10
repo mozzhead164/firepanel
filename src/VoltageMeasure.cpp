@@ -61,11 +61,11 @@ void read_psuVoltages()
     { 
       // re-read the voltage right now:
       int raw = analogRead(ADC0);
-      float voltage = raw / 1024.0 * 16.8; 
+      float voltage = raw / 1024.0 * PSU1_VOLTAGE_SCALE; 
 
       if (voltage >= VOLTAGE_RESTORE) 
       {
-          if (++psu1_restore_count >= 12) 
+          if (++psu1_restore_count >= 6) 
           {
             // OK, sustained high voltage
             underVoltage_1     = false;
@@ -76,8 +76,10 @@ void read_psuVoltages()
             Serial.println(" V"); 
 
             // stash voltage in systemData for handler to grab
+            raw = analogRead(ADC0);
+            voltage = raw / 1024.0 * PSU1_VOLTAGE_SCALE; 
             systemData.psu1UnderVolt = false;    // update the flag
-            systemData.psu1Voltage   = voltage / 1024.0 * 16.8;  // add this member too
+            systemData.psu1Voltage   = (voltage / 1024.0) * PSU1_VOLTAGE_SCALE;  // add this member too
 
             Event e{ EVENT_PSU_RESTORED, 1, false };
             dispatchEvent(&e);
@@ -112,11 +114,11 @@ void read_psuVoltages()
     { 
       // re-read the voltage right now:
       int raw = analogRead(ADC1);
-      float voltage = raw / 1024.0 * 16.8;
+      float voltage = raw / 1024.0 * PSU2_VOLTAGE_SCALE;
 
       if (voltage >= VOLTAGE_RESTORE) 
       {
-          if (++psu2_restore_count >= 12) 
+          if (++psu2_restore_count >= 6) 
           {
             // OK, sustained high voltage
             underVoltage_2     = false;
@@ -127,8 +129,10 @@ void read_psuVoltages()
             Serial.println(" V"); 
 
             // stash voltage in systemData for handler to grab
+            raw = analogRead(ADC1);
+            voltage = raw / 1024.0 * PSU2_VOLTAGE_SCALE;
             systemData.psu2UnderVolt = false;    // update the flag
-            systemData.psu2Voltage   = voltage / 1024.0 * 16.8; 
+            systemData.psu2Voltage   = (voltage / 1024.0) * PSU2_VOLTAGE_SCALE; 
 
             Event e{ EVENT_PSU_RESTORED, 2, false };
             dispatchEvent(&e);
