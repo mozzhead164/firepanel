@@ -53,6 +53,7 @@ void initInputs() {
     for (int i = 0; i < numCameras; i++) {
 
       auto &ch = systemData.channels[i];
+      
 
       uint8_t camPin = pgm_read_byte_near(cameraPins_P + i);
       ch.pin = camPin;                        // Camera Pins
@@ -77,6 +78,7 @@ void initInputs() {
       ch.ledGreen = 0;                        // Clear LED green state
       
       ch.lastTriggerTime = 0;                 // Clear last trigger time
+
     }
 
 
