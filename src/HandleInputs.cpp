@@ -487,7 +487,7 @@ void updateInputs() {
       ch.triggerTimestamp = now;  // Record the trigger time.
 
       #ifdef DEBUG_TRIGGER
-        Serial.print("[Trigger 🔥] Camera Input ");
+        Serial.print("\n[Trigger 🔥] Camera Input ");
         Serial.print(i + 1);
         Serial.print(" Triggered ");
       #endif
@@ -524,12 +524,11 @@ void updateBreakGlassInput() {
   // Check if the break-glass input has just been pressed.
   if (systemData.bgDebouncer.fell()) 
   {
-    Serial.println("\n\n Break Glass Pressed!");
     systemData.bgState     = LOW;
     systemData.bgTriggered = true;
     systemData.bgTimestamp = now;
 
-    Serial.println(" Break Glass Triggered!");
+    Serial.println("\n Break Glass Triggered!");
     
     // dispatch break-glass event
     Event e = {
@@ -977,11 +976,13 @@ void updateOutputSenseStates() {
           .connected = info.dummy
         };
         dispatchEvent(&e);
-
-        Serial.print(" Output channel ");
-        Serial.print(info.channel);
-        Serial.print(info.dummy ? " (dummy)" : " (live)");
-        Serial.println(" confirmed!");
+        
+        #ifdef DEBUG_OUTPUT_SENSE
+          Serial.print("\n[Confirm ✅] Output Channel ");
+          Serial.print(info.channel);
+          Serial.print(info.dummy ? " (dummy)" : " (live)");
+          Serial.println(" Confirmed!");
+        #endif
       }
     }
     else if (!stable && prevStable[bit]) {

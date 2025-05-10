@@ -48,9 +48,9 @@ const float FAN_ON_TEMP  = 33.0f;
 // start speed ramp at this temperature
 const float FAN_MIN_TEMP = 34.0f;
 // hit this temp (or above) for full speed
-const float FAN_MAX_TEMP = 50.0f;
+const float FAN_MAX_TEMP = 55.0f;
 // Minimum PWM value for the fan (X-255)
-const uint8_t FAN_MIN_PWM = 80;
+const uint8_t FAN_MIN_PWM = 32;
 
 
 
