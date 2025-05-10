@@ -367,7 +367,7 @@ void HandleInterrupts() {
       // keep polling the expander until all bits have debounced
       updateOutputSenseStates();
 
-      #ifdef DEBUG_OUTPUT_SENSE
+      #ifdef DEBUG_INTERRUPT
         Serial.println("Output sense interrupt triggered!");
       #endif 
 
