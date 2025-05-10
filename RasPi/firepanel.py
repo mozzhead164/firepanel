@@ -293,7 +293,7 @@ def handle_frame(frame):
                 "  cam:     %s\n"
                 "  th:      %s\n"
                 "  cb:      %s\n"
-                "  confirm: %s",
+                "  confirm: %s\n",
                 mode, 
                 avg_temp, 
                 break_glass, 
