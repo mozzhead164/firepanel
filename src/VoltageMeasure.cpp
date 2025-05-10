@@ -61,7 +61,7 @@ void read_psuVoltages()
     { 
       // re-read the voltage right now:
       int raw = analogRead(ADC0);
-      float voltage = raw * PSU1_VOLTAGE_SCALE; 
+      float voltage = raw / PSU1_VOLTAGE_SCALE; 
 
       if (voltage >= VOLTAGE_RESTORE) 
       {
@@ -77,7 +77,7 @@ void read_psuVoltages()
 
             // stash voltage in systemData for handler to grab
             systemData.psu1UnderVolt = false;    // update the flag
-            systemData.psu1Voltage   = voltage * PSU1_VOLTAGE_SCALE;  // add this member too
+            systemData.psu1Voltage   = voltage / PSU1_VOLTAGE_SCALE;  // add this member too
 
             Event e{ EVENT_PSU_RESTORED, 1, false };
             dispatchEvent(&e);
@@ -112,7 +112,7 @@ void read_psuVoltages()
     { 
       // re-read the voltage right now:
       int raw = analogRead(ADC1);
-      float voltage = raw * PSU2_VOLTAGE_SCALE;
+      float voltage = raw / PSU2_VOLTAGE_SCALE;
 
       if (voltage >= VOLTAGE_RESTORE) 
       {
@@ -128,7 +128,7 @@ void read_psuVoltages()
 
             // stash voltage in systemData for handler to grab
             systemData.psu2UnderVolt = false;    // update the flag
-            systemData.psu2Voltage   = voltage * PSU2_VOLTAGE_SCALE; 
+            systemData.psu2Voltage   = voltage / PSU2_VOLTAGE_SCALE; 
 
             Event e{ EVENT_PSU_RESTORED, 2, false };
             dispatchEvent(&e);
