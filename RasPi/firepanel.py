@@ -574,11 +574,9 @@ def socket_command_listener():
                             # 3) acknowledge back to Node-RED
                             conn.sendall(b"OK\n")
                             # 4) forward to Arduino
-                            frame = json.dumps({
-                                "type": "trigger_thermal",
-                                "channel": ch + 1
-                            })
-                            write_serial(frame)
+                            cmd = {"type": "trigger_thermal", "channel": ch + 1}
+                            send_json(ser, cmd)
+                            logger.debug("Forwarded to Arduino: %s", cmd)
                         else:
                             conn.sendall(b"ERR: Invalid channel\n")
                 else:
