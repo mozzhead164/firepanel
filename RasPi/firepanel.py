@@ -288,21 +288,24 @@ def handle_frame(frame):
             
             # Log the data
             logger.debug(
-                "DATA recv:\n"
-                "  mode=%s, Temp=%.1f, BG=%s, TempA=%s, PSU1_UV=%s, PSU2_UV=%s",
-                mode, avg_temp, break_glass, temp_alert, psu1_uv, psu2_uv
-            )
-            logger.debug(
-                "Masks:\n"
+                "DATA Received:\n"
+                "  Mode=%s, Temp=%.1f, BG=%s, TempA=%s, PSU1_UV=%s, PSU2_UV=%s \nMasks:\n"
                 "  cam:     %s\n"
                 "  th:      %s\n"
                 "  cb:      %s\n"
                 "  confirm: %s",
+                mode, 
+                avg_temp, 
+                break_glass, 
+                temp_alert, 
+                psu1_uv, 
+                psu2_uv, 
                 f"{cam_mask:08b}",
                 f"{th_mask:08b}",
                 f"{cb_mask:08b}",
                 f"{conf_mask:08b}"
             )
+
 
             # Merge triggers with existing state as before:
             existing = load_status_file()
