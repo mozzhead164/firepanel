@@ -255,6 +255,11 @@ void handleGetData()
     ch["cableConnected"]     = systemData.channels[i].cableConnected;
   }
 
+  Serial.print("[DEBUG] Masks C,T,CB = ");
+  Serial.print(cameraMask, BIN); Serial.print(", ");
+  Serial.print(thermalMask, BIN); Serial.print(", ");
+  Serial.println(cableMask, BIN);
+
   #ifdef DEBUG_SERIAL
     Serial.println(F("[DEBUG] Sending system data to Pi"));
     serializeJson(jsonDoc, Serial);
