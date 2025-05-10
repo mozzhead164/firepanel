@@ -302,78 +302,78 @@ static uint8_t stableState = 0xFF;    // debounced states (1 = released)
 static uint8_t lastRaw = 0xFF;        // last raw byte we sampled
 static uint8_t counter[8] = {0};      // per‑bit debounce counters
 
-ISR(INT4_vect)
-{
-    int4Flag = true;
-}
-ISR(INT5_vect)
-{
-    int5Flag = true;
-}
-ISR(INT6_vect)
-{
-    int6Flag = true;
-    bgLastInterrupt = millis();
-    bgPending = true;
-}
-ISR(INT7_vect)
-{
-    int7Flag = true;
-}
+  ISR(INT4_vect)
+  {
+      int4Flag = true;
+  }
+  ISR(INT5_vect)
+  {
+      int5Flag = true;
+  }
+  ISR(INT6_vect)
+  {
+      int6Flag = true;
+      bgLastInterrupt = millis();
+      bgPending = true;
+  }
+  ISR(INT7_vect)
+  {
+      int7Flag = true;
+  }
 
-void HandleInterrupts() {
+  void HandleInterrupts() {
 
-  // ATmega128: Multiple External Interrupt Lines
+    // ATmega128: Multiple External Interrupt Lines
 
-    // Front panel button triggered:
-    if (int4Flag) 
-    {
-        updateFpButtonStates(); // Read the front panel IO expander
-        
-        #ifdef DEBUG_FRONT_PANEL
-          Serial.println("Front panel button interrupt triggered!");
-        #endif
+      // Front panel button triggered:
+      if (int4Flag) 
+      {
+          updateFpButtonStates(); // Read the front panel IO expander
+          
+          #ifdef DEBUG_INTERRUPT
+            Serial.println("Front panel button interrupt triggered!");
+          #endif
 
-        int4Flag = false; 
-    }
+          int4Flag = false; 
+      }
 
-    // Cable connection triggered:
-    if (int5Flag) 
-    {
-        updateCableConnectedStates();
+      // Cable connection triggered:
+      if (int5Flag) 
+      {
+          updateCableConnectedStates();
 
-        #ifdef DEBUG_CONNECTED
-          Serial.println("Cable connection interrupt triggered!");
-        #endif
+          #ifdef DEBUG_INTERRUPT
+            Serial.println("Cable connection interrupt triggered!");
+          #endif
 
-        int5Flag = false;
-    }
+          int5Flag = false;
+      }
 
-    // Break glass triggered:
-    if (int6Flag) 
-    {
-        updateBreakGlassInput();  // Read the break-glass IO expander
+      // Break glass triggered:
+      if (int6Flag) 
+      {
+          updateBreakGlassInput();  // Read the break-glass IO expander
 
-        #ifdef DEBUG_TRIGGER
-          Serial.println("Break Glass Interrupt Triggered!");
-        #endif
+          #ifdef DEBUG_INTERRUPT
+            Serial.println("Break Glass Interrupt Triggered!");
+          #endif
 
-        int6Flag = false;       // Reset the flag
-    }
+          int6Flag = false;       // Reset the flag
+      }
 
-    // Output sense triggered:
-    if (int7Flag) {
+      // Output sense triggered:
+      if (int7Flag) {
 
-      // keep polling the expander until all bits have debounced
-      updateOutputSenseStates();
+        // keep polling the expander until all bits have debounced
+        updateOutputSenseStates();
 
-      #ifdef DEBUG_INTERRUPT
-        Serial.println("Output sense interrupt triggered!");
-      #endif 
+        #ifdef DEBUG_INTERRUPT
+          Serial.println("Output sense interrupt triggered!");
+        #endif 
 
-      // No need to reset the flag here; it will be cleared in updateOutputSenseStates()
-    }
-}
+        // No need to reset the flag here; it will be cleared in updateOutputSenseStates()
+      }
+  }
 
 // ATmega32
 #else

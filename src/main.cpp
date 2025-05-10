@@ -153,7 +153,7 @@ void loop()
   updateInputs();
 
   // Check Break Glass Input
-  updateBreakGlassInput();
+  // updateBreakGlassInput();
 
   // Check For Channel Triggers and Activate Outputs
   processChannelStates();
