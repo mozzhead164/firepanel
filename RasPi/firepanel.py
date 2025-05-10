@@ -554,37 +554,37 @@ def socket_command_listener():
             conn, _ = server.accept()
             with conn:
                 data = conn.recv(1024).decode().strip()
-                t0 = time.time()
-                logger.debug("Socket received command %r at %.3fs", data, t0)
+                logger.debug("Socket received command %r", data)
 
                 if data.startswith("thermal_trigger:"):
-                    ch1 = int(data.split(":",1)[1])
-                    if 1 <= ch1 <= 8:
-                        idx = ch1 - 1
+                    parts = data.split(":", 1)
 
-                        # Update status file immediately
-                        update_status_fields(thermal=[i == idx for i in range(8)])
-                        logger.info("🌡️ Thermal Alarm Triggered – Channel %d", ch)
-
-                        # Prepare and send to Arduino
-                        msg = {"type":"trigger_thermal","channel":ch1}
-                        frame = json.dumps(msg)
-                        t1 = time.time()
-                        ser.write(f'<{frame}>'.encode())
-                        ser.flush()
-                        t2 = time.time()
-                        logger.debug(
-                            "Wrote to serial at %.3fs (took %.3f s): %s",
-                            t2, t2 - t1, frame
-                        )
-
-                        conn.sendall(b"OK\n")
+                    try:
+                        ch = int(parts[1])
+                    except (ValueError, IndexError):
+                        conn.sendall(b"ERR: Bad format\n")
                     else:
-                        conn.sendall(b"ERR: Invalid channel\n")
+                        if 0 <= ch < 8:
+                            # 1) update status
+                            update_status_fields(
+                                thermal=[i == ch for i in range(8)]
+                            )
+                            # 2) log with ch defined
+                            logger.info("🌡️ Thermal Alarm Triggered – Channel %d", ch)
+                            # 3) acknowledge back to Node-RED
+                            conn.sendall(b"OK\n")
+                            # 4) forward to Arduino
+                            frame = json.dumps({
+                                "type": "trigger_thermal",
+                                "channel": ch + 1
+                            })
+                            write_serial(frame)
+                        else:
+                            conn.sendall(b"ERR: Invalid channel\n")
                 else:
                     conn.sendall(b"ERR: Unknown command\n")
-        except Exception as e:
-            logger.error("Socket listener error", exc_info=e)
+        except Exception:
+            logger.exception("Socket listener error")
 
 
 
