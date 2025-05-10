@@ -407,6 +407,20 @@ def handle_frame(frame):
             send_json(ser, {"type": "get_data"})
         
 
+        elif msg_type == "self_test":
+            rpt = data
+            logger.info(
+                "➤ Startup v%s: selfTest=%s, mode=%s, PSUs UV=%s/%s, I2C=%s%s",
+                rpt["fwVersion"],
+                rpt["selfTestPassed"],
+                rpt["systemMode"],
+                rpt["psu1UnderVolt"],
+                rpt["psu2UnderVolt"],
+                rpt["i2cOk"],
+                f", freeMem={rpt['freeMemory']}B" if "freeMemory" in rpt else ""
+            )
+
+
         else:
             logger.debug("Ignoring unhandled frame for status: %s", frame)
 
