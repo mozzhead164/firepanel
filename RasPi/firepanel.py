@@ -49,10 +49,11 @@ stop_event = threading.Event()
 
 
 # ——— Logging Setup ———
-LOG_FILE = "/home/Dale/firepanel/RasPi/firepanel.log"
+LOG_DIR  = os.path.expanduser("home/Dale/firepanel/RasPi/logs")
+LOG_FILE = os.path.join(LOG_DIR, "firepanel.log")
 
 # Ensure log directory exists
-os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
+os.makedirs(LOG_DIR, exist_ok=True)
 
 # ——— Logger Setup ———
 logger = logging.getLogger("firepanel")
