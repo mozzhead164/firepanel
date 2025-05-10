@@ -19,6 +19,10 @@ SystemData systemData;
 
 volatile bool confirmedIntFlag = false;
 
+// Flag + Timer For Break Glass Debouncing
+unsigned long bgLastInterrupt = 0;
+bool bgPending = false;
+
 // Initialize Mode Switch Inputs and human-readable names
 const uint8_t MODE_PINS_P[] PROGMEM   = { MODE_ARM, MODE_TST, MODE_NOP };
 
@@ -309,6 +313,8 @@ ISR(INT5_vect)
 ISR(INT6_vect)
 {
     int6Flag = true;
+    bgLastInterrupt = millis();
+    bgPending = true;
 }
 ISR(INT7_vect)
 {
@@ -346,14 +352,19 @@ void HandleInterrupts() {
     // Break glass triggered:
     if (int6Flag) 
     {
+       if (bgPending) { 
         updateBreakGlassInput();  // Read the break-glass IO expander
-
+        if (millis() - bgLastInterrupt > 50) {
+          // After 50 ms of sampling, give up
+          bgPending = false;
+          // Reset the flag
+          int6Flag = false;
+        }
+    }
         #ifdef DEBUG_TRIGGER
           Serial.println("Break glass interrupt triggered!");
         #endif
-
-        // Reset the flag
-        int6Flag = false;
+        
     }
 
     // Output sense triggered:
@@ -506,7 +517,7 @@ void updateInputs() {
 
 // Update Break Glass Input State
 void updateBreakGlassInput() {
-  
+ 
   bool raw = digitalRead(INT6_BRK_GLS);
   Serial.print("[DBG] BG raw level: ");
   Serial.println(raw ? "HIGH" : "LOW");
