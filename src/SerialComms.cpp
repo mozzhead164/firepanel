@@ -249,7 +249,7 @@ void handleGetData()
     Serial.println(cableMask, BIN);
 
     Serial.println(F("[DEBUG 🔧] Sending system data to Pi"));
-    serializeJson(jsonDoc, Serial);
+    serializeJsonPretty(jsonDoc, Serial);
     Serial.println();
   #endif
 
