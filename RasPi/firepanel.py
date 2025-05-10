@@ -364,7 +364,7 @@ def handle_frame(frame):
             if alert_type == "mode_change":
                 mode = data.get("mode", "UNKNOWN")
                 update_status_fields(mode=mode)
-                logger.info("🗝️ System mode changed to %s 🗝️", mode)
+                logger.info("🗝️  System mode changed to %s 🗝️", mode)
 
             elif alert_type == "psu_undervoltage":
                 psu = data.get("psu")
