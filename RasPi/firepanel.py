@@ -327,7 +327,6 @@ def handle_frame(frame):
             )
 
 
-
         elif msg_type == "alert":
             last_heartbeat = time.time()
             alert_type = data.get("alertType") or data.get("subtype") or data.get("type")
