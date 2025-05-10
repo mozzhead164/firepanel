@@ -1009,10 +1009,6 @@ void updateOutputSenseStates() {
       int7Flag = false;  // reset the interrupt flag
   }
 
-  #ifdef DEBUG_OUTPUT_SENSE
-      Serial.println("[DEBUG 🔧]: ISR [Output Sense] fired");
-  #endif
-
 }  // updateOutputSenseStates(); // Read and debounce the PCA9555 bits
 
 
