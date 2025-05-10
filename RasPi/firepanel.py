@@ -210,29 +210,38 @@ def handle_frame(frame):
             logger.debug("Received handshake from Arduino")
             send_json(ser, HANDSHAKE_PAYLOAD)
 
-
-        elif msg_type in ("channel_trigger", "output_confirm"):
-            # Reset Heartbeat as We Just Heard From Arduino
+        elif msg_type == "channel_trigger":
+            # Incoming camera trigger (before we know if the output fired)
             last_heartbeat = time.time()
-
-            # Get The Channel Data
             ch = data.get("channel")
-            # Check if 1 < Channel < 8
-            if ch is not None and 1 <= ch <= 8:
+            if ch and 1 <= ch <= 8:
                 idx = ch - 1
 
-                # 1) Mark the trigger
+                # mark the raw trigger
                 current = load_status_file()
-                trig    = current.get("trig", [False]*8)
-                trig[idx] = True
-
-                # 2) Record when it happened so cleanup knows how long to wait
+                raw_trig = current.get("raw_trig", [False]*8)
+                raw_trig[idx] = True
                 camera_trigger_times[idx] = time.time()
+                update_status_fields(raw_trig=raw_trig)
+                logger.info("🔥 Camera Trigger Detected - Channel %d 🔥", ch)
 
-                # 3) Persist to disk
-                update_status_fields(trig=trig)
-                logger.info("✅ Confirmed Camera Trigger - Channel %d ✅", ch)
+        elif msg_type == "output_confirm":
+            # Confirmation from Arduino that the output actually fired
+            last_heartbeat = time.time()
+            ch = data.get("channel")
+            dummy = data.get("dummy", False)
+            if ch and 1 <= ch <= 8:
+                idx = ch - 1
 
+                # mark the confirmed trigger
+                current = load_status_file()
+                confirmed = current.get("confirmed", [False]*8)
+                confirmed[idx] = True
+                update_status_fields(confirmed=confirmed)
+                if dummy:
+                    logger.info("✅ Confirmed Dummy Output - Channel %d ✅", ch)
+                else:
+                    logger.info("✅ Confirmed Live Output - Channel %d ✅", ch)
 
         elif msg_type == "trigger_thermal":
             ch = data.get("channel")
@@ -261,7 +270,6 @@ def handle_frame(frame):
                 logger.debug("Received ACK for command %r", cmd)
             # and then return, so we don't fall into the final else
             return
-
 
         elif msg_type == "data":
             system = data
@@ -332,7 +340,6 @@ def handle_frame(frame):
                 confirm=incoming_conf
             )
 
-
         elif msg_type == "alert":
             last_heartbeat = time.time()
             alert_type = data.get("alertType") or data.get("subtype") or data.get("type")
@@ -373,7 +380,6 @@ def handle_frame(frame):
             # Optionally: reflect alert visually in status file
             update_status_fields(lastAlert=data)
 
-
         elif msg_type == "heartbeat":
             last_heartbeat = time.time()
 
@@ -386,10 +392,8 @@ def handle_frame(frame):
             # Send get_data request in response to heartbeat
             send_json(ser, {"type": "get_data"})
         
-
         else:
             logger.debug("Ignoring unhandled frame for status: %s", frame)
-
 
     except json.JSONDecodeError:
         logger.error("Failed to parse incoming frame as JSON: %s", frame)
