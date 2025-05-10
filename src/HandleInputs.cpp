@@ -507,8 +507,17 @@ void updateInputs() {
 // Update Break Glass Input State
 void updateBreakGlassInput() {
   
+  bool raw = digitalRead(INT6_BRK_GLS);
+  Serial.print("[DBG] BG raw level: ");
+  Serial.println(raw ? "HIGH" : "LOW");
+
   // Check break‐glass input state
   systemData.bgDebouncer.update();
+
+  Serial.print("[DBG] Debouncer state: last=");
+  Serial.print(systemData.bgDebouncer.read() ? "HIGH" : "LOW");
+  Serial.print(" fell=");
+  Serial.println(systemData.bgDebouncer.fell() ? "YES" : "NO");
 
   // Current Timestamp
   uint32_t now = millis();
