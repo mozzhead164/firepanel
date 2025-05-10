@@ -3,6 +3,7 @@
 #include "SystemData.h"
 #include "Temperature.h"
 #include "Pins.h"       // Include pin definitions
+#include "Config.h"     // Include configuration
 
 
 // Raw-state for our non-blocking DS18B20 driver
@@ -10,17 +11,10 @@ enum TempState { TS_IDLE, TS_CONVERT, TS_READ };
 TempState tempState = TS_IDLE;
 
 
-#define TEMP_READ_INTERVAL_MS 10*1000UL
-#define TEMP_ALERT_THRESHOLD  0.10f
+
 
 
 static void updateTemperatureAlerts();
-
-
-
-
-
-
 
 
 
@@ -171,22 +165,9 @@ void requestTemperature() {
 
 void controlFanSpeed() {
 
-  // ───── Fan control thresholds (°C) ─────
-  // below FAN_OFF_TEMP the fan stays off
-  const float FAN_OFF_TEMP = 25.0f;
-  // once this temp exceeded, fan switches on
-  const float FAN_ON_TEMP  = 30.0f;
-  // start speed ramp at this temperature
-  const float FAN_MIN_TEMP = 30.0f;
-  // hit this temp (or above) for full speed
-  const float FAN_MAX_TEMP = 50.0f;
-  // Minimum PWM value for the fan (X-255)
-  const uint8_t FAN_MIN_PWM = 80;
-
   static bool   fanActive = false;
   float         t         = systemData.averageTemp;
   uint8_t       pwm       = 0;
-  
 
   // hysteresis: only arm the fan at or above FAN_ON_TEMP,
   // and only disarm once you cool below FAN_OFF_TEMP
@@ -218,12 +199,6 @@ void controlFanSpeed() {
 static void updateTemperatureAlerts() {
 
   float temp = systemData.averageTemp;
-
-  const float HIGH_TEMP_THRESHOLD = 55.0;  // degrees C
-  const float LOW_TEMP_RESET_THRESHOLD = 45.0; // degrees C
-
-  const uint32_t ALERT_CONFIRMATION_TIME = 5000UL; // 5 seconds
-
   static bool tempHighPending = false;
   static uint32_t tempHighStartTime = 0;
 
