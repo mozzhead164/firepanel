@@ -290,7 +290,7 @@ def handle_frame(frame):
                 "Masks \n cam=%s, th=%s, cb=%s",
                 format(cam_mask, '#010b'), 
                 format(th_mask,  '#010b'),
-                format(cb_mask,  '#010b')
+                format(cb_mask,  '#010b') 
             )
 
             # Merge triggers with existing state as before:
