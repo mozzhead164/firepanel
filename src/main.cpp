@@ -167,6 +167,9 @@ void loop()
   // Check For Channel Triggers and Activate Outputs
   processChannelStates();
 
+  // Update Output Sense States
+  updateOutputSenseStates(); 
+
   // Request PCB Temperature
   requestTemperature();
 

@@ -308,25 +308,37 @@ static uint8_t stableState = 0xFF;    // debounced states (1 = released)
 static uint8_t lastRaw = 0xFF;        // last raw byte we sampled
 static uint8_t counter[8] = {0};      // per‑bit debounce counters
 
+  // Interrupt Service Routines
+
+  // Int4 = Front Panel Button
   ISR(INT4_vect)
   {
       int4Flag = true;
   }
+  
+  // Int5 = Cable Connection
   ISR(INT5_vect)
   {
       int5Flag = true;
   }
+  
+  // Int6 = Break Glass
   ISR(INT6_vect)
   {
       int6Flag = true;
       bgLastInterrupt = millis();
       bgPending = true;
   }
+  
+  // Int7 = Output Sense
   ISR(INT7_vect)
   {
       int7Flag = true;
   }
 
+
+
+  // Handle Interrupts
   void HandleInterrupts() {
 
     // ATmega128: Multiple External Interrupt Lines
