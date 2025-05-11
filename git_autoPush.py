@@ -10,7 +10,7 @@ def after_build(source, target, env):
 
     # 1) pull remote
     pull = subprocess.run(['git','pull','origin','main'],
-                          capture_output=True, text=True)
+                          capture_output=True, text=True, encoding="utf-8", errors="replace")
     print("▶ extra_push: git pull →", pull.stdout, pull.stderr)
 
     # 2) stage everything except RasPi/
@@ -22,10 +22,10 @@ def after_build(source, target, env):
         msg = f"Auto‐update: {datetime.now():%Y-%m-%d %H:%M:%S}"
         print("▶ extra_push: committing:", msg)
         commit = subprocess.run(['git','commit','-m',msg],
-                                capture_output=True, text=True)
+                                capture_output=True, text=True, encoding="utf-8", errors="replace")
         print("▶ extra_push: git commit →", commit.stdout, commit.stderr)
         push = subprocess.run(['git','push','origin','main'],
-                              capture_output=True, text=True)
+                              capture_output=True, text=True, encoding="utf-8", errors="replace")
         print("▶ extra_push: git push →", push.stdout, push.stderr)
     else:
         print("▶ extra_push: nothing to commit")
