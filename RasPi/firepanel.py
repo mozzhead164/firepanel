@@ -632,13 +632,13 @@ def socket_command_listener(ser):
                     conn.sendall(b"OK\n")
                     continue
 
-                elif data == "selftest":
+                elif data == "self-test":
                     logger.info("🔧 Selftest requested over socket")
                     # forward to Arduino
                     send_json(ser, {"type": "selftest"})
                     # acknowledge immediately
                     conn.sendall(b"OK: selftest started\n")
-                    
+
                 elif data.startswith("thermal_trigger:"):
                     parts = data.split(":", 1)
 
