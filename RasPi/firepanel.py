@@ -62,7 +62,7 @@ stop_event = threading.Event()
 
 
 # ——— Logging Setup ———
-LOG_DIR  = os.path.expanduser("~/firepanel/RasPi/logs")
+LOG_DIR  = os.path.expanduser("/home/Dale/firepanel/RasPi/logs")
 LOG_FILE = os.path.join(LOG_DIR, "firepanel.log")
 
 # Ensure log directory exists
@@ -84,8 +84,7 @@ file_handler = TimedRotatingFileHandler(
     backupCount=12,      # keep the last 12 → ~48 weeks (~11 months)
     encoding="utf-8",
     utc=False,
-    atTime=datetime.time(hour=0, minute=1)
-)
+    atTime=datetime.time(hour=0, minute=1) )
 
 
 
@@ -101,23 +100,22 @@ file_handler.rotator = rotator
 file_handler.setLevel(logging.DEBUG)  # log everything to file
 file_handler.setFormatter(
     logging.Formatter("[%(asctime)s] %(levelname)-5s %(message)s",
-                      datefmt="%Y-%m-%d %H:%M:%S")
-)
+                      datefmt="%Y-%m-%d %H:%M:%S") )
 logger.addHandler(file_handler)
 
 # — Console Handler ——
 console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.INFO)   # only INFO+ to console
+console_handler.stream = open(sys.stdout.fileno(), 'w', encoding='utf-8', closefd=False)
 console_handler.setFormatter(
     logging.Formatter("%(asctime)s %(levelname)-5s %(message)s",
-                      datefmt="%H:%M:%S")
-)
-console_handler.stream = open(sys.stdout.fileno(), 'w', encoding='utf-8', closefd=False)
+                      datefmt="%H:%M:%S") )
+
 logger.addHandler(console_handler)
 
 
 
-
+# ——— Send JSON Frame To Arduino ———
 def send_json(ser, obj):
     try:
         frame = "<" + json.dumps(obj) + ">"
@@ -130,6 +128,7 @@ def send_json(ser, obj):
         logger.exception("Failed to send JSON frame")
 
 
+# —– Read from Serial Port ———
 def read_from_serial(ser):
     buffer = []               # list of chars inside <…>
     in_frame = False
@@ -194,8 +193,7 @@ def read_from_serial(ser):
             time.sleep(0.1)
 
 
-
-
+# ——— Handle Incoming Frame ———
 def handle_frame(frame):
     global handshake_complete, last_heartbeat, trig
 
@@ -414,12 +412,19 @@ def handle_frame(frame):
         elif msg_type == "self_test":
             rpt = data
             logger.info(
-                "➤ Startup v%s: selfTest=%s, mode=%s, PSUs UV=%s/%s, I2C=%s%s",
+                "\n\n ➤  Startup Arduino SelfTest ➤\n Firmware Version: %s\n"
+                " Self-Test: %s\n"
+                " Mode: %s\n"
+                " PSU #1: %s\n"
+                " PSU #2: %s\n"
+                " Channels: %s\n"
+                " I2C OK: %s%s\n",
                 rpt["fwVersion"],
                 rpt["passed"],
                 rpt["systemMode"],
-                rpt["psu1UnderVolt"],
-                rpt["psu2UnderVolt"],
+                rpt["psu1Voltage"],
+                rpt["psu2Voltage"],
+                rpt["channelCount"],
                 rpt["i2cOk"],
                 f", freeMem={rpt['freeMemory']}B" if "freeMemory" in rpt else ""
             )
@@ -433,8 +438,7 @@ def handle_frame(frame):
         logger.debug("Raw frame received (invalid JSON): %s", frame)
 
 
-
-
+# ——— Load Status File ———
 def load_status_file():
     try:
         with open(STATUS_FILE, "r") as f:
@@ -450,6 +454,7 @@ def load_status_file():
         }
 
 
+# —– Update Status Fields ———
 def update_status_fields(**updates):
     try:
         if DEBUG_STATUS:
@@ -489,6 +494,7 @@ def update_status_fields(**updates):
         logger.exception("Failed to update system_status.json")
 
 
+# ——— Camera Trigger Cleanup Loop ———
 def trig_cleanup_loop():
     global trig
     while not stop_event.is_set():
@@ -510,6 +516,7 @@ def trig_cleanup_loop():
         time.sleep(10)
 
 
+# ——— Thermal Cleanup Loop ———
 def thermal_cleanup_loop():
     global thermal_trigger_times
     while not stop_event.is_set():
@@ -530,6 +537,7 @@ def thermal_cleanup_loop():
         time.sleep(10)
 
 
+# ——— Write Watchdog Status to File ———
 def write_watchdog_status(payload):
 
     #payload can be either:
@@ -550,9 +558,7 @@ def write_watchdog_status(payload):
         logger.exception("Failed to write watchdog_status.json")
 
 
-
-
-
+# — Watchdog Loop - Check Arduino Heartbeat —
 def watchdog_loop():
     """
     Every second we compare time since last_heartbeat to watchdog_timeout.
@@ -601,8 +607,8 @@ def watchdog_loop():
         time.sleep(1)
 
 
-
-def socket_command_listener():
+#  Socket Listener From Nodered Thermal Trigger
+def socket_command_listener(ser):
     # Clean up old socket if needed
     try:
         os.unlink(SOCKET_PATH)
@@ -622,7 +628,18 @@ def socket_command_listener():
                 data = conn.recv(1024).decode().strip()
                 logger.debug("Socket received command %r", data)
 
-                if data.startswith("thermal_trigger:"):
+                if data == "ping":
+                    conn.sendall(b"OK\n")
+                    continue
+
+                elif data == "self-test":
+                    logger.info("🔧 Selftest requested over socket")
+                    # forward to Arduino
+                    send_json(ser, {"type": "selftest"})
+                    # acknowledge immediately
+                    conn.sendall(b"OK: selftest started\n")
+
+                elif data.startswith("thermal_trigger:"):
                     parts = data.split(":", 1)
 
                     try:
@@ -651,8 +668,13 @@ def socket_command_listener():
             logger.exception("Socket listener error")
 
 
+# ——— ask Arduino for a full data frame ASAP so avgTemp gets set quickly ———
+def prime_data_request():
+    time.sleep(0.5)  # give threads a moment to settle
+    send_json(ser, {"type": "get_data"})
 
 
+# —– Main Program Loop ———
 if __name__ == "__main__":
     try:
         ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=0.5, exclusive=True)
@@ -662,7 +684,23 @@ if __name__ == "__main__":
         sys.exit(1)
 
     logger.info("Firepanel controller started")
-    update_status_fields(stage="booting", mode="BOOTING", conn=[False]*8, trig=[False]*8, thermal=[False]*8)
+
+    #update_status_fields(stage="booting", mode="BOOTING", conn=[False]*8, trig=[False]*8, thermal=[False]*8)
+    
+    # initialise the status file so LCD has something to read
+    update_status_fields(
+        stage="booting",
+        mode="BOOTING",
+        conn=[False]*8,
+        trig=[False]*8,
+        thermal=[False]*8,
+        avgTemp=29.0,
+        breakGlass=False,
+        tempAlert=False,
+        psu1UnderVolt=False,
+        psu2UnderVolt=False,
+        confirm=[False]*8
+    )
 
     serial_thread = threading.Thread(target=read_from_serial, args=(ser,))
     serial_thread.start()
@@ -676,13 +714,12 @@ if __name__ == "__main__":
     watchdog_thread = threading.Thread(target=watchdog_loop)
     watchdog_thread.start()
 
-    socket_thread = threading.Thread(
-        target=socket_command_listener,
-        daemon=True
-    )
+    socket_thread = threading.Thread(target=socket_command_listener, args=(ser,), daemon=True)
     socket_thread.start()
     logger.debug("Socket listener thread started")
     print("[MAIN] socket_thread started")
+
+    threading.Thread(target=prime_data_request, daemon=True).start()
 
     try:
         while True:

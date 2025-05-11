@@ -366,7 +366,7 @@ class StatusChangeHandler(FileSystemEventHandler):
 
 
 def load_status_file():
-    try:
+    try:/firepanel/RasPi/
         with open(STATUS_FILE, 'r') as f:
             data = json.load(f)
             return {
