@@ -13,6 +13,7 @@ from RPLCD.i2c import CharLCD
 I2C_DEV = "/dev/i2c-1"
 
 STATUS_FILE = "/home/Dale/firepanel/RasPi/system_status.json"
+WATCHDOG_FILE = "/home/Dale/firepanel/RasPi/watchdog_status.json"
 
 lcd_cache = [[' ' for _ in range(20)] for _ in range(4)]
 current_data = {
@@ -390,13 +391,19 @@ def handle_status_file_update():
         global previous_trig_states
         previous_trig_states = current_data.get("trig", [False]*8)
 
-    if os.path.exists("/home/Dale/firepanel/RasPi/watchdog_status.json"):
+    if os.path.exists(WATCHDOG_FILE):
         try:
-            with open("/home/Dale/firepanel/RasPi/watchdog_status.json", 'r') as f:
+            with open(WATCHDOG_FILE, 'r') as f:
                 status = json.load(f)
-                watchdogActive = status.get('active', False)
+            # new schema: either an explicit "active" key, or "state"
+            if 'active' in status:
+                watchdogActive = bool(status.get('active'))
+            else:
+                # treat any non-"ok" state as active
+                watchdogActive = status.get('state', 'ok') not in ('ok', 'OK')
         except Exception:
             watchdogActive = False
+
 
     # Decide which page we should be on now
     page = determine_page(current_data)
