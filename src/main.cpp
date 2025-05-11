@@ -161,17 +161,14 @@ void loop()
   // Check Break Glass Input
   updateBreakGlassInput();
 
-  // Check For Channel Triggers and Activate Outputs
-  processChannelStates();
-
   // Check ISR Flags For Triggered Events
   HandleInterrupts();
 
   // Update Front Panel Button States
   updateFpButtonStates();
 
-  // Update FP Button States
-  dummyCleanup();
+  // Check For Channel Triggers and Activate Outputs
+  processChannelStates();
 
   // Request PCB Temperature
   requestTemperature();

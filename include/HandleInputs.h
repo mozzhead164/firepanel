@@ -114,9 +114,6 @@ bool checkCableForChannel(uint8_t channel);
 // Processes Front Panel button state changes
 void updateFpButtonStates();
 
-// Cleanup function for the dummy output
-void dummyCleanup();
-
 // Processes Output Sense state changes
 void updateOutputSenseStates();
 
