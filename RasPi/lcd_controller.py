@@ -25,9 +25,9 @@ current_data = {
 }
 
 
-FLASH_INTERVAL = 0.5        # seconds for on/off toggle
+FLASH_INTERVAL = 0.2        # seconds for on/off toggle
 POLL_INTERVAL  = 0.1        # how often to update the display
-BLINK_HOLD     = 30         # default blink duration (seconds)
+BLINK_HOLD     = 25         # default blink duration (seconds)
 
 # local state
 last_status_mtime = 0
@@ -37,7 +37,7 @@ blink_start       = [0.0]*8   # when this channel’s blink began
 blink_type        = [None]*8  # "camera" or "thermal"
 
 
-BOOT_DURATION = 10.0  # seconds
+BOOT_DURATION = 8.0  # seconds
 start_time = time.time()
 heartbeat_received = False
 
@@ -55,7 +55,6 @@ status_changed = Event()
 
 flash_tick_on = True
 last_flash_toggle = time.time()
-flash_interval = 0.33
 previous_trig_states = [False] * 8
 
 
@@ -333,21 +332,21 @@ def handshake_animation_frame():
         handshake_previous_right = None
 
 
-def update_flashing_triggers():
-    trig = current_data.get("trig", [False] * 8)
-    thermal = current_data.get("thermal", [False] * 8)
+# def update_flashing_triggers():
+#     trig = current_data.get("trig", [False] * 8)
+#     thermal = current_data.get("thermal", [False] * 8)
 
-    for i in range(8):
-        col = 5 + i * 2  # position on LCD line
-        if trig[i]:
-            char = '\x03' if flash_tick_on else ' '
-        elif thermal[i]:
-            char = '\x02' if flash_tick_on else ' '
-        else:
-            continue  # no update needed
+#     for i in range(8):
+#         col = 5 + i * 2  # position on LCD line
+#         if trig[i]:
+#             char = '\x03' if flash_tick_on else ' '
+#         elif thermal[i]:
+#             char = '\x02' if flash_tick_on else ' '
+#         else:
+#             continue  # no update needed
 
-        lcd_write_safe((3, col), char)
-        lcd_cache[3][col] = char  # keep cache in sync
+#         lcd_write_safe((3, col), char)
+#         lcd_cache[3][col] = char  # keep cache in sync
 
 
 def build_trig_line(trig_states, thermal_states):
