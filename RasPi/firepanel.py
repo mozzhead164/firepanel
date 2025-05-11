@@ -246,7 +246,7 @@ def handle_frame(frame):
                 update_status_fields(confirm=confirm)
 
                 if dummy:
-                    logger.info("✅ Confirmed Dummy Output ✅ - Channel %d", ch)
+                    logger.info("✅ Confirmed Dummy Output  ✅ - Channel %d", ch)
                 else:
                     logger.info("✅ Confirmed Live Output ✅ - Channel %d", ch)
 
