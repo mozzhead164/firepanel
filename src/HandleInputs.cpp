@@ -757,8 +757,22 @@ void updateFpButtonStates()
 
                     uint8_t pin = pgm_read_byte_near(dummyPins_P + i);
                     digitalWrite(pin, HIGH);
+                    
                     systemData.channels[i].dummyTriggered     = true;       // track dummy
                     systemData.channels[i].dummyLastTrigger   = millis();   // timestamp dummy
+                    
+                    // 🔧 Immediately generate a CONFIRM event
+                    Event e = {
+                      .type      = EVENT_OUTPUT_CONFIRM,
+                      .channel   = uint8_t(i+1),    // 1–8 for human
+                      .connected = true             // dummy output
+                    };
+                    dispatchEvent(&e);
+                    #ifdef DEBUG_FP
+                      Serial.print(F("[DEBUG_FP] Dispatched dummy confirm for CH"));
+                      Serial.println(i+1);
+                    #endif
+
                 } else {
                     #ifdef USE_BUZZER_OUTPUT
                       // non-blocking dual tone
