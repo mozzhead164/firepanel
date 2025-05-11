@@ -412,13 +412,13 @@ def handle_frame(frame):
         elif msg_type == "self_test":
             rpt = data
             logger.info(
-                "➤ Startup Arduino SelfTest:\n Firmware Version: %s\n"
+                "\n\n ➤  Startup Arduino SelfTest:\n Firmware Version: %s\n"
                 " Self-Test: %s\n"
                 " Mode: %s\n"
                 " PSU #1: %s\n"
                 " PSU #2: %s\n"
                 " Channels: %s\n"
-                " I2C OK: %s%s",
+                " I2C OK: %s%s\n",
                 rpt["fwVersion"],
                 rpt["passed"],
                 rpt["systemMode"],
