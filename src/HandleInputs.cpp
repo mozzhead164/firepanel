@@ -301,7 +301,7 @@ volatile bool int4Flag = false;
 volatile bool int5Flag = false;
 volatile bool int6Flag = false;
 volatile bool int7Flag = false;
-volatile bool fpIntFlag = false;      // set by ISR, cleared in loop
+bool fpIntFlag = false;               // set by ISR, cleared in loop
 
 static uint8_t stableState = 0xFF;    // debounced states (1 = released)
 static uint8_t lastRaw = 0xFF;        // last raw byte we sampled
@@ -333,8 +333,9 @@ static uint8_t counter[8] = {0};      // per‑bit debounce counters
       // Front panel button triggered:
       if (int4Flag) 
       {
-          updateFpButtonStates(); // Read the front panel IO expander
-          
+          // updateFpButtonStates(); // Read the front panel IO expander
+          fpIntFlag = true;       // Set the flag to indicate front panel button event
+
           #ifdef DEBUG_INTERRUPT
             Serial.println("Front panel button interrupt triggered!");
           #endif
@@ -714,11 +715,15 @@ void updateFpButtonStates()
     // only sample every SAMPLE_MS or on interrupt
     if (!fpIntFlag && (millis() - lastSample < SAMPLE_MS))
         return;
+
+    // if we’re here, we’re either on a timer or an interrupt
     lastSample = millis();
     fpIntFlag  = false;
 
+    // read the PCF8574 chip
     uint8_t raw = pcf8574Read(FP_SWITCH_ADDR);
 
+    // Debounce the 8 bits of the raw button state
     for (uint8_t i = 0; i < 8; ++i) {
         bool rawBit  = (raw >> i) & 0x01;       // 1 = released
         bool lastBit = (lastRaw >> i) & 0x01;

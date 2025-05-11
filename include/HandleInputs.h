@@ -47,6 +47,7 @@ extern volatile bool int4Flag;
 extern volatile bool int5Flag;
 extern volatile bool int6Flag;
 extern volatile bool int7Flag;
+extern bool fpIntFlag;
 
 #else
 

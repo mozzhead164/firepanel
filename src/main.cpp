@@ -164,6 +164,9 @@ void loop()
   // Check ISR Flags For Triggered Events
   HandleInterrupts();
 
+  // Update Front Panel Button States
+  updateFpButtonStates();
+
   // Request PCB Temperature
   requestTemperature();
 

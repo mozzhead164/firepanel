@@ -294,7 +294,7 @@ void handleTriggerThermal()
     #ifdef DEBUG_THERMAL
       Buzzer::beep(500); // short beep
     #else
-      Buzzer::beep(2000); // short beep
+      Buzzer::beep(2000); // long beep
     #endif
   #endif
 
