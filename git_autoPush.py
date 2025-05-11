@@ -1,4 +1,5 @@
 Import("env")
+print("▶ git_autoPush.py loaded!")
 import os, subprocess
 from datetime import datetime
 
