@@ -272,7 +272,7 @@ def handle_frame(frame):
             if cmd == "handshake":
                 # your current handshake logic
                 update_status_fields(stage="connected", mode="ARMED")
-                write_watchdog_status(False)
+                write_watchdog_status({"state": "ok", "missed": 0})
                 handshake_complete = True
                 last_heartbeat = time.time()
                 logger.info("Received handshake ACK from Arduino")
@@ -530,7 +530,19 @@ def thermal_cleanup_loop():
         time.sleep(10)
 
 
-def write_watchdog_status(obj):
+def write_watchdog_status(payload):
+
+    #payload can be either:
+    #  - a dict: written as-is
+    #  - a string: wrapped as {"state": payload, "missed": missed_heartbeats}
+    
+    global missed_heartbeats
+
+    if isinstance(payload, str):
+        obj = {"state": payload, "missed": missed_heartbeats}
+    else:
+        obj = payload
+
     try:
         with open(WATCHDOG_FILE, "w") as f:
             json.dump(obj, f)
