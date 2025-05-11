@@ -48,6 +48,7 @@ handshake_complete = False
 last_heartbeat = time.time()
 watchdog_timeout = 10  # seconds
 watchdog_active = False
+missed_heartbeats = 0     # how many seconds-loops in a row we’ve been past timeout
 
 trig = {}
 camera_trigger_times = [0] * 8  # Track last set time for each channel trig
@@ -529,28 +530,64 @@ def thermal_cleanup_loop():
         time.sleep(10)
 
 
-def write_watchdog_status(active):
+def write_watchdog_status(obj):
     try:
         with open(WATCHDOG_FILE, "w") as f:
-            json.dump({"active": active}, f)
+            json.dump(obj, f)
     except Exception:
         logger.exception("Failed to write watchdog_status.json")
 
 
+
+
+
 def watchdog_loop():
-    global watchdog_active
+    """
+    Every second we compare time since last_heartbeat to watchdog_timeout.
+    - 1st time over: warning
+    - 3rd consecutive time: critical
+    - on recovery: info + reset
+    """
+    global watchdog_active, missed_heartbeats
+
     while not stop_event.is_set():
         now = time.time()
-        if handshake_complete and (now - last_heartbeat > watchdog_timeout):
-            if not watchdog_active:
-                logger.warning("Watchdog timeout – activating trouble screen")
+        elapsed = now - last_heartbeat
+
+        if handshake_complete and elapsed > watchdog_timeout:
+            missed_heartbeats += 1
+
+            # first miss
+            if missed_heartbeats == 1:
+                logger.warning(
+                    "Watchdog: heartbeat overdue by %.1fs (1/%d)",
+                    elapsed, watchdog_timeout
+                )
                 watchdog_active = True
-                write_watchdog_status(True)
-        elif watchdog_active and (now - last_heartbeat <= watchdog_timeout):
-            logger.info("Watchdog recovered – clearing trouble state")
-            watchdog_active = False
-            write_watchdog_status(False)
+                write_watchdog_status({"state": "warning", "missed": missed_heartbeats})
+
+            # escalation on the 3rd miss
+            elif missed_heartbeats == 3:
+                logger.critical(
+                    "Watchdog: heartbeat missed %d times (>%ds each)",
+                    missed_heartbeats, watchdog_timeout
+                )
+                write_watchdog_status({"state": "critical", "missed": missed_heartbeats})
+
+        else:
+            # recovered: reset everything
+            if watchdog_active or missed_heartbeats > 0:
+                logger.info(
+                    "Watchdog recovered after %d missed heartbeats (elapsed=%.1fs)",
+                    missed_heartbeats, elapsed
+                )
+                watchdog_active = False
+                write_watchdog_status({"state": "ok", "missed": 0})
+
+            missed_heartbeats = 0
+
         time.sleep(1)
+
 
 
 def socket_command_listener():

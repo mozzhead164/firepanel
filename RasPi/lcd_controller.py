@@ -1,7 +1,8 @@
 import os
+import time
+import smbus
 import sys
 import json
-import time
 from time import sleep
 from threading import Event
 from watchdog.observers import Observer
@@ -9,6 +10,7 @@ from watchdog.events import FileSystemEventHandler
 from RPLCD.i2c import CharLCD
 
 
+I2C_DEV = "/dev/i2c-1"
 
 STATUS_FILE = "/home/Dale/firepanel/RasPi/system_status.json"
 
@@ -115,9 +117,18 @@ flame_filled = [
 
 
 def init_lcd():
-    global lcd
+    global lcd, bus
     try:
-        lcd = CharLCD('PCF8574', I2C_ADDRESS, cols=20, rows=4)
+        start = time.time()
+        while not os.path.exists(I2C_DEV):
+            if time.time() - start > 15:
+                break
+            time.sleep(0.1)
+
+        # now bus will succeed (or at worst throw)
+        bus = smbus.SMBus(1)
+        lcd = CharLCD('PCF8574', I2C_ADDRESS, port=1, cols=20, rows=4)
+
         lcd.create_char(0, tick_char)           # ID 0 - Tick
         lcd.create_char(1, cross_char)          # ID 1 - Cross
         lcd.create_char(2, thermo_char)         # ID 2 - Thermometer
@@ -436,7 +447,13 @@ def main():
     if not os.path.exists(STATUS_FILE):
         with open(STATUS_FILE, 'w') as f:
             json.dump(current_data, f)
-    init_lcd()
+    
+    
+    if not init_lcd():
+        print(f"LCD init failed after waiting for I2C")
+    else:
+        clear_screen_full()
+        
     sleep(0.05)
     current_data = load_status_file() or current_data
     handle_status_file_update()
