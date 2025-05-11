@@ -526,29 +526,34 @@ def main():
                 # shouldn’t happen, but just in case
                 pass
 
-            # — B) Draw row 4 (“TRIG …”) with robust blinking —
-            row = 3
-            for i in range(8):
-                bt  = blink_type[i]
-                col = 5 + i*2    # icon positions at columns 5,7,9,…,19
-                if bt is None:
-                    # expired or never triggered → show ❌ (char 1)
-                    char = "\x01"
-                else:
-                    elapsed = now - blink_start[i]
-                    if elapsed > BLINK_HOLD:
-                        # session over
-                        blink_type[i] = None
-                        char = "\x01"
+
+            # — B) Decide page & handle row 4 only if “connected” —
+            page = determine_page(current_data)
+            if page == "connected":
+                # draw blinking triggers
+                row = 3
+                for i in range(8):
+                    bt  = blink_type[i]
+                    col = 5 + i*2
+                    if bt is None:
+                        char = "\x01"  # ❌
                     else:
-                        # within session: toggle ON/OFF
-                        phase = int(elapsed / FLASH_INTERVAL) % 2
-                        if not phase:
-                            char = " "
+                        elapsed = now - blink_start[i]
+                        if elapsed > BLINK_HOLD:
+                            blink_type[i] = None
+                            char = "\x01"
                         else:
-                            char = "\x03" if bt == "camera" else "\x02"
-                lcd.cursor_pos = (row, col)
-                lcd.write_string(char)
+                            phase = int(elapsed / FLASH_INTERVAL) % 2
+                            if not phase:
+                                char = " "
+                            else:
+                                char = "\x03" if bt == "camera" else "\x02"
+                    lcd.cursor_pos = (row, col)
+                    lcd.write_string(char)
+            else:
+                # clear row 4 so boot/init animations start clean
+                lcd.cursor_pos = (3, 0)
+                lcd.write_string(" " * lcd.width)
 
             # — C) Handle page animations (boot/initializing/connected) —
             page = determine_page(current_data)
