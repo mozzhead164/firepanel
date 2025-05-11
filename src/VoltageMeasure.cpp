@@ -26,7 +26,7 @@ void read_psuVoltages()
 
 
   // Periodically Read PSU Voltages
-  if(timeNow - lastVoltage >= 550UL)
+  if(timeNow - lastVoltage >= 250UL)
   {
     // Take Raw Reading - PSU 1
     psu1_voltage = analogRead(ADC0);
@@ -154,7 +154,7 @@ void read_psuVoltages()
   #ifdef DEBUG_VOLTAGE
     static uint32_t lastPrint = 0;
     // Periodically Print Voltage Readings
-    if(timeNow - lastPrint >= 550L)
+    if(timeNow - lastPrint >= 5000L)
     {
         Serial.print("\n # PSU Voltages # - ");
         Serial.print(" PSU 1: ");
