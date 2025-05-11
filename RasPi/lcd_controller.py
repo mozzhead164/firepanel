@@ -460,7 +460,7 @@ def determine_page(status):
 
 
 def main():
-    global watchdogActive
+    global currentData, watchdogActive
 
     # 1) Ensure the status file exists
     if not os.path.exists(STATUS_FILE):
