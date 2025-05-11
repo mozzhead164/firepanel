@@ -7,6 +7,7 @@
 #include "HandleInputs.h"   // for thermalPins access
 #include "EventManager.h"   // for dispatching events if needed
 #include <ArduinoJson.h>    // for JSON handling
+#include "SelfTest.h"       // for selfTestPassed
 
 
 
@@ -117,6 +118,9 @@ void handleIncomingCommand(const JsonDocument& doc) {
   }
   else if (strcmp(type, "reset_thermal") == 0) {
     handleResetThermal();
+  }
+  else if (strcmp(type, "selftest") == 0) {
+    runSystemSelfTest();
   }
   else {
     sendNack("Unknown command type");
