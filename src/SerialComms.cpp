@@ -291,7 +291,11 @@ void handleTriggerThermal()
   digitalWrite(pin, HIGH);
 
   #ifdef USE_BUZZER_OUTPUT
-    Buzzer::beep(2000); // short beep
+    #ifdef DEBUG_THERMAL
+      Buzzer::beep(500); // short beep
+    #else
+      Buzzer::beep(2000); // short beep
+    #endif
   #endif
 
   #ifdef DEBUG_TRIGGER
