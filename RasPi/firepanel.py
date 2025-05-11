@@ -62,7 +62,7 @@ stop_event = threading.Event()
 
 
 # ——— Logging Setup ———
-LOG_DIR  = os.path.expanduser("~/firepanel/RasPi/logs")
+LOG_DIR  = os.path.expanduser("~/firepanel/RasPi/logs/")
 LOG_FILE = os.path.join(LOG_DIR, "firepanel.log")
 
 # Ensure log directory exists
@@ -84,8 +84,7 @@ file_handler = TimedRotatingFileHandler(
     backupCount=12,      # keep the last 12 → ~48 weeks (~11 months)
     encoding="utf-8",
     utc=False,
-    atTime=datetime.time(hour=0, minute=1)
-)
+    atTime=datetime.time(hour=0, minute=1) )
 
 
 
