@@ -459,38 +459,35 @@ def determine_page(status):
 
 
 
-def main():
-    global currentData, watchdogActive
+ddef main():
+    global current_data, watchdogActive
 
-    # 1) Ensure the status file exists
+    # 1) Ensure the status file exists on disk
     if not os.path.exists(STATUS_FILE):
         with open(STATUS_FILE, "w") as f:
             json.dump(current_data, f)
 
-    # 2) Initialize the LCD
+    # 2) Initialize the LCD hardware
     if not init_lcd():
         print("LCD init failed after waiting for I2C")
     else:
         clear_screen_full()
 
+    # Brief pause & initial load/draw
     sleep(0.05)
-
-    # 3) Initial load & draw of lines 1–3
-    try:
-        with open(STATUS_FILE) as f:
-            current_data.update(json.load(f))
-    except Exception:
-        pass
+    initial = load_status_file()
+    if initial:
+        current_data.update(initial)
     handle_status_file_update()
 
-    # ─── Blink‐session state ───────────────────────────
-    last_mtime   = 0
-    prev_trig    = [False] * 8
-    prev_therm   = [False] * 8
-    blink_start  = [0.0]   * 8
-    blink_type   = [None]  * 8
+    # ─── Blink-session state for each channel ─────────────────
+    last_mtime  = 0.0
+    prev_trig   = [False]*8
+    prev_therm  = [False]*8
+    blink_start = [0.0]*8
+    blink_type  = [None]*8  # None | "camera" | "thermal"
 
-    # ─── Trouble‐flash state ──────────────────────────
+    # ─── Trouble-flash state ─────────────────────────────────
     last_toggle_time = time.monotonic()
     showing_trouble  = False
 
@@ -498,20 +495,21 @@ def main():
         while True:
             now = time.monotonic()
 
-            # ——— A) Reload JSON only when it’s changed —————
+            # — A) Reload JSON only when the file’s mtime changes —
             try:
                 mtime = os.path.getmtime(STATUS_FILE)
                 if mtime != last_mtime:
                     last_mtime = mtime
+
                     with open(STATUS_FILE) as f:
                         status = json.load(f)
+
+                    # Update our in-memory copy and redraw lines 1–3
                     current_data.clear()
                     current_data.update(status)
-
-                    # redraw lines 1–3 (mode, temp, etc)
                     handle_status_file_update()
 
-                    # edge-detect new trigger sessions
+                    # Edge-detect new sessions
                     trig_list  = status.get("trig",    [False]*8)
                     therm_list = status.get("thermal", [False]*8)
                     for i in range(8):
@@ -525,31 +523,34 @@ def main():
                     prev_therm = therm_list
 
             except FileNotFoundError:
+                # shouldn’t happen, but just in case
                 pass
 
-            # ——— B) Draw the “TRIG” line (row 4) with robust blinking ——
+            # — B) Draw row 4 (“TRIG …”) with robust blinking —
+            row = 3
             for i in range(8):
-                bt = blink_type[i]
-                col = i  # column index
+                bt  = blink_type[i]
+                col = 5 + i*2    # icon positions at columns 5,7,9,…,19
                 if bt is None:
-                    # no active blink → show ❌
-                    lcd.cursor_pos(col, 3)
-                    lcd.write_string("✗")
+                    # expired or never triggered → show ❌ (char 1)
+                    char = "\x01"
                 else:
                     elapsed = now - blink_start[i]
                     if elapsed > BLINK_HOLD:
-                        # blink session ended
+                        # session over
                         blink_type[i] = None
-                        lcd.cursor_pos(col, 3)
-                        lcd.write_string("✗")
+                        char = "\x01"
                     else:
-                        # within session: toggle flash
+                        # within session: toggle ON/OFF
                         phase = int(elapsed / FLASH_INTERVAL) % 2
-                        icon  = "🔥" if bt == "camera" else "🌡"
-                        lcd.cursor_pos(col, 3)
-                        lcd.write_string(icon if phase else " ")
+                        if not phase:
+                            char = " "
+                        else:
+                            char = "\x03" if bt == "camera" else "\x02"
+                lcd.cursor_pos = (row, col)
+                lcd.write_string(char)
 
-            # ——— C) Trouble‐page flash (if we’re “connected”) ———
+            # — C) Handle page animations (boot/initializing/connected) —
             page = determine_page(current_data)
             if page == "booting":
                 booting_animation_frame()
@@ -560,12 +561,23 @@ def main():
                     if now - last_toggle_time > 2.5:
                         last_toggle_time = now
                         showing_trouble  = not showing_trouble
-                    show_trouble(showing_trouble)
+                    # You’ll need a small helper to draw the trouble screen:
+                    if showing_trouble:
+                        update_screen(build_trouble_screen())
+                    else:
+                        # optionally redraw normal screen on toggle off
+                        handle_status_file_update()
 
             sleep(POLL_INTERVAL)
 
     except KeyboardInterrupt:
+        # graceful exit if you ever run it in foreground
         pass
+
+
+if __name__ == "__main__":
+    main()
+
 
 
 if __name__ == "__main__":
