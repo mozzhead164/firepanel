@@ -26,8 +26,10 @@ current_data = {
 
 
 FLASH_INTERVAL = 0.33        # seconds for on/off toggle
-POLL_INTERVAL  = 0.1        # how often to update the display
+POLL_INTERVAL  = 0.05        # how often to update the display
 BLINK_HOLD     = 25         # default blink duration (seconds)
+flash_on         = True
+last_flash_tick  = time.monotonic()
 
 # local state
 last_status_mtime = 0
@@ -228,11 +230,6 @@ def build_trouble_screen():
     return ["*** SYSTEM TROUBLE ***".center(20), " ".center(20), " ".center(20), " ".center(20)]
 
 
-def check_and_handle_stage_change(current_stage):
-    global last_stage
-    if current_stage != last_stage:
-        clear_screen_full()
-        last_stage = current_stage
 
 
 def booting_animation_frame():
@@ -419,10 +416,10 @@ def handle_status_file_update():
     # Decide which page we should be on now
     page = determine_page(current_data)
 
-    # If the page changed, clear the screen
-    if page != last_stage:
-        clear_screen_full()
-        last_stage = page
+    # # If the page changed, clear the screen
+    # if page != last_stage:
+    #     clear_screen_full()
+    #     last_stage = page
 
     # For booting / initializing we have their own frame-renderers
     if page == "connected":
@@ -455,135 +452,176 @@ def determine_page(status):
     # Otherwise we’re still waiting on that first heartbeat
     return "initializing"
 
+def check_and_handle_stage_change(new_stage):
+    global last_stage
+    global blink_type, blink_start, prev_trig, prev_thermal
+    global booting_idx, handshake_left, handshake_right
+    global handshake_previous_left, handshake_previous_right
+
+    if new_stage == last_stage:
+        return
+
+    # 1) Wipe the LCD and our cache
+    clear_screen_full()
+
+    # 2) Reset *all* per-page state
+    #    – Blink-row
+    blink_type  = [None] * 8
+    blink_start = [0.0] * 8
+    prev_trig   = [False] * 8
+    prev_thermal= [False] * 8
+
+    #    – Boot animation
+    booting_idx             = 0
+
+    #    – Handshake animation
+    handshake_left          = 0
+    handshake_right         = 20 - 1  # 19
+    handshake_previous_left = None
+    handshake_previous_right= None
+
+    # 3) Immediately *draw* the first frame of whatever page we’re now in
+    if new_stage == "booting":
+        # draw first booting frame (border + text)
+        booting_animation_frame()
+
+    elif new_stage == "initializing":
+        # show the static “initializing” text + first handshake frame
+        handshake_animation_frame()
+
+    elif new_stage == "connected":
+        # build & draw the *entire* connected screen in one go
+        screen = build_screen_from_system(current_data)
+        update_screen(screen)
+
+    # 4) Remember for next time
+    last_stage = new_stage
 
 
 
 def main():
-    global current_data, watchdogActive
+    global current_data, last_stage, watchdogActive
 
-    # 1) Ensure the status file exists on disk
+    # Ensure status file exists
     if not os.path.exists(STATUS_FILE):
         with open(STATUS_FILE, "w") as f:
             json.dump(current_data, f)
 
-    # 2) Initialize the LCD hardware
+    # Initialize LCD
     if not init_lcd():
         print("LCD init failed after waiting for I2C")
-    else:
-        clear_screen_full()
+        return
+    clear_screen_full()
 
-    # Brief pause & initial load/draw
-    sleep(0.05)
+    # Initial load
+    time.sleep(0.05)
     initial = load_status_file()
     if initial:
         current_data.update(initial)
-    handle_status_file_update()
 
-    # ─── Blink-session state for each channel ─────────────────
+    last_stage = None
     last_mtime  = 0.0
-    prev_trig   = [False]*8
-    prev_therm  = [False]*8
-    blink_start = [0.0]*8
-    blink_type  = [None]*8  # None | "camera" | "thermal"
 
-    # ─── Trouble-flash state ─────────────────────────────────
-    last_toggle_time = time.monotonic()
-    showing_trouble  = False
+    # State for blinking & trouble
+    prev_trig       = [False]*8
+    prev_thermal    = [False]*8
+    blink_start     = [0.0]*8
+    blink_type      = [None]*8
+    last_toggle     = time.monotonic()
+    showing_trouble = False
 
     try:
         while True:
             now = time.monotonic()
+            if now - last_flash_tick >= FLASH_INTERVAL:
+                last_flash_tick = now
+                flash_on        = not flash_on
 
-            # — A) Reload JSON only when the file’s mtime changes —
+            # — 1) Reload JSON & detect changes —
             try:
                 mtime = os.path.getmtime(STATUS_FILE)
                 if mtime != last_mtime:
                     last_mtime = mtime
-
                     with open(STATUS_FILE) as f:
                         status = json.load(f)
-
-                    # Update our in-memory copy and redraw lines 1–3
                     current_data.clear()
                     current_data.update(status)
-                    handle_status_file_update()
-                    check_and_handle_stage_change(status.get("stage"))
-
-                    # Edge-detect new sessions
+                    # start any new blink sessions
                     trig_list  = status.get("trig",    [False]*8)
                     therm_list = status.get("thermal", [False]*8)
                     for i in range(8):
                         if trig_list[i] and not prev_trig[i]:
                             blink_start[i] = now
                             blink_type[i]  = "camera"
-                        if therm_list[i] and not prev_therm[i]:
+                        if therm_list[i] and not prev_thermal[i]:
                             blink_start[i] = now
                             blink_type[i]  = "thermal"
-                    prev_trig  = trig_list
-                    prev_therm = therm_list
-
+                    prev_trig    = trig_list
+                    prev_thermal = therm_list
             except FileNotFoundError:
-                # shouldn’t happen, but just in case
                 pass
 
-
-            # — B) Decide page & handle row 4 only if “connected” —
+            # — 2) Figure out which page we should be on —
             page = determine_page(current_data)
-            if page == "connected":
-                # draw blinking triggers
-                row = 3
-                for i in range(8):
-                    bt  = blink_type[i]
-                    col = 5 + i*2
-                    if bt is None:
-                        char = "\x01"  # ❌
-                    else:
-                        elapsed = now - blink_start[i]
-                        if elapsed > BLINK_HOLD:
-                            blink_type[i] = None
-                            char = "\x01"
-                        else:
-                            phase = int(elapsed / FLASH_INTERVAL) % 2
-                            if not phase:
-                                char = " "
-                            else:
-                                char = "\x03" if bt == "camera" else "\x02"
-                    lcd.cursor_pos = (row, col)
-                    lcd.write_string(char)
-            else:
-                # clear row 4 so boot/init animations start clean
-                lcd.cursor_pos = (3, 0)
-                lcd.write_string(" " * 20)
 
-            # — C) Handle page animations (boot/initializing/connected) —
-            page = determine_page(current_data)
-            
+            # — 3) Handle a stage‐change *once* on entry to a new page —
+            if page != last_stage:
+                clear_screen_full()
+                # reset page‐specific state
+                blink_type[:]   = [None]*8
+                blink_start[:]  = [0.0]*8
+                prev_trig[:]    = [False]*8
+                prev_thermal[:] = [False]*8
+                showing_trouble = False
+                # draw the *entire* new page
+                if page == "booting":
+                    booting_animation_frame()
+                elif page == "initializing":
+                    handshake_animation_frame()
+                elif page == "connected":
+                    # static layout: lines 1–4
+                    screen = build_screen_from_system(current_data)
+                    update_screen(screen)
+                last_stage = page
+
+            # — 4) Run per-frame logic for the current page —
             if page == "booting":
                 booting_animation_frame()
+
             elif page == "initializing":
                 handshake_animation_frame()
-            elif page == "connected":
+
+            else:  # connected
+                # a) blinking TRIG row
+                for i in range(8):
+                    elapsed = now - blink_start[i]
+                    if blink_type[i] is None or elapsed > BLINK_HOLD:
+                        char = "\x01"   # ❌
+                    else:
+                        # synchronized flash across all channels
+                        if not flash_on:
+                            char = " "
+                        else:
+                            char = "\x03" if blink_type[i] == "camera" else "\x02"
+                    lcd.cursor_pos = (3, 5 + i*2)
+                    lcd.write_string(char)
+
+                # b) trouble‐flash if active
                 if watchdogActive:
-                    if now - last_toggle_time > 2.5:
-                        last_toggle_time = now
-                        showing_trouble  = not showing_trouble
-                    # You’ll need a small helper to draw the trouble screen:
+                    if now - last_toggle > 2.5:
+                        last_toggle     = now
+                        showing_trouble = not showing_trouble
                     if showing_trouble:
                         update_screen(build_trouble_screen())
                     else:
-                        # optionally redraw normal screen on toggle off
-                        handle_status_file_update()
+                        # restore the normal static lines 1–3
+                        stat = build_screen_from_system(current_data)
+                        update_screen(stat)
 
-            sleep(POLL_INTERVAL)
+            time.sleep(POLL_INTERVAL)
 
     except KeyboardInterrupt:
-        # graceful exit if you ever run it in foreground
         pass
-
-
-if __name__ == "__main__":
-    main()
-
 
 
 if __name__ == "__main__":
