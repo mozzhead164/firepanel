@@ -688,6 +688,30 @@ void updateTriggeredChannelLEDs() {
 }
 
 
+// Resets any dummy output pins once their latch time has expired  
+void dummyCleanup() {
+    uint32_t now = millis();
+    for (uint8_t i = 0; i < 8; ++i) {
+        if (systemData.channels[i].dummyTriggered) {
+            // has the latch period elapsed?
+            if (now - systemData.channels[i].lastTriggerTime
+                  >= DEFAULT_TRIGGER_LATCH_TIME_MS) {
+                // flip the pin LOW
+                uint8_t pin = pgm_read_byte_near(dummyPins_P + i);
+                digitalWrite(pin, LOW);
+
+                // clear our flag so it can re-trigger later
+                systemData.channels[i].dummyTriggered = false;
+
+                #ifdef DEBUG_FP
+                  Serial.print(F("[DEBUG] Dummy output reset—channel "));
+                  Serial.println(i + 1);
+                #endif
+            }
+        }
+    }
+}
+
 // Process Front Panel button state changes from the PCF8574 switch expander.
 void updateFpButtonStates()
 {

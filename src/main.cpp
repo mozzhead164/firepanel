@@ -167,6 +167,9 @@ void loop()
   // Update Front Panel Button States
   updateFpButtonStates();
 
+  // Update FP Button States
+  dummyCleanup();
+
   // Request PCB Temperature
   requestTemperature();
 
