@@ -116,6 +116,9 @@ void loop()
   // Update System State
   updateModeSwitch();
 
+  // Check ISR Flags For Triggered Events
+  HandleInterrupts();
+
   // ——— detect mode changes and notify the Pi ———
   if (systemData.systemMode != prevSystemMode)
   {
@@ -143,11 +146,8 @@ void loop()
   // Send Heartbeat to Pi Every 10 Seconds
   sendHeartbeat();  // Send Heartbeat to Pi
 
-  // Determine mode
-  uint8_t mode = systemData.systemMode;
-
   // Check & Update Start Animation - is it complete?
-  if (!startupAnimationDone) { updateStartupAnimation(mode); }
+  if (!startupAnimationDone) { updateStartupAnimation(systemData.systemMode); }
 
   // Update Front Panel LEDs
   updateTriggeredChannelLEDs();
@@ -160,9 +160,6 @@ void loop()
 
   // Check Break Glass Input
   updateBreakGlassInput();
-
-  // Check ISR Flags For Triggered Events
-  HandleInterrupts();
 
   // Update Front Panel Button States
   updateFpButtonStates();
