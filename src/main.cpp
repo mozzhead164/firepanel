@@ -78,6 +78,9 @@ void setup()
   // Initialize Temperature Sensor
   initTemperature();
 
+  // Initialize PSU Voltage Measurement
+  read_psuVoltages();
+
   // Register the event handler.
   registerEventCallback(eventHandler);
 
