@@ -236,14 +236,21 @@ def handle_frame(frame):
             # Confirmation from Arduino that the output actually fired
             ch = data.get("channel")
             dummy = data.get("dummy", False)
+
             if ch and 1 <= ch <= 8:
                 idx = ch - 1
 
                 # mark the confirmed trigger
                 current = load_status_file()
+
+                # load the current mode straight from disk
+                trig    = current.get("trig",    [False]*8)
                 confirm = current.get("confirm", [False]*8)
+
+                trig[idx]    = True
                 confirm[idx] = True
-                update_status_fields(confirm=confirm)
+
+                update_status_fields(trig=trig, confirm=confirm)
 
                 if dummy:
                     logger.info("✅ Confirmed Dummy Output  ✅ - Channel %d", ch)
