@@ -25,7 +25,7 @@ current_data = {
 }
 
 
-FLASH_INTERVAL = 0.2        # seconds for on/off toggle
+FLASH_INTERVAL = 0.33        # seconds for on/off toggle
 POLL_INTERVAL  = 0.1        # how often to update the display
 BLINK_HOLD     = 25         # default blink duration (seconds)
 
