@@ -460,62 +460,112 @@ def determine_page(status):
 
 
 def main():
-    global current_data, last_toggle_time, showing_trouble
-    global last_flash_toggle, flash_tick_on
+    global watchdogActive
 
+    # 1) Ensure the status file exists
     if not os.path.exists(STATUS_FILE):
-        with open(STATUS_FILE, 'w') as f:
+        with open(STATUS_FILE, "w") as f:
             json.dump(current_data, f)
-    
-    
+
+    # 2) Initialize the LCD
     if not init_lcd():
-        print(f"LCD init failed after waiting for I2C")
+        print("LCD init failed after waiting for I2C")
     else:
         clear_screen_full()
-        
+
     sleep(0.05)
-    current_data = load_status_file() or current_data
+
+    # 3) Initial load & draw of lines 1–3
+    try:
+        with open(STATUS_FILE) as f:
+            current_data.update(json.load(f))
+    except Exception:
+        pass
     handle_status_file_update()
 
-    event_handler = StatusChangeHandler()
-    observer = Observer()
-    observer.schedule(event_handler, path="/home/Dale/firepanel/RasPi/", recursive=False)
-    observer.start()
+    # ─── Blink‐session state ───────────────────────────
+    last_mtime   = 0
+    prev_trig    = [False] * 8
+    prev_therm   = [False] * 8
+    blink_start  = [0.0]   * 8
+    blink_type   = [None]  * 8
+
+    # ─── Trouble‐flash state ──────────────────────────
+    last_toggle_time = time.monotonic()
+    showing_trouble  = False
 
     try:
         while True:
-            if status_changed.is_set():
-                handle_status_file_update()
-                status_changed.clear()
+            now = time.monotonic()
 
-            now = time.time()
-            if current_data.get("stage") == "connected":
-                if now - last_flash_toggle >= flash_interval:
-                    last_flash_toggle = now
-                    flash_tick_on = not flash_tick_on
-                    update_flashing_triggers()
+            # ——— A) Reload JSON only when it’s changed —————
+            try:
+                mtime = os.path.getmtime(STATUS_FILE)
+                if mtime != last_mtime:
+                    last_mtime = mtime
+                    with open(STATUS_FILE) as f:
+                        status = json.load(f)
+                    current_data.clear()
+                    current_data.update(status)
 
-            # Decide page each iteration
+                    # redraw lines 1–3 (mode, temp, etc)
+                    handle_status_file_update()
+
+                    # edge-detect new trigger sessions
+                    trig_list  = status.get("trig",    [False]*8)
+                    therm_list = status.get("thermal", [False]*8)
+                    for i in range(8):
+                        if trig_list[i] and not prev_trig[i]:
+                            blink_start[i] = now
+                            blink_type[i]  = "camera"
+                        if therm_list[i] and not prev_therm[i]:
+                            blink_start[i] = now
+                            blink_type[i]  = "thermal"
+                    prev_trig  = trig_list
+                    prev_therm = therm_list
+
+            except FileNotFoundError:
+                pass
+
+            # ——— B) Draw the “TRIG” line (row 4) with robust blinking ——
+            for i in range(8):
+                bt = blink_type[i]
+                col = i  # column index
+                if bt is None:
+                    # no active blink → show ❌
+                    lcd.set_cursor(col, 3)
+                    lcd.write_string("✗")
+                else:
+                    elapsed = now - blink_start[i]
+                    if elapsed > BLINK_HOLD:
+                        # blink session ended
+                        blink_type[i] = None
+                        lcd.set_cursor(col, 3)
+                        lcd.write_string("✗")
+                    else:
+                        # within session: toggle flash
+                        phase = int(elapsed / FLASH_INTERVAL) % 2
+                        icon  = "🔥" if bt == "camera" else "🌡"
+                        lcd.set_cursor(col, 3)
+                        lcd.write_string(icon if phase else " ")
+
+            # ——— C) Trouble‐page flash (if we’re “connected”) ———
             page = determine_page(current_data)
-
-            if page == 'booting':
+            if page == "booting":
                 booting_animation_frame()
-            elif page == 'initializing':
-                handshake_animation_frame()   # reuse your old init animation
-            elif page == 'connected':
-                # only show trouble if watchdog is active
+            elif page == "initializing":
+                handshake_animation_frame()
+            elif page == "connected":
                 if watchdogActive:
-                    now = time.time()
                     if now - last_toggle_time > 2.5:
                         last_toggle_time = now
-                        showing_trouble = not showing_trouble
-            # else: no other pages
+                        showing_trouble  = not showing_trouble
+                    show_trouble(showing_trouble)
 
-            sleep(0.01)
+            sleep(POLL_INTERVAL)
 
     except KeyboardInterrupt:
-        observer.stop()
-    observer.join()
+        pass
 
 
 if __name__ == "__main__":
