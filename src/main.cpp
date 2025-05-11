@@ -21,7 +21,7 @@
 
 */
 
-// Arduino Compile Test 2
+// Arduino Compile Test 3
 
 // Function Prototypes
 void updateStartupAnimation();
