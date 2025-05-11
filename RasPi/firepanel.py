@@ -412,12 +412,19 @@ def handle_frame(frame):
         elif msg_type == "self_test":
             rpt = data
             logger.info(
-                "➤ Startup v%s: selfTest=%s, mode=%s, PSUs UV=%s/%s, I2C=%s%s",
+                "➤ Startup Arduino SelfTest:\n Firmware Version: %s\n
+                " Self-Test: %s\n"
+                " Mode: %s\n"
+                " PSU #1: %s\n"
+                " PSU #2: %s\n"
+                " Channels: %s\n"
+                " I2C OK: %s%s",
                 rpt["fwVersion"],
                 rpt["passed"],
                 rpt["systemMode"],
-                rpt["psu1UnderVolt"],
-                rpt["psu2UnderVolt"],
+                rpt["psu1Voltage"],
+                rpt["psu2Voltage"],
+                rpt["channelCount"],
                 rpt["i2cOk"],
                 f", freeMem={rpt['freeMemory']}B" if "freeMemory" in rpt else ""
             )
