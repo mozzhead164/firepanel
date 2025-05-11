@@ -500,7 +500,7 @@ def check_and_handle_stage_change(new_stage):
 
 
 def main():
-    global current_data, last_stage, watchdogActive
+    global current_data, last_stage, watchdogActive, flash_on, last_flash_tick
 
     # Ensure status file exists
     if not os.path.exists(STATUS_FILE):
