@@ -459,7 +459,7 @@ def determine_page(status):
 
 
 
-ddef main():
+def main():
     global current_data, watchdogActive
 
     # 1) Ensure the status file exists on disk
