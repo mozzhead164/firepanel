@@ -622,6 +622,10 @@ def socket_command_listener():
                 data = conn.recv(1024).decode().strip()
                 logger.debug("Socket received command %r", data)
 
+                if data == "ping":
+                    conn.sendall(b"OK\n")
+                    continue
+
                 if data.startswith("thermal_trigger:"):
                     parts = data.split(":", 1)
 
