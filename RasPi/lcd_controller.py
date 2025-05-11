@@ -507,6 +507,7 @@ def main():
                     current_data.clear()
                     current_data.update(status)
                     handle_status_file_update()
+                    check_and_handle_stage_change(status.get("stage"))
 
                     # Edge-detect new sessions
                     trig_list  = status.get("trig",    [False]*8)
@@ -556,6 +557,7 @@ def main():
 
             # — C) Handle page animations (boot/initializing/connected) —
             page = determine_page(current_data)
+            
             if page == "booting":
                 booting_animation_frame()
             elif page == "initializing":
