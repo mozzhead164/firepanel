@@ -75,8 +75,8 @@ void runSystemSelfTest() {
       jsonDoc["passed"]         = selfTestPassed;
       jsonDoc["fwVersion"]      = FIRMWARE_VERSION;
       jsonDoc["systemMode"]     = modeToStr(systemData.systemMode);
-      jsonDoc["psu1UnderVolt"]  = systemData.psu1UnderVolt;
-      jsonDoc["psu2UnderVolt"]  = systemData.psu2UnderVolt;
+      jsonDoc["psu1Voltage"]    = systemData.psu1Voltage;
+      jsonDoc["psu2Voltage"]    = systemData.psu2Voltage;
       jsonDoc["channelCount"]   = 8;
       jsonDoc["i2cOk"]          = (Wire.endTransmission() == 0);
       jsonDoc["heapFree"]       = freeMemory();  // if you have this helper
