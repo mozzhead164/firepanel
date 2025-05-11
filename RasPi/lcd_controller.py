@@ -553,7 +553,7 @@ def main():
             else:
                 # clear row 4 so boot/init animations start clean
                 lcd.cursor_pos = (3, 0)
-                lcd.write_string(" " * lcd.width)
+                lcd.write_string(" " * lcd.cols)
 
             # — C) Handle page animations (boot/initializing/connected) —
             page = determine_page(current_data)
