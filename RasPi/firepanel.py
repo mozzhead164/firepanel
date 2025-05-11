@@ -608,7 +608,7 @@ def watchdog_loop():
 
 
 #  Socket Listener From Nodered Thermal Trigger
-def socket_command_listener():
+def socket_command_listener(ser):
     # Clean up old socket if needed
     try:
         os.unlink(SOCKET_PATH)
@@ -632,7 +632,14 @@ def socket_command_listener():
                     conn.sendall(b"OK\n")
                     continue
 
-                if data.startswith("thermal_trigger:"):
+                elif data == "selftest":
+                    logger.info("🔧 Selftest requested over socket")
+                    # forward to Arduino
+                    send_json(ser, {"type": "selftest"})
+                    # acknowledge immediately
+                    conn.sendall(b"OK: selftest started\n")
+                    
+                elif data.startswith("thermal_trigger:"):
                     parts = data.split(":", 1)
 
                     try:
@@ -707,10 +714,7 @@ if __name__ == "__main__":
     watchdog_thread = threading.Thread(target=watchdog_loop)
     watchdog_thread.start()
 
-    socket_thread = threading.Thread(
-        target=socket_command_listener,
-        daemon=True
-    )
+    socket_thread = threading.Thread(target=socket_command_listener, args=(ser,), daemon=True)
     socket_thread.start()
     logger.debug("Socket listener thread started")
     print("[MAIN] socket_thread started")
