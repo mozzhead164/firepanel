@@ -21,6 +21,7 @@ struct ChannelData
   bool     dummyTriggered;          // Track Dummy Output
   bool thermalTriggered;            // Track Thermal Output
   uint32_t lastTriggerTime;         // Timestamp of Camera / Dummy Activation
+  uint32_t dummyLastTrigger;
   uint32_t thermalLastTrigger;      // Timestamp of Thermal Activation
 
   // ——— Output-confirmation flags ———

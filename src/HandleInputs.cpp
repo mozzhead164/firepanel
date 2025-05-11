@@ -82,7 +82,8 @@ void initInputs() {
       ch.ledGreen = 0;                        // Clear LED green state
       
       ch.lastTriggerTime = 0;                 // Clear last trigger time
-
+      ch.dummyLastTrigger = 0;                // Clear last dummy trigger time
+      ch.thermalLastTrigger = 0;              // Clear last thermal trigger time
     }
 
 
@@ -608,11 +609,15 @@ void processChannelStates()
       digitalWrite(thermPin, LOW);
     }
 
-    if (ch.dummyTriggered && (now - ch.lastTriggerTime >= LATCH)) {
+    if (ch.dummyTriggered && (now - ch.dummyLastTrigger  >= LATCH)) {
       ch.dummyTriggered = false;
       // also turn it off in hardware:
       uint8_t pin = pgm_read_byte_near(dummyPins_P + i);
       digitalWrite(pin, LOW);
+      #ifdef DEBUG_FP
+        Serial.print(F("[DEBUG_FP] Dummy pin reset for channel "));
+        Serial.println(i + 1);
+      #endif
     }
 
     // expire live-confirm after the latch interval
@@ -753,7 +758,7 @@ void updateFpButtonStates()
                     uint8_t pin = pgm_read_byte_near(dummyPins_P + i);
                     digitalWrite(pin, HIGH);
                     systemData.channels[i].dummyTriggered     = true;       // track dummy
-                    systemData.channels[i].lastTriggerTime   = millis();   // timestamp dummy
+                    systemData.channels[i].dummyLastTrigger   = millis();   // timestamp dummy
                 } else {
                     #ifdef USE_BUZZER_OUTPUT
                       // non-blocking dual tone
