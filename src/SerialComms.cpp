@@ -289,6 +289,7 @@ void handleTriggerThermal()
 
   uint8_t pin = pgm_read_byte_near(thermalPins_P + (ch - 1));
   digitalWrite(pin, HIGH);
+  Buzzer::beep(2000); // short beep
 
   #ifdef DEBUG_TRIGGER
     Serial.print(F("[THERMAL 🔥] Triggered channel: "));
