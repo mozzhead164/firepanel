@@ -533,20 +533,20 @@ def main():
                 col = i  # column index
                 if bt is None:
                     # no active blink → show ❌
-                    lcd.set_cursor(col, 3)
+                    lcd.cursor_pos(col, 3)
                     lcd.write_string("✗")
                 else:
                     elapsed = now - blink_start[i]
                     if elapsed > BLINK_HOLD:
                         # blink session ended
                         blink_type[i] = None
-                        lcd.set_cursor(col, 3)
+                        lcd.cursor_pos(col, 3)
                         lcd.write_string("✗")
                     else:
                         # within session: toggle flash
                         phase = int(elapsed / FLASH_INTERVAL) % 2
                         icon  = "🔥" if bt == "camera" else "🌡"
-                        lcd.set_cursor(col, 3)
+                        lcd.cursor_pos(col, 3)
                         lcd.write_string(icon if phase else " ")
 
             # ——— C) Trouble‐page flash (if we’re “connected”) ———
