@@ -49,9 +49,6 @@ void setup()
   // System Startup Message
   Serial.print("\n\n ✅ System Initialising...✅ \n\n");
 
-  // Begin Serial Communication with Raspberry Pi
-  initPiSerial();
-
   // Initialise Camera Inputs + Mode Switch
   initInputs();
 
@@ -90,8 +87,8 @@ void setup()
   // Set Connection State For Pi Communication
   systemConnectionState = STATE_WAITING_FOR_PI;
 
-  // Setup Complete
-  Serial.println(F("\n\n ✅ Initialisation Complete...✅\n\n"));
+  // Begin Serial Communication with Raspberry Pi
+  initPiSerial();
 
   #ifdef DEBUG_STARTUP
     runSystemSelfTest();
@@ -107,6 +104,9 @@ void setup()
     // Short Buzzer Beep On Startup
     Buzzer::beep(50);
   #endif
+
+  // Setup Complete
+  Serial.println(F("\n\n ✅ Initialisation Complete...✅\n\n"));
 }
 
 
