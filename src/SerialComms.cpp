@@ -189,7 +189,7 @@ void sendHeartbeat()
 {
   static unsigned long lastHeartbeat = 0;
 
-  if (millis() - lastHeartbeat > 10*1000UL) { // every 10 seconds
+  if (millis() - lastHeartbeat > 2*1000UL) { // every 10 seconds
     
     #ifdef DEBUG_PI_SERIAL
       Serial.println(F("[HEARTBEAT 💓] Sending heartbeat to Pi..."));

@@ -75,6 +75,7 @@ void requestTemperature() {
   const uint8_t AVG_WINDOW_SIZE = 5;
   static float tempBuf[AVG_WINDOW_SIZE];
   static uint8_t bufIdx = 0, bufCount = 0;
+  static uint32_t lastDebugTs = 0UL; // for debug-printing every 5s
 
   static unsigned long lastRequestTs = 0;
   
