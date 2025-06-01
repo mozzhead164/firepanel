@@ -55,11 +55,6 @@ void setup()
   // Initialise Outputs
   initOutputs();
 
-  #ifdef USE_BUZZER_OUTPUT
-    // Initialise Buzzer
-    Buzzer::init();
-  #endif
-
   // Initialize LED Control
   initTLCs();
 
@@ -101,6 +96,9 @@ void setup()
   #endif
 
   #ifdef USE_BUZZER_OUTPUT
+    // Initialise Buzzer
+    Buzzer::init();
+
     // Short Buzzer Beep On Startup
     Buzzer::beep(50);
   #endif
