@@ -49,8 +49,7 @@ void scanI2C()
   Serial.println("\nI2C Scanner:");
 
   // Initialize I2C communication
-  Serial.println("Initializing I2C bus at 100kHz...");
-  Wire.setClock(100000UL);
+  
   
   // Start I2C communication
   Serial.println("Starting I2C communication...");
@@ -89,7 +88,7 @@ void scanI2C()
 void initInputs() {
 
   #ifdef DEBUG_STARTUP
-    Serial.println("\n Initializing Inputs...\n");
+    Serial.println("\n Initializing Inputs...");
   #endif
 
     // Initialize Camera Inputs
@@ -157,7 +156,7 @@ void initInputs() {
 void initOutputs() {
 
   #ifdef DEBUG_STARTUP
-    Serial.println("\n Initializing Outputs...\n");
+    Serial.println("\n Initializing Outputs...");
   #endif
 
   // Initialise Thermal Outputs

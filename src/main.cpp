@@ -55,9 +55,12 @@ void setup()
   // Initialise Outputs
   initOutputs();
 
+  Serial.println("Initializing I2C bus at 100kHz...");
+  Wire.setClock(100000UL);
+
   #ifdef DEBUG_I2C
     Serial.println(F("\n Testing I2C Bus..."));
-    scanI2C();  // Scan I2C Bus for Devices
+    scanI2C();  // Scan I2C Bus for Devices  
   #endif
 
   // Initialize LED Control

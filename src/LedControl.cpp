@@ -295,7 +295,7 @@ void initTLC(uint8_t chipAddr)
 void initTLCs() 
 {
   #ifdef DEBUG_STARTUP
-    Serial.println("\n\n Initializing TLC59116 LED Expanders...");
+    Serial.println("\n Initializing TLC59116 LED Expanders...");
   #endif
 
   Wire.begin();
