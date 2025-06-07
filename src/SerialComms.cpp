@@ -205,7 +205,7 @@ void sendHeartbeat()
   { 
 
     #ifdef DEBUG_HEARTBEAT
-      Serial.println(F("\n [ 💓  HEARTBEAT  💓 ] Sending A Heartbeat To RasPi..."));
+      Serial.println(F("\n [ 💓  HEARTBEAT  💓 ] Sending A Heartbeat via Serial..."));
     #endif
 
     jsonDoc.clear();
@@ -226,7 +226,7 @@ void sendJson(const JsonDocument &doc)
   Serial1.write(END_MARKER);
 
   #ifdef DEBUG_PI_SERIAL
-    Serial.print(F("\n [ 🔧  DEBUG  🔧 ] Sending Framed JSON: <"));
+    Serial.print(F("\n [ 📄  Data Transfer  📄 ] Sending Framed JSON: <"));
     serializeJsonPretty(doc, Serial);
     Serial.println(F(">"));
   #endif

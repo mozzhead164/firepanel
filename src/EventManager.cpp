@@ -113,7 +113,7 @@ void eventHandler(const Event *event)
     uint8_t psu = event->channel;  // 1 or 2
 
     // Local alert
-    Serial.print(" [ ⚠️  ALERT!  ⚠️ ] PSU ");
+    Serial.print(" [ ⚠️  ALERT!  ⚠️  ] PSU ");
     Serial.print(psu);
     Serial.println(" Under-Voltage!");
 
