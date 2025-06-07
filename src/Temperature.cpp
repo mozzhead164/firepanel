@@ -66,11 +66,6 @@ void initTemperature() {
 
   tempState = TS_IDLE;
 
-  #ifdef DEBUG_TEMPERATURE
-    Serial.println("\n Initialising Temperature Sensor: ");
-    Serial.print("\n ✅ OneWire Bus Detected: ");
-    Serial.println(ow_reset() ? "OK" : "FAIL");
-  #endif
 }
 
 /// call every loop(); does the state machine

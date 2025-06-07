@@ -2,6 +2,7 @@
 #include "SelfTest.h"
 #include "LedControl.h"
 #include "SerialComms.h"
+#include "Temperature.h"
 #include "SystemData.h"
 #include <Arduino.h>
 #include <Wire.h>
@@ -10,6 +11,9 @@
 
 bool selfTestPassed = false;
 bool selfTestCompleted = false;
+
+
+bool ow_reset();
 
 
 void runSystemSelfTest() {
@@ -61,6 +65,9 @@ void runSystemSelfTest() {
     } else {
     Serial.println(F(" [PASS ✅] PCA9555 (0x24) OK"));
     }
+
+    Serial.print("\n ✅ OneWire Bus Detected: ");
+    Serial.println(ow_reset() ? "OK" : "FAIL");
 
     // Final Summary
     if (i2cOk) {

@@ -13,6 +13,7 @@
 // Function prototypes
 void initTemperature();
 void requestTemperature();
+bool ow_reset();
 void controlFanSpeed();
 
 
