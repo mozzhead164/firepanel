@@ -222,7 +222,7 @@ void sendJson(const JsonDocument &doc)
 
   #ifdef DEBUG_PI_SERIAL
     Serial.print(F("[DEBUG 🔧] Sending framed JSON: <"));
-    serializeJsonPretty(doc, Serial);
+    // serializeJsonPretty(doc, Serial);
     Serial.println(F(">"));
   #endif
 }
