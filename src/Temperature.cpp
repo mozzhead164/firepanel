@@ -57,7 +57,7 @@ static uint8_t  ow_readByte()           { uint8_t v=0; for(int i=0;i<8;i++) if(o
 void initTemperature() {
 
   #ifdef DEBUG_STARTUP
-    Serial.println("\n ⛓️ Initializing Temperature Sensor... ⛓️");  
+    Serial.println("\n Initializing Temperature Sensor... ");  
   #endif
 
   // ensure PF2/A2 has pull-up

@@ -88,7 +88,7 @@ void scanI2C()
 void initInputs() {
 
   #ifdef DEBUG_STARTUP
-    Serial.println("\n ⛓️ Initializing Inputs... ⛓️");
+    Serial.println("\n Initializing Inputs... ");
   #endif
 
     // Initialize Camera Inputs
@@ -156,7 +156,7 @@ void initInputs() {
 void initOutputs() {
 
   #ifdef DEBUG_STARTUP
-    Serial.println("\n ⛓️ Initializing Outputs... ⛓️");
+    Serial.println("\n Initializing Outputs... ");
   #endif
 
   // Initialise Thermal Outputs
@@ -246,7 +246,7 @@ void initPCA9555(uint8_t chipAddress) {
 void initPCFs() {
   
   #ifdef DEBUG_STARTUP
-    Serial.println("\n ⛓️ Initializing I2C PCF8574 & PCA9555 IO Expanders... ⛓️");
+    Serial.println("\n Initializing I2C PCF8574 & PCA9555 IO Expanders... ");
   #endif
 
   initPCF8574(FP_SWITCH_ADDR);
@@ -258,7 +258,7 @@ void initPCFs() {
 void initPinInterrupts() {
 
   #ifdef DEBUG_STARTUP
-    Serial.println("\n ⛓️ Initializing Interrupts... ⛓️");
+    Serial.println("\n Initializing Interrupts... ");
   #endif
 
   // Set up the interrupt pins for ATmega128 or ATmega32
@@ -490,7 +490,7 @@ static uint8_t counter[8] = {0};      // per‑bit debounce counters
 void initModeSwitch() {
 
   #ifdef DEBUG_STARTUP
-    Serial.println("\n ⛓️ Initializing Mode Switches... ⛓️"); 
+    Serial.println("\n Initializing Mode Switches... "); 
   #endif
 
   // Initialize Mode Switch
