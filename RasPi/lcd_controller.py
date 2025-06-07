@@ -45,10 +45,10 @@ heartbeat_received = False
 
 last_stage = None
 booting_idx = 0
-handshake_left = 0
-handshake_right = 19
-handshake_previous_left = None
-handshake_previous_right = None
+connect_left = 0
+connect_right = 19
+connect_previous_left = None
+connect_previous_right = None
 
 watchdogActive = False
 last_toggle_time = 0
@@ -278,8 +278,8 @@ def clear_screen_full():
     lcd_cache = [[' ' for _ in range(20)] for _ in range(4)]
 
 
-def handshake_animation_frame():
-    global handshake_left, handshake_right, handshake_previous_left, handshake_previous_right
+def connect_animation_frame():
+    global connect_left, connect_right, connect_previous_left, connect_previous_right
 
     # Write static text on line 1 (row index 0-based = 1)
     line1 = "Initialising".center(20)
@@ -288,20 +288,20 @@ def handshake_animation_frame():
         lcd_cache[1][i] = line1[i]
 
     # Clear previous animation arrows (line 3 / row 2)
-    if handshake_previous_left is not None and handshake_previous_left not in [9, 10]:
-        lcd_write_safe((2, handshake_previous_left), " ")
-        lcd_cache[2][handshake_previous_left] = " "
-    if handshake_previous_right is not None and handshake_previous_right not in [9, 10]:
-        lcd_write_safe((2, handshake_previous_right), " ")
-        lcd_cache[2][handshake_previous_right] = " "
+    if connect_previous_left is not None and connect_previous_left not in [9, 10]:
+        lcd_write_safe((2, connect_previous_left), " ")
+        lcd_cache[2][connect_previous_left] = " "
+    if connect_previous_right is not None and connect_previous_right not in [9, 10]:
+        lcd_write_safe((2, connect_previous_right), " ")
+        lcd_cache[2][connect_previous_right] = " "
 
     # Draw new animation arrows
-    if handshake_left not in [9, 10]:
-        lcd_write_safe((2, handshake_left), ">")
-        lcd_cache[2][handshake_left] = ">"
-    if handshake_right not in [9, 10]:
-        lcd_write_safe((2, handshake_right), "<")
-        lcd_cache[2][handshake_right] = "<"
+    if connect_left not in [9, 10]:
+        lcd_write_safe((2, connect_left), ">")
+        lcd_cache[2][connect_left] = ">"
+    if connect_right not in [9, 10]:
+        lcd_write_safe((2, connect_right), "<")
+        lcd_cache[2][connect_right] = "<"
 
     lcd_write_safe((2, 9), "|")
     lcd_write_safe((2, 10), "|")
@@ -309,13 +309,13 @@ def handshake_animation_frame():
     lcd_cache[2][10] = "|"
 
     # Save current positions
-    handshake_previous_left = handshake_left
-    handshake_previous_right = handshake_right
+    connect_previous_left = connect_left
+    connect_previous_right = connect_right
 
-    handshake_left += 1
-    handshake_right -= 1
+    connect_left += 1
+    connect_right -= 1
 
-    if handshake_left >= 9:
+    if connect_left >= 9:
         sleep(0.5)
 
         # Clear >||< before restarting
@@ -323,10 +323,10 @@ def handshake_animation_frame():
             lcd_write_safe((2, col), " ")
             lcd_cache[2][col] = " "
 
-        handshake_left = 0
-        handshake_right = 19
-        handshake_previous_left = None
-        handshake_previous_right = None
+        connect_left = 0
+        connect_right = 19
+        connect_previous_left = None
+        connect_previous_right = None
 
 
 # def update_flashing_triggers():
@@ -455,8 +455,8 @@ def determine_page(status):
 def check_and_handle_stage_change(new_stage):
     global last_stage
     global blink_type, blink_start, prev_trig, prev_thermal
-    global booting_idx, handshake_left, handshake_right
-    global handshake_previous_left, handshake_previous_right
+    global booting_idx, connect_left, connect_right
+    global connect_previous_left, connect_previous_right
 
     if new_stage == last_stage:
         return
@@ -474,11 +474,11 @@ def check_and_handle_stage_change(new_stage):
     #    – Boot animation
     booting_idx             = 0
 
-    #    – Handshake animation
-    handshake_left          = 0
-    handshake_right         = 20 - 1  # 19
-    handshake_previous_left = None
-    handshake_previous_right= None
+    #    – Connection animation
+    connect_left          = 0
+    connect_right         = 20 - 1  # 19
+    connect_previous_left = None
+    connect_previous_right= None
 
     # 3) Immediately *draw* the first frame of whatever page we’re now in
     if new_stage == "booting":
@@ -486,8 +486,8 @@ def check_and_handle_stage_change(new_stage):
         booting_animation_frame()
 
     elif new_stage == "initializing":
-        # show the static “initializing” text + first handshake frame
-        handshake_animation_frame()
+        # show the static "initializing" text + first connection frame
+        connect_animation_frame()
 
     elif new_stage == "connected":
         # build & draw the *entire* connected screen in one go
@@ -577,7 +577,7 @@ def main():
                 if page == "booting":
                     booting_animation_frame()
                 elif page == "initializing":
-                    handshake_animation_frame()
+                    connect_animation_frame()
                 elif page == "connected":
                     # static layout: lines 1–4
                     screen = build_screen_from_system(current_data)
@@ -589,7 +589,7 @@ def main():
                 booting_animation_frame()
 
             elif page == "initializing":
-                handshake_animation_frame()
+                connect_animation_frame()
 
             else:  # connected
                 # a) blinking TRIG row
