@@ -300,12 +300,14 @@ void initTLCs()
 
   Wire.begin();
   Wire.setClock(100000UL); // Set I2C clock speed to 100kHz
-
+  
+  digitalWrite(LED_TLC_RST, HIGH); // Set TLC Reset Pin High
   pinMode(LED_TLC_RST, OUTPUT);     // Set TLC Reset Pin as Output
-  digitalWrite(LED_TLC_RST, LOW);   // Set TLC Reset Pin Low
-  delay(500);                       // Wait for 500ms
-  digitalWrite(LED_TLC_RST, HIGH);  // Set TLC Reset Pin High
-  delay(500);                       // Wait for 500ms
+  
+  // digitalWrite(LED_TLC_RST, LOW);   // Set TLC Reset Pin Low
+  // delay(500);                       // Wait for 500ms
+   // Set TLC Reset Pin High
+  // delay(500);                       // Wait for 500ms
 
   initTLC(TLC1_ADDR);  // Initialize TLC1 (front panel LEDs)
   initTLC(TLC2_ADDR);  // Initialize TLC2 (mode select LED + PCB LEDs)
