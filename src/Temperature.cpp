@@ -149,7 +149,7 @@ void requestTemperature() {
       #ifdef DEBUG_TEMPERATURE
       if (millis() - lastDebugTs >= 5000) {
         lastDebugTs = millis();
-        Serial.print(" [DEBUG] AvgTemp=");
+        Serial.print("\n [ 🔧  DEBUG  🔧 ] Average Temp = ");
         Serial.print(avgTemp, 2);
         Serial.print(" °C");
         Serial.println();
