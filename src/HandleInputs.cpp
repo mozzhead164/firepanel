@@ -44,7 +44,23 @@ const char * const PROGMEM MODE_NAMES_P[] = {
 bool setFrontPanelLED(uint8_t ledNum, uint8_t red, uint8_t green);  // Set LED color
 
 
-
+void scanI2C() 
+{
+  Serial.println("\nI2C Scanner:");
+  Wire.begin();
+  for (uint8_t addr = 1; addr < 127; addr++) {
+    Wire.beginTransmission(addr);
+    uint8_t err = Wire.endTransmission();
+    if (err == 0) {
+      Serial.print(" • Found device @ 0x");
+      Serial.println(addr, HEX);
+    } else if (err == 4) {
+      Serial.print(" • Unknown error @ 0x");
+      Serial.println(addr, HEX);
+    }
+  }
+  Serial.println("Scanner done.\n");
+}
 
 
 // Initialisation Functions

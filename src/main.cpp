@@ -55,6 +55,11 @@ void setup()
   // Initialise Outputs
   initOutputs();
 
+  #ifdef DEBUG_STARTUP
+    Serial.println(F("\n Testing I2C Bus..."));
+    scanI2C();  // Scan I2C Bus for Devices
+  #endif
+
   // Initialize LED Control
   // initTLCs();
 

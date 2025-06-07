@@ -62,6 +62,8 @@ extern volatile bool pcfInterruptFlag;
 // -----------------------------------------------------------------
 // -------------         Function Prototypes        ----------------
 
+// Test I2C Bus
+void scanI2C();
 
 // Initialize the TLC59116 chips
 void initPCFs();
