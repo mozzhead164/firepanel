@@ -295,7 +295,7 @@ void initTLC(uint8_t chipAddr)
 void initTLCs() 
 {
   #ifdef DEBUG_STARTUP
-    Serial.println("\n Initializing TLC59116 LED Expanders...");
+    Serial.println("\n ⛓️ Initializing TLC59116 LED Expanders... ⛓️");
   #endif
 
   Wire.begin();
@@ -337,7 +337,7 @@ uint8_t computeChaseBrightness(float effectivePhase) {
 void startupAnimation() {
 
   #ifdef DEBUG_STARTUP
-    Serial.println("\n Setting Up LED Startup Animation...");
+    Serial.println("\n ⛓️ Setting Up LED Startup Animation... ⛓️");
   #endif
 
   startupAnimStartTime = millis();

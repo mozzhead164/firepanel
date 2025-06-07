@@ -55,7 +55,7 @@ void setup()
   // Initialise Outputs
   initOutputs();
 
-  Serial.println("\n Initializing I2C bus at 100kHz...");
+  Serial.println("\n ⛓️ Initializing I2C bus at 100kHz...⛓️ ");
   Wire.setClock(100000UL);
 
   #ifdef DEBUG_I2C
