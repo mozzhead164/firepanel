@@ -183,7 +183,7 @@ void controlFanSpeed() {
     }
   }
 
-  analogWrite(FAN_CNTROL, pwm);
+  analogWrite(FAN_CONTROL, pwm);
 }
 
 

@@ -62,7 +62,7 @@
 
         // Output Control Pins
         #define BUZZER_OUT 2        // Buzzer Output Pin
-        #define FAN_CNTROL 3        // Fan Control PWM Pin
+        #define FAN_CONTROL 3        // Fan Control PWM Pin
         #define LED_TLC_RST 17      // TLC59116 Reset Pin
 
 

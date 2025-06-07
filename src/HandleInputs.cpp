@@ -135,7 +135,7 @@ void initOutputs() {
   pinMode(BUZZER_OUT, OUTPUT);
 
   // Initialise Fan Control Output
-  pinMode(FAN_CNTROL, OUTPUT);
+  pinMode(FAN_CONTROL, OUTPUT);
 
   // Initialise TLC Reset Pin
   pinMode(LED_TLC_RST, OUTPUT);
