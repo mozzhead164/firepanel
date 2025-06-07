@@ -68,7 +68,7 @@ void initTemperature() {
 
   #ifdef DEBUG_TEMPERATURE
     Serial.println("\n Initialising Temperature Sensor: ");
-    Serial.print(" ✅ OneWire Bus Detected: ");
+    Serial.print("\n ✅ OneWire Bus Detected: ");
     Serial.println(ow_reset() ? "OK" : "FAIL");
   #endif
 }

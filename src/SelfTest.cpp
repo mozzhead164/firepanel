@@ -15,11 +15,11 @@ bool selfTestCompleted = false;
 void runSystemSelfTest() {
 
     #ifdef DEBUG_STARTUP
-      Serial.println(F("\n\n Running System Self-Test..."));
+      Serial.println(F("\n\n 🔧 Running System Self-Test...\n"));
     #endif
 
     // Initialisation System Self-Test
-    Serial.println(F("[INFO ℹ️] Checking I2C devices..."));
+    Serial.println(F("[INFO ℹ️] Checking I2C devices...\n"));
     bool i2cOk = true;
 
     // Check TLC1 (assume 0x60)
@@ -64,9 +64,9 @@ void runSystemSelfTest() {
 
     // Final Summary
     if (i2cOk) {
-    Serial.println(F("\n[✅ Self Test - PASS ✅] All I2C devices OK.\n"));
+    Serial.println(F("\n[✅ # SELF TEST PASS # ✅] - All I2C devices Responded OK.\n"));
     } else {
-    Serial.println(F("\n[❌ Self Test - FAIL ❌] One or More I2C Devices Are Missing!\n"));
+    Serial.println(F("\n[❌ # SELF TEST FAIL # ❌] - One or More I2C Devices Are Missing!\n"));
     // Optional: flash RED LED, or send special alert to Pi
     }
 

@@ -337,7 +337,7 @@ uint8_t computeChaseBrightness(float effectivePhase) {
 void startupAnimation() {
 
   #ifdef DEBUG_STARTUP
-    Serial.println("\n\n Setting Up LED Startup Animation...");
+    Serial.println("\n Setting Up LED Startup Animation...");
   #endif
 
   startupAnimStartTime = millis();
