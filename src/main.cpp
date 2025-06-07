@@ -56,7 +56,7 @@ void setup()
   initOutputs();
 
   // Initialize LED Control
-  initTLCs();
+  // initTLCs();
 
   // Initialize PCF8574 IO Expanders
   initPCFs();
