@@ -18,11 +18,6 @@ static uint32_t lastVoltage = 0UL;
 // Periodically Read PSU Voltages
 if(timeNow - lastVoltage >= 500UL)
 {
-
-  #ifdef DEBUG_STARTUP
-    Serial.println("\n Initializing PSU Voltage Measurement...\n");
-  #endif
-
   
   static float psu1_voltage = 0.0;
   static float psu2_voltage = 0.0;
