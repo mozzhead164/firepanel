@@ -184,19 +184,20 @@ void sendNack(const char *reason)
 
 
 
-// Send a heartbeat message to the Pi every 10 seconds
+// Send a heartbeat message to the Pi periodically.
+// Interval is 5s when DEBUG_HEARTBEAT is enabled, otherwise 10s.
 void sendHeartbeat()
 {
   static unsigned long lastHeartbeat = 0;
   static uint32_t heartbeatTime = 0;
 
   #ifdef DEBUG_HEARTBEAT
-    heartbeatTime = 5 * 1000UL; // 10 seconds
+    heartbeatTime = 5 * 1000UL; // 5 seconds
   #else
-    heartbeatTime = 10 * 1000UL; // 60 seconds for debug
+    heartbeatTime = 10 * 1000UL; // 10 seconds for debug
   #endif
 
-  if (millis() - lastHeartbeat >= heartbeatTime) // every 10 seconds
+  if (millis() - lastHeartbeat >= heartbeatTime) // every heartbeatTime interval
   { 
 
     #ifdef DEBUG_HEARTBEAT
@@ -222,7 +223,7 @@ void sendJson(const JsonDocument &doc)
 
   #ifdef DEBUG_PI_SERIAL
     Serial.print(F("[DEBUG 🔧] Sending framed JSON: <"));
-    // serializeJsonPretty(doc, Serial);
+    serializeJsonPretty(doc, Serial);
     Serial.println(F(">"));
   #endif
 }
