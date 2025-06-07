@@ -53,11 +53,11 @@ static void     ow_writeByte(uint8_t v) { for (int i=0;i<8;i++, v>>=1) ow_writeB
 static uint8_t  ow_readByte()           { uint8_t v=0; for(int i=0;i<8;i++) if(ow_readBit()) v|=1<<i; return v; }
 
 
-
+// Initialize the temperature sensor
 void initTemperature() {
 
   #ifdef DEBUG_STARTUP
-    Serial.println("\n Initializing Temperature Sensor...\n");  
+    Serial.println("\n Initializing Temperature Sensor...");  
   #endif
 
   // ensure PF2/A2 has pull-up

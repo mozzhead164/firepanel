@@ -246,7 +246,7 @@ void initPCA9555(uint8_t chipAddress) {
 void initPCFs() {
   
   #ifdef DEBUG_STARTUP
-    Serial.println("\n Initializing I2C PCF8574 & PCA9555 IO Expanders...\n");
+    Serial.println("\n Initializing I2C PCF8574 & PCA9555 IO Expanders...");
   #endif
 
   initPCF8574(FP_SWITCH_ADDR);
@@ -258,7 +258,7 @@ void initPCFs() {
 void initPinInterrupts() {
 
   #ifdef DEBUG_STARTUP
-    Serial.println("\n Initializing Interrupts...\n");
+    Serial.println("\n Initializing Interrupts...");
   #endif
 
   // Set up the interrupt pins for ATmega128 or ATmega32
@@ -490,7 +490,7 @@ static uint8_t counter[8] = {0};      // per‑bit debounce counters
 void initModeSwitch() {
 
   #ifdef DEBUG_STARTUP
-    Serial.println("\n Initializing Mode Switches...\n"); 
+    Serial.println("\n Initializing Mode Switches..."); 
   #endif
 
   // Initialize Mode Switch
@@ -506,7 +506,7 @@ void initModeSwitch() {
       systemData.systemMode = SystemMode(i);
       char buf[12];
       strcpy_P(buf, ms.name);
-      Serial.print("Mode Switch: ");
+      Serial.print("\n Mode Switch: ");
       Serial.println(buf);
     }
   }
