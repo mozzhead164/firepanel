@@ -96,7 +96,7 @@ void pollJsonSerial()
 
 
 // Handle incoming commands from the Pi
-void handleIncomingCommand(const JsonDocument& doc) {
+void handleIncomingCommand(const JsonDocument& doc) { 
   if (!doc["type"].is<const char*>()) {
     sendNack("Missing type field");
     return;
@@ -188,10 +188,18 @@ void sendNack(const char *reason)
 void sendHeartbeat()
 {
   static unsigned long lastHeartbeat = 0;
+  static uint32_t heartbeatTime = 0;
 
-  if (millis() - lastHeartbeat > 2*1000UL) { // every 10 seconds
-    
-    #ifdef DEBUG_PI_SERIAL
+  #ifdef DEBUG_HEARTBEAT
+    heartbeatTime = 5 * 1000UL; // 10 seconds
+  #else
+    heartbeatTime = 10 * 1000UL; // 60 seconds for debug
+  #endif
+
+  if (millis() - lastHeartbeat >= heartbeatTime) // every 10 seconds
+  { 
+
+    #ifdef DEBUG_HEARTBEAT
       Serial.println(F("[HEARTBEAT 💓] Sending heartbeat to Pi..."));
     #endif
 
