@@ -41,10 +41,6 @@ STATUS_FILE = "/home/Dale/firepanel/RasPi/system_status.json"
 WATCHDOG_FILE = "/home/Dale/firepanel/RasPi/watchdog_status.json"
 SOCKET_PATH = "/home/Dale/firepanel/RasPi/firepanel.sock"
 
-HANDSHAKE_PAYLOAD = {"type": "handshake", "payload": "HELLO_PI"}
-ACK_HANDSHAKE = {"type": "ack", "command": "handshake"}
-
-handshake_complete = False
 last_heartbeat = time.time()
 watchdog_timeout = 10  # seconds
 watchdog_active = False
@@ -195,7 +191,7 @@ def read_from_serial(ser):
 
 # ——— Handle Incoming Frame ———
 def handle_frame(frame):
-    global handshake_complete, last_heartbeat, trig
+    global last_heartbeat, trig
 
     try:
         parsed = json.loads(frame)
@@ -204,14 +200,7 @@ def handle_frame(frame):
 
         data = json.loads(frame)
         msg_type = data.get("type")
-
-
-        if msg_type == "handshake" and data.get("payload") == "HELLO_ATMEGA":
-            logger.debug("Received handshake from Arduino")
-            send_json(ser, HANDSHAKE_PAYLOAD)
-
-
-        elif msg_type == "channel_trigger":
+        if msg_type == "channel_trigger":
             # Incoming camera trigger (before we know if the output fired)
             last_heartbeat = time.time()
             ch = data.get("channel")
@@ -274,14 +263,7 @@ def handle_frame(frame):
 
         elif msg_type == "ack":
             cmd = data.get("command", "<none>")
-            if cmd == "handshake":
-                # your current handshake logic
-                update_status_fields(stage="connected", mode="ARMED")
-                write_watchdog_status({"state": "ok", "missed": 0})
-                handshake_complete = True
-                last_heartbeat = time.time()
-                logger.info("Received handshake ACK from Arduino")
-            elif cmd == "trigger_thermal":
+            if cmd == "trigger_thermal":
                 ch = data.get("channel", 0)
                 if 1 <= ch <= 8:
                     logger.info("✅ Thermal Trigger Confirmed ✅ - Channel %d", ch)
@@ -579,7 +561,7 @@ def watchdog_loop():
         now = time.time()
         elapsed = now - last_heartbeat
 
-        if handshake_complete and elapsed > watchdog_timeout:
+        if elapsed > watchdog_timeout:
             missed_heartbeats += 1
 
             # first miss
