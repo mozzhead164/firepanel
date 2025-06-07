@@ -51,9 +51,9 @@ void pollJsonSerial()
   {
     char c = Serial1.read();
 
-    #ifdef DEBUG_PI_SERIAL
-      Serial.print(c);
-    #endif
+    // #ifdef DEBUG_PI_SERIAL
+    //   Serial.print(c);
+    // #endif
 
     if (!receiving)
     {
@@ -71,7 +71,7 @@ void pollJsonSerial()
         buffer[bufpos] = '\0';
 
         #ifdef DEBUG_PI_SERIAL
-          Serial.print(millis()); Serial.print(F("\n >>|>> Received Frame: "));
+          Serial.print(millis()); Serial.print(F("\n >>|>> Received Frame >>|>> : "));
           Serial.print(buffer);
           Serial.println(">");
         #endif
@@ -81,8 +81,9 @@ void pollJsonSerial()
         if (!err)
         {
           handleIncomingCommand(jsonDoc);  // 🔥 CALL PROPER COMMAND HANDLER
+          
           #ifdef DEBUG_PI_SERIAL
-            Serial.print(millis()); Serial.println(" ms: Calling handleIncomingCommand");
+            Serial.println("\n Calling handleIncomingCommand");
           #endif
         }
         else
@@ -251,9 +252,9 @@ void sendJson(const JsonDocument &doc)
   Serial1.write(END_MARKER);
 
   #ifdef DEBUG_PI_SERIAL
-    Serial.print(F("\n [ 📄  Data Transfer  📄 ] Sending Framed JSON: <"));
+    Serial.print(F("\n [ <<|<<  Sending Data <<|<<  ] Sending Framed JSON: \n<"));
     serializeJsonPretty(doc, Serial);
-    Serial.println(F(">"));
+    Serial.println(F(">\n"));
   #endif
 }
 
