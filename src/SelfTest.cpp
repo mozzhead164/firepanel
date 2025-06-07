@@ -13,6 +13,11 @@ bool selfTestCompleted = false;
 
 
 void runSystemSelfTest() {
+
+    #ifdef DEBUG_STARTUP
+      Serial.println(F("\n\n Running System Self-Test..."));
+    #endif
+    
     // Initialisation System Self-Test
     Serial.println(F("[INFO ℹ️] Checking I2C devices..."));
     bool i2cOk = true;

@@ -294,6 +294,10 @@ void initTLC(uint8_t chipAddr)
 // Call this in setup() to initialize both TLC59116 chips.
 void initTLCs() 
 {
+  #ifdef DEBUG_STARTUP
+    Serial.println("\n\n Initializing TLC59116 LED Expanders...");
+  #endif
+
   Wire.begin();
   Wire.setClock(100000UL); // Set I2C clock speed to 100kHz
 
@@ -331,6 +335,11 @@ uint8_t computeChaseBrightness(float effectivePhase) {
 
 // Call this in setup() after initTLCs() to begin the startup animation
 void startupAnimation() {
+
+  #ifdef DEBUG_STARTUP
+    Serial.println("\n\n Setting Up LED Startup Animation...");
+  #endif
+
   startupAnimStartTime = millis();
   lastTestUpdateTime = startupAnimStartTime;
   nextTestLED = 0;

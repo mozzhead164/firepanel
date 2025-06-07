@@ -53,6 +53,11 @@ bool setFrontPanelLED(uint8_t ledNum, uint8_t red, uint8_t green);  // Set LED c
 
 // Initialize camera inputs, break glass input, and mode switches.
 void initInputs() {
+
+  #ifdef DEBUG_STARTUP
+    Serial.println("\n Initializing Inputs...\n");
+  #endif
+
     // Initialize Camera Inputs
     for (int i = 0; i < numCameras; i++) {
 
@@ -116,6 +121,11 @@ void initInputs() {
 
 // Initialise Thermal / Dummy Outputs
 void initOutputs() {
+
+  #ifdef DEBUG_STARTUP
+    Serial.println("\n Initializing Outputs...\n");
+  #endif
+
   // Initialise Thermal Outputs
   for (int i = 0; i < numThermals; i++) {
     // First Read the Thermal Pins From PROGMEM
@@ -199,6 +209,11 @@ void initPCA9555(uint8_t chipAddress) {
 
 // Init 3x PCF Chips with Their Addresses
 void initPCFs() {
+  
+  #ifdef DEBUG_STARTUP
+    Serial.println("\n Initializing I2C PCF8574 & PCA9555 IO Expanders...\n");
+  #endif
+
   initPCF8574(FP_SWITCH_ADDR);
   initPCF8574(CABLE_CON_ADDR);
   initPCA9555(OUTP_SENS_ADDR);
@@ -206,6 +221,15 @@ void initPCFs() {
 
 // Initialize Interrupts
 void initPinInterrupts() {
+
+  #ifdef DEBUG_STARTUP
+    Serial.println("\n Initializing Interrupts...\n");
+  #endif
+
+  // Set up the interrupt pins for ATmega128 or ATmega32
+
+  // For ATmega128, we use INT4..7 for different inputs.
+  // For ATmega32, we use INT0 for the PCF interrupt.
 
 #ifdef USE_ATMEGA128
     // --------- ATmega128 Interrupt Setup ---------
@@ -429,6 +453,12 @@ static uint8_t counter[8] = {0};      // per‑bit debounce counters
 
 // GPIO Update Functions
 void initModeSwitch() {
+
+  #ifdef DEBUG_STARTUP
+    Serial.println("\n Initializing Mode Switches...\n"); 
+  #endif
+
+  // Initialize Mode Switch
   
   for (uint8_t i = 0; i < 3; ++i) 
   {

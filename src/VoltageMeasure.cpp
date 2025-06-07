@@ -10,6 +10,11 @@
 
 void read_psuVoltages() 
 {
+
+  #ifdef DEBUG_STARTUP
+    Serial.println("\n Initializing PSU Voltage Measurement...\n");
+  #endif
+  
   // Get Current Time Stamp
   uint32_t timeNow = millis();
 

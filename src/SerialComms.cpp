@@ -26,6 +26,10 @@ extern SystemConnectionState systemConnectionState; // for tracking Pi status
 // Initialize the Serial1 port for communication with the Pi
 void initPiSerial()
 {
+  #ifdef DEBUG_STARTUP
+    Serial.println(F("\n Initializing Serial Communication with Raspberry Pi...\n"));
+  #endif
+  
   Serial1.begin(SERIAL_BAUD);
   // Optional: give it a moment and flush
   delay(10);
