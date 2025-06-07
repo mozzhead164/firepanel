@@ -15,7 +15,7 @@ bool selfTestCompleted = false;
 void runSystemSelfTest() {
 
     #ifdef DEBUG_STARTUP
-      Serial.println(F("\n\n 🔧 Running System Self-Test...\n"));
+      Serial.println(F("\n\n 🔧 Running System Self-Test... 🔧\n"));
     #endif
 
     // Initialisation System Self-Test

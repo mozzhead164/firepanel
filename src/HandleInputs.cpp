@@ -506,7 +506,7 @@ void initModeSwitch() {
       systemData.systemMode = SystemMode(i);
       char buf[12];
       strcpy_P(buf, ms.name);
-      Serial.print("\n Mode Switch: ");
+      Serial.print("\n Initial Mode Switch Position: ");
       Serial.println(buf);
     }
   }
