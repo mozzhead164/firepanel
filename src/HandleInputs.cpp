@@ -61,6 +61,9 @@ void scanI2C()
   for (uint8_t addr = 1; addr < 127; addr++) {
 
     Serial.print("Scanning address 0x");
+    Serial.print(addr, HEX);
+    Serial.println("...");
+
     Wire.beginTransmission(addr);
 
     Serial.println("ending transmission...");
