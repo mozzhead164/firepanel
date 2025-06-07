@@ -15,6 +15,7 @@ static void updateTemperatureAlerts();
 
 
 
+
 // PF2/A2 on ATmega128 (the ONE_WIRE_BUS pin) :contentReference[oaicite:2]{index=2}&#8203;:contentReference[oaicite:3]{index=3}
 #define OW_DDR   DDRF
 #define OW_PORT  PORTF

@@ -13,7 +13,7 @@ bool selfTestPassed = false;
 bool selfTestCompleted = false;
 
 
-bool ow_reset();
+extern bool ow_reset();
 
 
 void runSystemSelfTest() {
