@@ -59,8 +59,12 @@ void scanI2C()
   Serial.println("Scanning I2C bus...");
 
   for (uint8_t addr = 1; addr < 127; addr++) {
+
+    Serial.print("Scanning address 0x");
     Wire.beginTransmission(addr);
+
     uint8_t err = Wire.endTransmission();
+    
     if (err == 0) {
       Serial.print(" • Found device @ 0x");
       Serial.println(addr, HEX);
