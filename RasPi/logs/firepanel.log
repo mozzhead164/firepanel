@@ -1,0 +1,9 @@
+18:04:56 INFO  Firepanel controller started
+[MAIN] socket_thread started
+18:04:56 INFO  Socket listening on /home/Dale/firepanel/RasPi/firepanel.sock
+25-06-07 18:03:37] INFO  Firepanel controller started
+[2025-06-07 18:03:37] DEBUG Socket listener thread started
+[2025-06-07 18:03:37] INFO  Socket listening on /home/Dale/firepanel/RasPi/firepanel.sock
+[2025-06-07 18:04:56] INFO  Firepanel controller started
+[2025-06-07 18:04:56] DEBUG Socket listener thread started
+[2025-06-07 18:04:56] INFO  Socket listening on /home/Dale/firepanel/RasPi/firepanel.sock

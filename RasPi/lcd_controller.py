@@ -1,6 +1,6 @@
 import os
 import time
-import smbus
+from smbus2 import SMBus as smbus
 import sys
 import json
 from time import sleep
@@ -8,7 +8,6 @@ from threading import Event
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from RPLCD.i2c import CharLCD
-
 
 I2C_DEV = "/dev/i2c-1"
 
@@ -26,7 +25,7 @@ current_data = {
 
 
 FLASH_INTERVAL = 0.33        # seconds for on/off toggle
-POLL_INTERVAL  = 0.05        # how often to update the display
+POLL_INTERVAL  = 0.2        # how often to update the display
 BLINK_HOLD     = 25         # default blink duration (seconds)
 flash_on         = True
 last_flash_tick  = time.monotonic()
@@ -100,7 +99,7 @@ thermo_char = [
   0B11011,
   0B11111,
   0B11011,
-  0B11111,
+  0B11111
 ]
 
 # Flame icon (outline version)
@@ -112,7 +111,7 @@ flame_outline = [
   0B01001,
   0B10101,
   0B10101,
-  0B01110,
+  0B01110
 ]
 
 # Flame icon (filled version)
@@ -124,7 +123,7 @@ flame_filled = [
   0B01111,
   0B11111,
   0B11111,
-  0B01110,
+  0B01110
 ]
 
 
@@ -140,7 +139,7 @@ def init_lcd():
             time.sleep(0.1)
 
         # now bus will succeed (or at worst throw)
-        bus = smbus.SMBus(1)
+        bus = smbus(1)
         lcd = CharLCD('PCF8574', I2C_ADDRESS, port=1, cols=20, rows=4)
 
         lcd.create_char(0, tick_char)           # ID 0 - Tick
@@ -375,19 +374,40 @@ class StatusChangeHandler(FileSystemEventHandler):
 
 def load_status_file():
     try:
+        # If the file is missing or zero‐length, skip
+        if not os.path.exists(STATUS_FILE):
+            return None
+        if os.path.getsize(STATUS_FILE) == 0:
+            # empty file → nothing to parse
+            return None
+
         with open(STATUS_FILE, 'r') as f:
-            data = json.load(f)
+            raw = f.read().strip()
+            if not raw:
+                # file contains only whitespace
+                return None
+            try:
+                data = json.loads(raw)
+            except json.JSONDecodeError as je:
+                print(f"[WARN] JSON decode error in {STATUS_FILE}: {je}", file=sys.stderr)
+                return None
+
+            # build our normalized dict
             return {
-                'stage': data.get('stage', 'booting'),
-                'mode': data.get('mode', 'UNKNOWN').upper(),
-                'conn': data.get('conn', [False]*8),
-                'trig': data.get('trig', [False]*8),
-                'thermal':data.get('thermal', [False]*8), 
+                'stage':   data.get('stage', 'booting'),
+                'mode':    data.get('mode', 'UNKNOWN').upper(),
+                'conn':    data.get('conn',    [False]*8),
+                'trig':    data.get('trig',    [False]*8),
+                'thermal': data.get('thermal', [False]*8),
                 'avgTemp': data.get('avgTemp', None)
             }
-    except Exception as e:
-        print(f"[WARN] Failed to load status file: {e}", file=sys.stderr)
+    except FileNotFoundError:
+        # If status file disappears between the os.path.exists check and open()
         return None
+    except Exception as e:
+        print(f"[WARN] Unexpected error loading {STATUS_FILE}: {e}", file=sys.stderr)
+        return None
+
 
 
 def handle_status_file_update():
@@ -540,26 +560,40 @@ def main():
             # — 1) Reload JSON & detect changes —
             try:
                 mtime = os.path.getmtime(STATUS_FILE)
-                if mtime != last_mtime:
-                    last_mtime = mtime
-                    with open(STATUS_FILE) as f:
-                        status = json.load(f)
+            except FileNotFoundError:
+                # If file was just deleted, skip this cycle
+                mtime = None
+
+            if mtime is not None and mtime != last_mtime:
+                last_mtime = mtime
+                # Attempt to do a “safe load”
+                try:
+                    with open(STATUS_FILE, 'r') as f:
+                        raw = f.read().strip()
+                        if not raw:
+                            raise json.JSONDecodeError("Empty file", raw, 0)
+                        status = json.loads(raw)
+                except (FileNotFoundError, json.JSONDecodeError) as je:
+                    print(f"[WARN] Skipping status‐refresh (invalid JSON): {je}", file=sys.stderr)
+                    status = None
+
+                if status:
+                    # Only update if we successfully parsed something
                     current_data.clear()
                     current_data.update(status)
                     # start any new blink sessions
-                    trig_list  = status.get("trig",    [False]*8)
-                    therm_list = status.get("thermal", [False]*8)
+                    trig_list = status.get("trig", [False]*8)
+                    thermal_list = status.get("thermal", [False]*8)
                     for i in range(8):
                         if trig_list[i] and not prev_trig[i]:
-                            blink_start[i] = now
-                            blink_type[i]  = "camera"
-                        if therm_list[i] and not prev_thermal[i]:
-                            blink_start[i] = now
-                            blink_type[i]  = "thermal"
-                    prev_trig    = trig_list
-                    prev_thermal = therm_list
-            except FileNotFoundError:
-                pass
+                            blink_type[i] = 'trig'
+                            blink_start[i] = time.monotonic()
+                        elif thermal_list[i] and not prev_thermal[i]:
+                            blink_type[i] = 'thermal'
+                            blink_start[i] = time.monotonic()
+                    prev_trig = trig_list.copy()
+                    prev_thermal = thermal_list.copy()
+                    # update watchdogActive if needed
 
             # — 2) Figure out which page we should be on —
             page = determine_page(current_data)

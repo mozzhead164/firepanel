@@ -1,1 +1,38 @@
-{"active": false}
+{
+  "stage": "connected",
+  "mode": "BOOTING",
+  "conn": [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ],
+  "trig": [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ],
+  "thermal": [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ],
+  "avgTemp": null,
+  "timestamp": 1748806415,
+  "missed_heartbeats": 0,
+  "watchdog_state": "CRIT"
+}

@@ -17,8 +17,8 @@ from logging.handlers import TimedRotatingFileHandler
 logger = logging.getLogger("firepanel")
 logger.propagate = False           # don’t pass to root logger
 
-# logger.setLevel(logging.DEBUG)     # capture everything; filter on handlers
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)     # capture everything; filter on handlers
+# logger.setLevel(logging.INFO)
 # logger.setLevel(logging.WARNNG)
 # logger.setLevel(logging.ERROR)
 # logger.setLevel(logging.EXCEPTION)
@@ -26,7 +26,7 @@ logger.setLevel(logging.INFO)
 DEBUG_FILE = False
 DEBUG_TRIG = False
 DEBUG_STATUS = False
-DEBUG_HEARTBEAT = False
+DEBUG_HEARTBEAT = True
 SHOW_ALERTS = False
 
 SERIAL_PORT = "/dev/ttyS0" 
@@ -196,7 +196,7 @@ def handle_frame(frame):
     try:
         parsed = json.loads(frame)
         pretty = json.dumps(parsed, indent=2, sort_keys=True)
-        logger.debug("Raw frame received:\n%s", pretty)
+        #logger.debug("Raw frame received:\n%s", pretty)
 
         data = json.loads(frame)
         msg_type = data.get("type")
@@ -299,26 +299,26 @@ def handle_frame(frame):
             incoming_conf = [(conf_mask >> i) & 1 == 1 for i in range(8)]
             
             # Log the data
-            logger.debug(
-                "  DATA Received:\n"
-                " System Status\n"
-                "  Mode=%s, Temp=%.1f, BG=%s, TempA=%s, PSU1_UV=%s, PSU2_UV=%s \n"
-                " Masks:\n"
-                "  Camera:  %s\n"
-                "  Thermal: %s\n"
-                "  Confirm: %s\n"
-                "  Connect: %s\n",
-                mode, 
-                avg_temp, 
-                break_glass, 
-                temp_alert, 
-                psu1_uv, 
-                psu2_uv, 
-                f"{cam_mask:08b}",
-                f"{th_mask:08b}",
-                f"{conf_mask:08b}",
-                f"{cab_mask:08b}"
-            )
+            # logger.debug(
+            #     "  DATA Received:\n"
+            #     " System Status\n"
+            #     "  Mode=%s, Temp=%.1f, BG=%s, TempA=%s, PSU1_UV=%s, PSU2_UV=%s \n"
+            #     " Masks:\n"
+            #     "  Camera:  %s\n"
+            #     "  Thermal: %s\n"
+            #     "  Confirm: %s\n"
+            #     "  Connect: %s\n",
+            #     mode, 
+            #     avg_temp, 
+            #     break_glass, 
+            #     temp_alert, 
+            #     psu1_uv, 
+            #     psu2_uv, 
+            #     f"{cam_mask:08b}",
+            #     f"{th_mask:08b}",
+            #     f"{conf_mask:08b}",
+            #     f"{cab_mask:08b}"
+            # )
 
 
             # Merge triggers with existing state as before:

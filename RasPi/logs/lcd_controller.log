@@ -1,0 +1,2 @@
+LCD init failed after waiting for I2C
+cted', 'mode': 'TEST', 'conn': [True, False, False, False, False, False, False, False], 'trig': [False, False, False, False, False, False, False, False], 'thermal': [False, False, False, False, False, False, False, False], 'avgTemp': 29, 'breakGlass': False, 'tempAlert': False, 'psu1UnderVolt': False, 'psu2UnderVolt': True, 'confirm': [True, False, False, False, False, False, False, False], 'lastAlert': {'type': 'alert', 'alertType': 'mode_change', 'mode': 'TEST'}}

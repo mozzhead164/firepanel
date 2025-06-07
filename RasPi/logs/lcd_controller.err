@@ -1,0 +1,19 @@
+[ERROR] LCD init failed: [Errno 5] Input/output error
+firepanel/RasPi/lcd_controller.py", line 662, in <module>
+    main()
+  File "/home/Dale/firepanel/RasPi/lcd_controller.py", line 641, in main
+    lcd.write_string(char)
+  File "/home/Dale/firepanel/RasPi/venv/lib/python3.11/site-packages/RPLCD/lcd.py", line 293, in write_string
+    self.write(char)
+  File "/home/Dale/firepanel/RasPi/venv/lib/python3.11/site-packages/RPLCD/lcd.py", line 420, in write
+    self.cursor_pos = newpos
+    ^^^^^^^^^^^^^^^
+  File "/home/Dale/firepanel/RasPi/venv/lib/python3.11/site-packages/RPLCD/lcd.py", line 158, in _set_cursor_pos
+    self.command(c.LCD_SETDDRAMADDR | row_offsets[value[0]] + value[1])
+  File "/home/Dale/firepanel/RasPi/venv/lib/python3.11/site-packages/RPLCD/lcd.py", line 391, in command
+    self._send_instruction(value)
+  File "/home/Dale/firepanel/RasPi/venv/lib/python3.11/site-packages/RPLCD/i2c.py", line 258, in _send_instruction
+    self._pulse_data(c.RS_INSTRUCTION | (value & 0xF0))
+  File "/home/Dale/firepanel/RasPi/venv/lib/python3.11/site-packages/RPLCD/i2c.py", line 275, in _pulse_data
+    self.bus.write_byte(self._address, ((value & ~PCF8574_E) | self._backlight))
+OSError: [Errno 5] Input/output error
