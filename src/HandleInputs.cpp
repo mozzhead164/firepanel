@@ -179,7 +179,9 @@ void initOutputs() {
   pinMode(FAN_CONTROL, OUTPUT);
 
   // Initialise TLC Reset Pin
-  pinMode(LED_TLC_RST, OUTPUT);
+  // digitalWrite(LED_TLC_RST, HIGH); // Set TLC Reset Pin High
+  // pinMode(LED_TLC_RST, OUTPUT);     // Set TLC Reset Pin as Output
+  // pinMode(LED_TLC_RST, OUTPUT);
   
 }
 
