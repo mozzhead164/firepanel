@@ -71,7 +71,7 @@ void pollJsonSerial()
         buffer[bufpos] = '\0';
 
         #ifdef DEBUG_PI_SERIAL
-          Serial.print(millis()); Serial.print(" ms: Received frame: <");
+          Serial.print(millis()); Serial.print(F("\n >>|>> Received Frame: "));
           Serial.print(buffer);
           Serial.println(">");
         #endif
@@ -115,19 +115,44 @@ void handleIncomingCommand(const JsonDocument& doc) {
   }
 
   if (strcmp(type, "get_data") == 0) {
+    
+    #ifdef DEBUG_PI_SERIAL
+      Serial.println(F("\n Received get_data Command from Pi"));
+    #endif
+
     handleGetData();
   }
   else if (strcmp(type, "trigger_thermal") == 0) {
+    
+    #ifdef DEBUG_PI_SERIAL
+      Serial.println(F("\n Received trigger_thermal Command from Pi"));
+    #endif
+
     handleTriggerThermal();
+
   }
   else if (strcmp(type, "reset_thermal") == 0) {
+
+    #ifdef DEBUG_PI_SERIAL
+      Serial.println(F("\n Received reset_thermal Command from Pi"));
+    #endif
+
     handleResetThermal();
+
   }
   else if (strcmp(type, "selftest") == 0) {
+    
+    #ifdef DEBUG_PI_SERIAL
+      Serial.println(F("\n Received SELF TEST Command From Pi"));
+    #endif
+
     runSystemSelfTest();
+
   }
   else {
+    
     sendNack("Unknown command type");
+
   }
 }
 
