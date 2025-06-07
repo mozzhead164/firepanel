@@ -47,7 +47,17 @@ bool setFrontPanelLED(uint8_t ledNum, uint8_t red, uint8_t green);  // Set LED c
 void scanI2C() 
 {
   Serial.println("\nI2C Scanner:");
+
+  // Initialize I2C communication
+  Serial.println("Initializing I2C bus at 100kHz...");
+  Wire.setClock(100000UL);
+  
+  // Start I2C communication
+  Serial.println("Starting I2C communication...");
   Wire.begin();
+  
+  Serial.println("Scanning I2C bus...");
+
   for (uint8_t addr = 1; addr < 127; addr++) {
     Wire.beginTransmission(addr);
     uint8_t err = Wire.endTransmission();
