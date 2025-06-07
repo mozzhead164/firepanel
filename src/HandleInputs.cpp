@@ -46,26 +46,26 @@ bool setFrontPanelLED(uint8_t ledNum, uint8_t red, uint8_t green);  // Set LED c
 
 void scanI2C() 
 {
-  Serial.println("\nI2C Scanner:");
+  Serial.println("\n I2C Scanner:");
 
   // Initialize I2C communication
   
   
   // Start I2C communication
-  Serial.println("Starting I2C communication...");
+  Serial.println("\n Starting I2C communication...");
   Wire.begin();
   
-  Serial.println("Scanning I2C bus...");
+  Serial.println("\n Scanning I2C bus...");
 
   for (uint8_t addr = 1; addr < 127; addr++) {
 
-    Serial.print("Scanning address 0x");
+    Serial.print("\n Scanning address 0x");
     Serial.print(addr, HEX);
     Serial.println("...");
 
     Wire.beginTransmission(addr);
 
-    Serial.println("ending transmission...");
+    Serial.println("\n ending transmission...");
     uint8_t err = Wire.endTransmission();
 
     if (err == 0) {
@@ -76,7 +76,7 @@ void scanI2C()
       Serial.println(addr, HEX);
     }
   }
-  Serial.println("Scanner done.\n");
+  Serial.println(" Scanner done.\n");
 }
 
 
@@ -409,7 +409,7 @@ static uint8_t counter[8] = {0};      // per‑bit debounce counters
           fpIntFlag = true;       // Set the flag to indicate front panel button event
 
           #ifdef DEBUG_INTERRUPT
-            Serial.println("Front panel button interrupt triggered!");
+            Serial.println(" Front panel button interrupt triggered!");
           #endif
 
           int4Flag = false; 
@@ -421,7 +421,7 @@ static uint8_t counter[8] = {0};      // per‑bit debounce counters
           updateCableConnectedStates();
 
           #ifdef DEBUG_INTERRUPT
-            Serial.println("Cable connection interrupt triggered!");
+            Serial.println(" Cable connection interrupt triggered!");
           #endif
 
           int5Flag = false;
@@ -433,7 +433,7 @@ static uint8_t counter[8] = {0};      // per‑bit debounce counters
           updateBreakGlassInput();  // Read the break-glass IO expander
 
           #ifdef DEBUG_INTERRUPT
-            Serial.println("Break Glass Interrupt Triggered!");
+            Serial.println(" Break Glass Interrupt Triggered!");
           #endif
 
           int6Flag = false;       // Reset the flag
@@ -446,7 +446,7 @@ static uint8_t counter[8] = {0};      // per‑bit debounce counters
         updateOutputSenseStates();
 
         #ifdef DEBUG_INTERRUPT
-          Serial.println("Output sense interrupt triggered!");
+          Serial.println(" Output sense interrupt triggered!");
         #endif 
 
         // No need to reset the flag here; it will be cleared in updateOutputSenseStates()
@@ -533,7 +533,7 @@ void updateModeSwitch() {
       char buf[12];
       strcpy_P(buf, ms.name);
 
-      Serial.print("Mode Switch: ");
+      Serial.print(" Mode Switch: ");
       Serial.println(buf);
     }
   }
@@ -571,7 +571,7 @@ void updateInputs() {
       ch.triggerTimestamp = now;  // Record the trigger time.
 
       #ifdef DEBUG_TRIGGER
-        Serial.print("\n[Trigger 🔥] Camera Input ");
+        Serial.print("\n [Trigger 🔥] Camera Input ");
         Serial.print(i + 1);
         Serial.print(" Triggered ");
       #endif
@@ -692,7 +692,7 @@ void processChannelStates()
       uint8_t pin = pgm_read_byte_near(dummyPins_P + i);
       digitalWrite(pin, LOW);
       #ifdef DEBUG_FP
-        Serial.print(F("[DEBUG_FP] Dummy pin reset for channel "));
+        Serial.print(F(" [DEBUG_FP] Dummy pin reset for channel "));
         Serial.println(i + 1);
       #endif
     }
@@ -822,7 +822,7 @@ void updateFpButtonStates()
             rawBit != ((stableState >> i) & 0x01))
         {
             if (rawBit == 0) {
-                Serial.print(F("Front Panel Button "));
+                Serial.print(F(" Front Panel Button "));
                 Serial.print(i + 1);
                 Serial.println(F(" - Pressed."));
 
@@ -846,7 +846,7 @@ void updateFpButtonStates()
                     };
                     dispatchEvent(&e);
                     #ifdef DEBUG_FP
-                      Serial.print(F("[DEBUG_FP] Dispatched dummy confirm for CH"));
+                      Serial.print(F(" [ DEBUG_FP ] Dispatched dummy confirm for CH"));
                       Serial.println(i+1);
                     #endif
 
@@ -861,7 +861,7 @@ void updateFpButtonStates()
                     #endif
                 }
             } else {
-                Serial.print(F("Front Panel Button "));
+                Serial.print(F(" Front Panel Button "));
                 Serial.print(i + 1);
                 Serial.println(F(" - Released."));
             }
@@ -905,10 +905,10 @@ void updateCableConnectedStates() {
       lastReported[i]    = rawReading[i];
     }
 
-    Serial.println(F("=== Cable Connected Detection ==="));
+    Serial.println(F(" ===>> Cable Connected Detection <<==="));
 
     // Connected Cables list...
-    Serial.print  (F("Connected Cables: "));
+    Serial.print  (F(" Connected Cables: "));
     bool first = true;
     for (uint8_t i = 0; i < 8; ++i) {
       if (!rawReading[i]) {
@@ -917,11 +917,11 @@ void updateCableConnectedStates() {
         first = false;
       }
     }
-    if (first) Serial.print(F("None"));
+    if (first) Serial.print(F(" None"));
     Serial.println();
 
     // Disconnected Cables list...
-    Serial.print  (F("Disconnected Cables: "));
+    Serial.print  (F(" Disconnected Cables: "));
     first = true;
     for (uint8_t i = 0; i < 8; ++i) {
       if (rawReading[i]) {
@@ -930,7 +930,7 @@ void updateCableConnectedStates() {
         first = false;
       }
     }
-    if (first) Serial.print(F("None"));
+    if (first) Serial.print(F(" None"));
     Serial.println(F("\n"));
 
     // ——— NEW: Prime the front-panel LEDs to match the above state ———
@@ -965,7 +965,7 @@ void updateCableConnectedStates() {
 
     // falling edge (true→false) = Connected
     if (!stableState && lastReported[i]) {
-      Serial.print(F("Debounced Cable "));
+      Serial.print(F(" Debounced Cable "));
       Serial.print(i+1);
       Serial.println(F(" Connected."));
       systemData.channels[i].cableConnected = true;
@@ -977,7 +977,7 @@ void updateCableConnectedStates() {
     }
     // rising edge (false→true) = Disconnected
     else if (stableState && !lastReported[i]) {
-      Serial.print(F("Debounced Cable "));
+      Serial.print(F(" Debounced Cable "));
       Serial.print(i+1);
       Serial.println(F(" Disconnected."));
       systemData.channels[i].cableConnected = false;
@@ -1084,7 +1084,7 @@ void updateOutputSenseStates() {
         dispatchEvent(&e);
         
         #ifdef DEBUG_OUTPUT_SENSE
-          Serial.print("\n[Confirm ✅] Output Channel ");
+          Serial.print("\n [Confirm ✅] Output Channel ");
           Serial.print(info.channel);
           Serial.print(info.dummy ? " (dummy)" : " (live)");
           Serial.println(" Confirmed!");
